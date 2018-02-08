@@ -9,6 +9,9 @@ version of the OpenConfig AFT model.
 During the initial development phase, the OpenConfig AFT model is forked in this
 repo. Changes will be upstreamed following iteration of the design of the API.
 
+A detailed description of the gRIBI protocol can be found in [
+docs/motivation.md](https://github.com/openconfig/gribi/blob/master/doc/motivation.md).
+
 ## Disclaimer
 
 This is not an official Google product.
