@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+go run $GOPATH/src/github.com/openconfig/ygot/proto_generator/protogenerator.go \
+	-path=yang,/Users/robjs/Code/openconfig/models,/Users/robjs/Code/ietf-yang \
+	-output_dir=proto -compress_paths -generate_fakeroot -fakeroot_name=device \
+	-package_name=gribi_aft -exclude_modules=ietf-interfaces,openconfig-interfaces \
+	-base_import_path="gob/gribi/proto" yang/gribi-aft.yang
+go run $GOPATH/src/github.com/openconfig/ygot/generator/generator.go \
+	-path=yang,/Users/robjs/Code/openconfig/models,/Users/robjs/Code/ietf-yang \
+	-output_file=oc/oc.go -package_name=oc -generate_fakeroot -fakeroot_name=device \
+	-exclude_modules=ietf-interfaces \
+	yang/gribi-aft.yang
+
+echo -e "$(cat scripts/data/apache-short)\n\n$(cat oc/oc.go)" > oc/oc.go
