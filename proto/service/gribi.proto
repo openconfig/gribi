@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-import "gob/gribi/proto/gribi_aft/gribi_aft.proto";
+import "github.com/openconfig/gribi/proto/gribi_aft/gribi_aft.proto";
 
 package gribi;
 

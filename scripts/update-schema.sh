@@ -15,16 +15,16 @@
 # limitations under the License.
 
 go run $GOPATH/src/github.com/openconfig/ygot/proto_generator/protogenerator.go \
-	-path=yang,/Users/robjs/Code/openconfig/models,/Users/robjs/Code/ietf-yang \
+	-path=yang,yang/deps \
 	-output_dir=proto -compress_paths -generate_fakeroot -fakeroot_name=device \
 	-package_name=gribi_aft -exclude_modules=ietf-interfaces,openconfig-interfaces \
 	-base_import_path="github.com/openconfig/gribi/proto" yang/gribi-aft.yang
 go run $GOPATH/src/github.com/openconfig/ygot/generator/generator.go \
-	-path=yang,/Users/robjs/Code/openconfig/models,/Users/robjs/Code/ietf-yang \
+	-path=yang,yang/deps \
 	-output_file=oc/oc.go -package_name=oc -generate_fakeroot -fakeroot_name=device \
-	-exclude_modules=ietf-interfaces \
+	-exclude_modules=ietf-interfaces,openconfig-interfaces \
 	yang/gribi-aft.yang
 
 echo -e "$(cat scripts/data/apache-short)\n\n$(cat oc/oc.go)" > oc/oc.go
 
-find proto -type d | while read l; do (cd $l && go generate); done
+find proto -type d -mindepth 1 | while read l; do (cd $l && go generate); done

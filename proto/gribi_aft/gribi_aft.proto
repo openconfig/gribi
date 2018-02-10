@@ -5,8 +5,7 @@
 //  - yang/gribi-aft.yang
 // Include paths:
 //   - yang/...
-//   - /Users/robjs/Code/openconfig/models/...
-//   - /Users/robjs/Code/ietf-yang/...
+//   - yang/deps/...
 syntax = "proto3";
 
 package gribi_aft;
@@ -85,6 +84,10 @@ message Afts {
     MacEntry mac_entry = 2;
   }
   message NextHop {
+    message InterfaceRef {
+      ywrapper.StringValue interface = 269626950 [(yext.schemapath) = "/afts/next-hops/next-hop/interface-ref/config/interface"];
+      ywrapper.UintValue subinterface = 387796466 [(yext.schemapath) = "/afts/next-hops/next-hop/interface-ref/config/subinterface"];
+    }
     message PushedMplsLabelStackUnion {
       PushedMplsLabelStack pushed_mpls_label_stack_pushedmplslabelstack = 63633490;
       uint64 pushed_mpls_label_stack_uint64 = 47493573;
@@ -99,6 +102,7 @@ message Afts {
       PUSHEDMPLSLABELSTACK_NO_LABEL = 9 [(yext.yang_name) = "NO_LABEL"];
     }
     gribi_aft.enums.OpenconfigAftEncapsulationHeaderType encapsulate_header = 69966061 [(yext.schemapath) = "/afts/next-hops/next-hop/state/encapsulate-header"];
+    InterfaceRef interface_ref = 293682821 [(yext.schemapath) = "/afts/next-hops/next-hop/interface-ref"];
     ywrapper.StringValue ip_address = 242108262 [(yext.schemapath) = "/afts/next-hops/next-hop/state/ip-address"];
     ywrapper.StringValue mac_address = 404609192 [(yext.schemapath) = "/afts/next-hops/next-hop/state/mac-address"];
     gribi_aft.enums.OpenconfigPolicyTypesINSTALLPROTOCOLTYPE origin_protocol = 186436757 [(yext.schemapath) = "/afts/next-hops/next-hop/state/origin-protocol"];

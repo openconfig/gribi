@@ -17,4 +17,4 @@
 package gribi
 
 // Generate command to create the protobuf .pb.go file.
-//go:generate sh -c "cd $GOPATH/src && protoc --proto_path=. --go_out=plugins=grpc:. gob/gribi/proto/service/gribi.proto"
+//go:generate sh -c "cd $GOPATH/src && protoc --proto_path=. --go_out=plugins=grpc:. github.com/openconfig/gribi/proto/service/gribi.proto"

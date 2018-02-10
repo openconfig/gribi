@@ -3,7 +3,7 @@ submodule openconfig-aft-common {
     prefix "oc-aft";
   }
 
-  //import openconfig-interfaces { prefix "oc-if"; }
+  import openconfig-interfaces { prefix "oc-if"; }
   import openconfig-extensions { prefix "oc-ext"; }
   import openconfig-yang-types { prefix "oc-yang"; }
   import openconfig-inet-types { prefix "oc-inet"; }
@@ -89,7 +89,7 @@ submodule openconfig-aft-common {
           uses aft-common-entry-nexthop-state;
         }
 
-        //uses oc-if:interface-ref;
+        uses oc-if:interface-ref;
       }
     }
   }
