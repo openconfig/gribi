@@ -86,7 +86,7 @@ submodule openconfig-aft-common {
             next-hop entry";
 
           uses aft-common-entry-nexthop-config;
-          //uses aft-common-entry-nexthop-state;
+          uses aft-common-entry-nexthop-state;
         }
 
         uses oc-if:interface-ref;
@@ -111,6 +111,17 @@ submodule openconfig-aft-common {
         "The number of octets which have matched, and been forwarded,
          based on the AFT entry";
     }
+
+    // We are at $afi/$entry/state/next-hop-group
+    leaf next-hop-group {
+      type leafref {
+        path "../../../../next-hop-groups/next-hop-group/state/id";
+      }
+      description
+        "A reference to the next-hop-group that is in use for the entry
+        within the AFT. Traffic is distributed across the set of next-hops
+        within the next-hop group according to the weight.";
+    }
   }
 
   grouping aft-common-entry-nexthop-config {
@@ -125,7 +136,7 @@ submodule openconfig-aft-common {
     }
   }
 
-  grouping aft-nh-state {
+  grouping aft-common-entry-nexthop-state {
     description
       "Parameters relating to a next-hop.";
 
@@ -216,6 +227,7 @@ submodule openconfig-aft-common {
         container state {
           config false;
           uses aft-nhg-config;
+          uses aft-nhg-state;
         }
 
         container next-hops {
@@ -257,6 +269,28 @@ submodule openconfig-aft-common {
     }
   }
 
+  grouping aft-nhg-state {
+    leaf color {
+      type uint64;
+      description
+        "An arbitrary colour that is used to match against the next-hop
+        group. Some next-hop resolutions may utilise the colour of the
+        next-hop-group to select the particular next-hop-group that a
+        routing entry should be resolved to.";
+    }
+
+    leaf backup-next-hop-group {
+      // We are at afts/next-hop-groups/next-hop-group/config/backup-next-hop-group
+      type leafref {
+        path "../../../next-hop-group/id";
+      }
+      description
+        "The backup next-hop-group for the current group. When all
+        entries within the next-hop group become unusable, the backup
+        next-hop group is used in preference.";
+    }
+  }
+
   grouping aft-nhg-nh-config {
     leaf index {
       type leafref {
@@ -277,15 +311,6 @@ submodule openconfig-aft-common {
         is balanced across the next-hops within the group in the
         proportion of weight/(sum of weights of the next-hops within
         the next-hop group.";
-    }
-
-    leaf color {
-      type uint64;
-      description
-        "An arbitrary colour that is used to match against the next-hop
-        group. Some next-hop resolutions may utilise the colour of the
-        next-hop-group to select the particular next-hop-group that a
-        routing entry should be resolved to.";
     }
   }
 }
