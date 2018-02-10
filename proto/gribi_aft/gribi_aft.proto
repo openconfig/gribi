@@ -13,7 +13,7 @@ package gribi_aft;
 
 import "github.com/openconfig/ygot/proto/ywrapper/ywrapper.proto";
 import "github.com/openconfig/ygot/proto/yext/yext.proto";
-import "gob/gribi/proto/gribi_aft/enums/enums.proto";
+import "github.com/openconfig/gribi/proto/gribi_aft/enums/enums.proto";
 
 message Device {
   Afts afts = 35982132 [(yext.schemapath) = "/afts"];
@@ -99,7 +99,6 @@ message Afts {
       PUSHEDMPLSLABELSTACK_NO_LABEL = 9 [(yext.yang_name) = "NO_LABEL"];
     }
     gribi_aft.enums.OpenconfigAftEncapsulationHeaderType encapsulate_header = 69966061 [(yext.schemapath) = "/afts/next-hops/next-hop/state/encapsulate-header"];
-    InterfaceRef interface_ref = 293682821 [(yext.schemapath) = "/afts/next-hops/next-hop/interface-ref"];
     ywrapper.StringValue ip_address = 242108262 [(yext.schemapath) = "/afts/next-hops/next-hop/state/ip-address"];
     ywrapper.StringValue mac_address = 404609192 [(yext.schemapath) = "/afts/next-hops/next-hop/state/mac-address"];
     gribi_aft.enums.OpenconfigPolicyTypesINSTALLPROTOCOLTYPE origin_protocol = 186436757 [(yext.schemapath) = "/afts/next-hops/next-hop/state/origin-protocol"];
