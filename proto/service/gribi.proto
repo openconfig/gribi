@@ -70,21 +70,21 @@ message AFTOperation {
           // Each openconfig.AFT.* message is a protobuf transformed
           // message corresponding to the OpenConfig AFT for that
           // schema.
-          // Schema for IPv4UnicastEntry is
+          // Schema for IPv4UnicastEntry is generated from
           // /network-instances/network-instance/afts/ipv4-unicast/ipv4-entry
-          gribi_aft.Afts.Ipv4Entry ipv4 = 4;
-          // Schema for IPv6UnicastEntry is
+          gribi_aft.Afts.Ipv4EntryKey ipv4 = 4;
+          // Schema for IPv6UnicastEntry is generated from
           // /network-instances/network-instance/afts/ipv6-unicast/ipv6-entry
-          gribi_aft.Afts.Ipv6Entry ipv6 = 5;
-          // Schema for MPLSLabelEntry is
+          gribi_aft.Afts.Ipv6EntryKey ipv6 = 5;
+          // Schema for MPLSLabelEntry is generated from
           // /network-instances/network-instance/afts/mpls/label-entry
-          gribi_aft.Afts.LabelEntry mpls = 6;
-          // Schema for NextHopGroup is
+          gribi_aft.Afts.LabelEntryKey mpls = 6;
+          // Schema for NextHopGroup is generated from
           // /network-instances/network-instance/afts/next-hop-groups/next-hop-group
-          gribi_aft.Afts.NextHopGroup next_hop_group = 7;
-          // Schema for NextHop is
+          gribi_aft.Afts.NextHopGroupKey next_hop_group = 7;
+          // Schema for NextHop is generated from
           // /network-instances/network-instance/afts/next-hops/next-hop.
-          gribi_aft.Afts.NextHop next_hop = 8;
+          gribi_aft.Afts.NextHopKey next_hop = 8;
         }
 }
 
