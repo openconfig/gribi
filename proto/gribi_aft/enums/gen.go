@@ -13,9 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package gribi_aft_enums contains generated enums corresponding to the gribi_aft
+// Package enums contains generated enums corresponding to the gribi_aft
 // proto.
-package gribi_aft_enums
+package enums
 
 // Generate command to create the protobuf .pb.go file.
 //go:generate sh -c "cd $GOPATH/src && protoc --proto_path=. --go_out=:. github.com/openconfig/gribi/proto/gribi_aft/enums/enums.proto"
