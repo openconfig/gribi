@@ -1,0 +1,121 @@
+name: Go
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.13', '1.14', '1.15', '1.16']
+
+    steps:
+      - name: Install protobuf
+        uses: arduino/setup-protoc@v1
+        with:
+          version: '3.x'
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+        id: go
+
+      - name: Install protoc-gen-go
+        run: |
+          go get -u google.golang.org/protobuf/cmd/protoc-gen-go
+          go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
+
+      - name: Install goimports
+        run: |
+          go get -u golang.org/x/tools/cmd/goimports
+
+      - name: Install Staticcheck
+        run: |
+          go get -u honnef.co/go/tools/cmd/staticcheck
+
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          path: go/src/github.com/openconfig/gribi
+
+      - name: Get dependencies
+        run: |
+          go get -v -t -d ./...
+        working-directory: go/src/github.com/openconfig/gribi
+
+      - name: Generate dependencies
+        run: make generate
+        working-directory: go/src/github.com/openconfig/gribi
+
+      - name: Build packages
+        run: go build -v ./...
+        working-directory: go/src/github.com/openconfig/gribi
+
+      - name: Run Tests
+        run: go test -v ./...
+        working-directory: go/src/github.com/openconfig/gribi
+
+      - name: Run race tests
+        run:  go test -race -v ./...
+        working-directory: go/src/github.com/openconfig/gribi
+
+  static_analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.15'
+        id: go
+
+      - name: Install required static analysis tools
+        run: |
+          go get -u github.com/go-playground/overalls
+          go get -u github.com/mattn/goveralls
+          go get -u honnef.co/go/tools/cmd/staticcheck
+
+      - name: Check out ygot code
+        uses: actions/checkout@v2
+
+      - name: Get dependencies
+        run: |
+          go get -v -t -d ./...
+
+      - name: Run coverage
+        run: |
+          overalls -project ${GITHUB_WORKSPACE} -covermode=count -ignore=".git,vendor"
+
+      - name: Submit coverage
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: overalls.coverprofile
+
+      - name: Go vet
+        run: |
+          for i in `find . -type d -maxdepth 1`; do
+            go vet ./$i
+          done
+
+      - name: Gofmt
+        run: |
+          for i in `find . -type d -maxdepth 1`; do
+            diff -u <(echo -n) <(gofmt -d -s ./$i)
+          done
+
+      - name: Staticcheck
+        run: |
+          checkstr=""
+          for i in `find . -type d -maxdepth 1`; do
+            checkstr="$checkstr github.com/openconfig/gribi/$i"
+          done
+          staticcheck $checkstr
