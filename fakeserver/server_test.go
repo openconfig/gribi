@@ -30,7 +30,7 @@ import (
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 
-	rpb "gob/gribi/proto/service"
+	rpb "github.com/openconfig/gribi/proto/service"
 
 	gpb "github.com/openconfig/gnmi/proto/gnmi"
 )

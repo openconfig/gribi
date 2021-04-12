@@ -18,6 +18,8 @@ import "github.com/openconfig/gribi/proto/gribi_aft/gribi_aft.proto";
 
 package gribi;
 
+option go_package="github.com/openconfig/gribi/proto/service;gribi";
+
 // gRIBI is a gRPC service which provides an external entity a mechanism through
 // which to programmatically inject and remove entries from the system's RIB.
 service gRIBI {

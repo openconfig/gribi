@@ -20,13 +20,13 @@ import (
 	"context"
 	"sync"
 
-	"gob/gribi/oc"
+	"github.com/openconfig/gribi/oc"
 
 	"github.com/openconfig/ygot/ygot"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	rpb "gob/gribi/proto/service"
+	rpb "github.com/openconfig/gribi/proto/service"
 
 	gpb "github.com/openconfig/gnmi/proto/gnmi"
 )

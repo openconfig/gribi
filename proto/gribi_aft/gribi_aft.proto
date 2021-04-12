@@ -14,6 +14,8 @@ import "github.com/openconfig/ygot/proto/ywrapper/ywrapper.proto";
 import "github.com/openconfig/ygot/proto/yext/yext.proto";
 import "github.com/openconfig/gribi/proto/gribi_aft/enums/enums.proto";
 
+option go_package = "github.com/openconfig/gribi/proto/gribi_aft";
+
 message Device {
   Afts afts = 35982132 [(yext.schemapath) = "/afts"];
 }
