@@ -20,11 +20,20 @@ $GOPATH/bin/proto_generator \
 	-package_name=gribi_aft -exclude_modules=ietf-interfaces,openconfig-interfaces \
 	-base_import_path="github.com/openconfig/gribi/proto" \
 	-go_package_base="github.com/openconfig/gribi/proto" \
+	-consistent_union_enum_names -typedef_enum_with_defmod \
 	yang/gribi-aft.yang
 $GOPATH/bin/generator \
 	-path=yang,yang/deps \
 	-output_file=oc/oc.go -package_name=oc -generate_fakeroot -fakeroot_name=device \
 	-exclude_modules=ietf-interfaces,openconfig-interfaces \
+	-shorten_enum_leaf_names \
+	-typedef_enum_with_defmod \
+	-enum_suffix_for_simple_union_enums \
+	-generate_simple_unions \
+	-generate_rename \
+	-generate_append \
+	-generate_leaf_getters \
+	-annotations \
 	yang/gribi-aft.yang
 
 echo -e "$(cat scripts/data/apache-short)\n\n$(cat oc/oc.go)" > oc/oc.go

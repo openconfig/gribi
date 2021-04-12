@@ -1,10 +1,5 @@
 module openconfig-aft {
 
-  // TODO(robjs): This is the proposed modification to the
-  // OpenConfig AFT model. It is planned to be interated on
-  // here and then subsequently folded back into the OC
-  // repo.
-
   yang-version "1";
 
   namespace "http://openconfig.net/yang/aft";
@@ -45,7 +40,50 @@ module openconfig-aft {
     is referred to as an Abstract Forwarding Table (AFT), rather than
     the FIB.";
 
-  oc-ext:openconfig-version "0.3.1";
+  oc-ext:openconfig-version "0.6.0";
+
+  revision "2020-11-06" {
+    description
+      "Make AFT model read-only.";
+    reference "0.6.0";
+  }
+
+  revision "2020-09-09" {
+    description
+      "Remove leafs that are not used as keys from config containers as
+      AFT model is ready-only.
+      * next-hop/interface-ref/config.
+      * all leafs under policy-forwarding-entry/config except index.";
+    reference "0.5.0";
+  }
+
+  revision "2019-11-07" {
+    description
+      "Move lsp-name leaf out of aft-common-entry-nexthop-state group.";
+    reference "0.4.1";
+  }
+
+  revision "2019-08-02" {
+    description
+      "Add installing protocol for IPv[46] unicast entries.
+      Add the ability to describe conditional next-hop groups
+      outside of the policy forwarding module to allow for efficient
+      handling of CBTS, where many prefixes may share the same next-hop
+      criteria.";
+    reference "0.4.0";
+  }
+
+  revision "2019-08-01" {
+    description
+      "Add lsp-name leaf to AFT next-hop.";
+    reference "0.3.3";
+  }
+
+  revision "2018-11-21" {
+    description
+      "Add OpenConfig module metadata extensions.";
+    reference "0.3.2";
+  }
 
   revision 2017-08-24 {
     description
@@ -59,6 +97,11 @@ module openconfig-aft {
     reference "0.3.0";
   }
 
+  // OpenConfig specific extensions for module metadata.
+  oc-ext:regexp-posix;
+  oc-ext:catalog-organization "openconfig";
+  oc-ext:origin "openconfig";
+
   // config + state groupings
 
   // structural groupings
@@ -69,6 +112,7 @@ module openconfig-aft {
       AFT.";
 
     container afts {
+      config false;
       description
         "The abstract forwarding tables (AFTs) that are associated
         with the network instance. An AFT is instantiated per-protocol
@@ -81,7 +125,6 @@ module openconfig-aft {
 
       container ipv4-unicast {
         description
-
           "The abstract forwarding table for IPv4 unicast. Entries
           within this table are uniquely keyed on the IPv4 unicast
           destination prefix which is matched by ingress packets.
