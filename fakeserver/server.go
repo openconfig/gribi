@@ -53,6 +53,8 @@ type Server struct {
 	// or explicitly specified by the client.
 	// TODO(robjs): Clarify how the explicit specification by the client works.
 	clientAFT map[string]*internalAFT
+
+	*rpb.UnimplementedGRIBIServer
 }
 
 // internalAFT is an internally stored abstract forwarding table (AFT), which is
