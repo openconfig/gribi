@@ -139,5 +139,5 @@ var GRIBI_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 	},
-	Metadata: "github.com/openconfig/gribi/proto/service/gribi.proto",
+	Metadata: "proto/service/gribi.proto",
 }

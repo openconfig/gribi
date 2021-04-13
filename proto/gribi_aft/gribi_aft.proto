@@ -2,17 +2,17 @@
 // representation of a YANG schema.
 //
 // Input schema modules:
-//  - yang/gribi-aft.yang
+//  - /Users/robjs/go/src/github.com/openconfig/gribi/scripts/../yang/gribi-aft.yang
 // Include paths:
-//   - yang/...
-//   - yang/deps/...
+//   - /Users/robjs/go/src/github.com/openconfig/gribi/yang/...
+//   - /Users/robjs/go/src/github.com/openconfig/gribi/yang/deps/...
 syntax = "proto3";
 
 package gribi_aft;
 
 import "github.com/openconfig/ygot/proto/ywrapper/ywrapper.proto";
 import "github.com/openconfig/ygot/proto/yext/yext.proto";
-import "github.com/openconfig/gribi/proto/gribi_aft/enums/enums.proto";
+import "proto/gribi_aft/enums/enums.proto";
 
 option go_package = "github.com/openconfig/gribi/proto/gribi_aft";
 
