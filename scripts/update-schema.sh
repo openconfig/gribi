@@ -14,9 +14,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Hack to ensure that if we are running on OS X with a homebrew installed
+# GNU sed then we can still run sed.
+runsed() {
+  if hash gsed 2>/dev/null; then
+    gsed "$@"
+  else
+    sed "$@"
+  fi
+}
+
+# A similar hack for readlink
+runreadlink() {
+  if hash greadlink 2>/dev/null; then
+    greadlink "$@"
+  else
+    readlink "$@"
+  fi
+}
+
 if [ -z $SRCDIR ]; then
 	THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-	SRC_DIR=${THIS_DIR}/..
+	SRC_DIR=`runreadlink -m ${THIS_DIR}/..`
 fi
 
 proto_generator \
@@ -28,8 +47,8 @@ proto_generator \
 	-consistent_union_enum_names -typedef_enum_with_defmod \
 	${SRC_DIR}/yang/gribi-aft.yang
 generator \
-	-path=yang,yang/deps \
-	-output_file=oc/oc.go -package_name=oc -generate_fakeroot -fakeroot_name=device \
+	-path=${SRC_DIR}/yang,${SRC_DIR}/yang/deps \
+	-output_file=${SRC_DIR}/oc/oc.go -package_name=oc -generate_fakeroot -fakeroot_name=device \
 	-exclude_modules=ietf-interfaces,openconfig-interfaces \
 	-shorten_enum_leaf_names \
 	-typedef_enum_with_defmod \
@@ -41,4 +60,12 @@ generator \
 	-annotations \
 	${SRC_DIR}/yang/gribi-aft.yang
 
+# Add licensing to the generated Go code.
+RP=`echo ${SRC_DIR} | sed 's/\./\\./g'`
 echo -e "$(cat ${SRC_DIR}/scripts/data/apache-short)\n\n$(cat ${SRC_DIR}/oc/oc.go)" > ${SRC_DIR}/oc/oc.go
+runsed -i "s;${RP};github.com/openconfig/gribi;g" ${SRC_DIR}/oc/oc.go
+
+# Replace absolute paths in the protobuf files.
+for i in `find ${SRC_DIR} -type f -name "*.proto"`; do
+	runsed -i "s;${RP};github.com/openconfig/gribi;g" $i
+done
