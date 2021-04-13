@@ -14,19 +14,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$GOPATH/bin/proto_generator \
-	-path=yang,yang/deps \
-	-output_dir=proto -compress_paths -generate_fakeroot -fakeroot_name=device \
+if [ -z $SRCDIR ]; then
+	THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+	SRC_DIR=${THIS_DIR}/..
+fi
+
+proto_generator \
+	-path=${SRC_DIR}/yang,${SRC_DIR}/yang/deps \
+	-output_dir=${SRC_DIR}/proto -compress_paths -generate_fakeroot -fakeroot_name=device \
 	-package_name=gribi_aft -exclude_modules=ietf-interfaces,openconfig-interfaces \
-	-base_import_path="github.com/openconfig/gribi/proto" \
+	-base_import_path="proto" \
 	-go_package_base="github.com/openconfig/gribi/proto" \
-	yang/gribi-aft.yang
-$GOPATH/bin/generator \
-	-path=yang,yang/deps \
-	-output_file=oc/oc.go -package_name=oc -generate_fakeroot -fakeroot_name=device \
+	${SRC_DIR}/yang/gribi-aft.yang
+generator \
+	-path=${SRC_DIR}/yang,${SRC_DIR}/yang/deps \
+	-output_file=${SRC_DIR}/oc/oc.go -package_name=oc -generate_fakeroot -fakeroot_name=device \
 	-exclude_modules=ietf-interfaces,openconfig-interfaces \
-	yang/gribi-aft.yang
+	${SRC_DIR}/yang/gribi-aft.yang
 
-echo -e "$(cat scripts/data/apache-short)\n\n$(cat oc/oc.go)" > oc/oc.go
-
-find proto -type d -mindepth 1 | while read l; do (cd $l && go generate); done
+echo -e "$(cat ${SRC_DIR}/scripts/data/apache-short)\n\n$(cat ${SRC_DIR}/oc/oc.go)" > ${SRC_DIR}/oc/oc.go
