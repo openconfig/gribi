@@ -14,12 +14,46 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-go run $GOPATH/src/github.com/openconfig/ygot/proto_generator/protogenerator.go \
-	-path=yang,yang/deps \
-	-output_dir=proto -compress_paths -generate_fakeroot -fakeroot_name=device \
+# Hack to ensure that if we are running on OS X with a homebrew installed
+# GNU sed then we can still run sed.
+runsed() {
+  if hash gsed 2>/dev/null; then
+    gsed "$@"
+  else
+    sed "$@"
+  fi
+}
+
+# A similar hack for readlink
+runreadlink() {
+  if hash greadlink 2>/dev/null; then
+    greadlink "$@"
+  else
+    readlink "$@"
+  fi
+}
+
+if [ -z $SRCDIR ]; then
+	THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+	SRC_DIR=`runreadlink -m ${THIS_DIR}/..`
+fi
+
+proto_generator \
+	-path=${SRC_DIR}/yang,${SRC_DIR}/yang/deps \
+	-output_dir=${SRC_DIR}/proto -compress_paths -generate_fakeroot -fakeroot_name=device \
 	-package_name=gribi_aft -exclude_modules=ietf-interfaces,openconfig-interfaces \
+	-base_import_path="proto" \
+	-go_package_base="github.com/openconfig/gribi/proto" \
+	-consistent_union_enum_names -typedef_enum_with_defmod \
+	${SRC_DIR}/yang/gribi-aft.yang
 	-base_import_path="github.com/openconfig/gribi/proto" yang/gribi-aft.yang
 
-echo -e "$(cat scripts/data/apache-short)\n\n$(cat oc/oc.go)" > oc/oc.go
+# Add licensing to the generated Go code.
+RP=`echo ${SRC_DIR} | sed 's/\./\\./g'`
+echo -e "$(cat ${SRC_DIR}/scripts/data/apache-short)\n\n$(cat ${SRC_DIR}/oc/oc.go)" > ${SRC_DIR}/oc/oc.go
+runsed -i "s;${RP};github.com/openconfig/gribi;g" ${SRC_DIR}/oc/oc.go
 
-find proto -type d -mindepth 1 | while read l; do (cd $l && go generate); done
+# Replace absolute paths in the protobuf files.
+for i in `find ${SRC_DIR} -type f -name "*.proto"`; do
+	runsed -i "s;${RP};github.com/openconfig/gribi;g" $i
+done
