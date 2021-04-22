@@ -1,0 +1,45 @@
+gribi-v1-augments:
+
+
+in nhg:
+    leaf next-hop-group-network-instance {
+      type string;
+      description
+        "The network instance to look up the next-hop-group in.  If 
+         unspecified, the next hop group is in the default network 
+         instance.  The referenced network-instance must be an existing
+         network instance on the device and have corresponding entries 
+         in the /network-instances/network-instance list.";
+    }
+
+in nh:
+    leaf network-instance {
+        type string;
+        description:
+          "Network instance for the nexthop.  If this is not populated 
+          then network-instance should be the same instance that the entry 
+          is populated into.";
+    }
+
+in entry:
+    leaf metadata {
+      type binary {
+        length 8; // 8 bytes
+      }
+      description
+        "Metadata that is persistently stored with the entry.";
+    }
+
+in nexthop:
+    container ip-in-ip {
+      leaf src-ip {
+        type oc-inet:ip-address;
+        description:
+          "The source IP address to use for the encapsulated packet.";
+      }
+      leaf dst-ip {
+        type oc-inet:ip-address;
+        description:
+          "The destination IP address to use for the encapsulated packet.";
+      }
+    }
