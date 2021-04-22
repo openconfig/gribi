@@ -28,7 +28,50 @@ submodule openconfig-aft-pf {
     fields other than the destination address that is used in
     other forwarding tables.";
 
-  oc-ext:openconfig-version "0.3.1";
+  oc-ext:openconfig-version "0.6.0";
+
+  revision "2020-11-06" {
+    description
+      "Make AFT model read only.";
+    reference "0.6.0";
+  }
+
+  revision "2020-09-09" {
+    description
+      "Remove leafs that are not used as keys from config containers as
+      AFT model is ready-only.
+      * next-hop/interface-ref/config.
+      * all leafs under policy-forwarding-entry/config except index.";
+    reference "0.5.0";
+  }
+
+  revision "2019-11-07" {
+    description
+      "Move lsp-name leaf out of aft-common-entry-nexthop-state group.";
+    reference "0.4.1";
+  }
+
+  revision "2019-08-02" {
+    description
+      "Add installing protocol for IPv[46] unicast entries.
+      Add the ability to describe conditional next-hop groups
+      outside of the policy forwarding module to allow for efficient
+      handling of CBTS, where many prefixes may share the same next-hop
+      criteria.";
+    reference "0.4.0";
+  }
+
+  revision "2019-08-01" {
+    description
+      "Add lsp-name leaf to AFT next-hop.";
+    reference "0.3.3";
+  }
+
+  revision "2018-11-21" {
+    description
+      "Add OpenConfig module metadata extensions.";
+    reference "0.3.2";
+  }
 
   revision 2017-08-24 {
     description
@@ -62,18 +105,11 @@ submodule openconfig-aft-pf {
 
       leaf index {
         type leafref {
-          path "../config/index";
+          path "../state/index";
         }
         description
           "Reference to the arbitary index for the policy forwarding
           AFT entry.";
-      }
-
-      container config {
-        description
-          "Configuration parameters for the Policy forwarding
-          AFT entry.";
-        uses aft-pf-entry-config;
       }
 
       container state {
@@ -81,15 +117,14 @@ submodule openconfig-aft-pf {
         description
           "Operational state parameters for the Policy Forwarding
           AFT entry.";
-        uses aft-pf-entry-config;
         uses aft-pf-entry-state;
       }
     }
   }
 
-  grouping aft-pf-entry-config {
+  grouping aft-pf-entry-state {
     description
-      "Configuration parameters for the Policy Forwarding
+      "Operational state parameters for the Policy Forwarding
       AFT entry.";
 
     leaf index {
@@ -161,12 +196,7 @@ submodule openconfig-aft-pf {
         "The value of the destination port field of the transport
         header that is to be matched by the AFT entry.";
     }
-  }
 
-  grouping aft-pf-entry-state {
-    description
-      "Operational state parameters for the Policy Forwarding
-      AFT entry.";
     uses aft-common-entry-state;
   }
 }

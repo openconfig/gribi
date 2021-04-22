@@ -48,6 +48,45 @@ type Binary []byte
 // in the generated code.
 type YANGEmpty bool
 
+// UnionInt8 is an int8 type assignable to unions of which it is a subtype.
+type UnionInt8 int8
+
+// UnionInt16 is an int16 type assignable to unions of which it is a subtype.
+type UnionInt16 int16
+
+// UnionInt32 is an int32 type assignable to unions of which it is a subtype.
+type UnionInt32 int32
+
+// UnionInt64 is an int64 type assignable to unions of which it is a subtype.
+type UnionInt64 int64
+
+// UnionUint8 is a uint8 type assignable to unions of which it is a subtype.
+type UnionUint8 uint8
+
+// UnionUint16 is a uint16 type assignable to unions of which it is a subtype.
+type UnionUint16 uint16
+
+// UnionUint32 is a uint32 type assignable to unions of which it is a subtype.
+type UnionUint32 uint32
+
+// UnionUint64 is a uint64 type assignable to unions of which it is a subtype.
+type UnionUint64 uint64
+
+// UnionFloat64 is a float64 type assignable to unions of which it is a subtype.
+type UnionFloat64 float64
+
+// UnionString is a string type assignable to unions of which it is a subtype.
+type UnionString string
+
+// UnionBool is a bool type assignable to unions of which it is a subtype.
+type UnionBool bool
+
+// UnionUnsupported is an interface{} wrapper type for unsupported types. It is
+// assignable to unions of which it is a subtype.
+type UnionUnsupported struct {
+	Value interface{}
+}
+
 var (
 	SchemaTree map[string]*yang.Entry
 )
@@ -105,7 +144,9 @@ func Unmarshal(data []byte, destStruct ygot.GoStruct, opts ...ytypes.UnmarshalOp
 
 // Device represents the /device YANG schema element.
 type Device struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Afts	*GribiAft_Afts	`path:"afts" module:"gribi-aft"`
+	ΛAfts	[]ygot.Annotation	`path:"@afts" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that Device implements the yang.GoStruct
@@ -128,13 +169,21 @@ func (t *Device) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes 
 
 // GribiAft_Afts represents the /gribi-aft/afts YANG schema element.
 type GribiAft_Afts struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Ethernet	*GribiAft_Afts_Ethernet	`path:"ethernet" module:"gribi-aft"`
+	ΛEthernet	[]ygot.Annotation	`path:"@ethernet" ygotAnnotation:"true"`
 	Ipv4Unicast	*GribiAft_Afts_Ipv4Unicast	`path:"ipv4-unicast" module:"gribi-aft"`
+	ΛIpv4Unicast	[]ygot.Annotation	`path:"@ipv4-unicast" ygotAnnotation:"true"`
 	Ipv6Unicast	*GribiAft_Afts_Ipv6Unicast	`path:"ipv6-unicast" module:"gribi-aft"`
+	ΛIpv6Unicast	[]ygot.Annotation	`path:"@ipv6-unicast" ygotAnnotation:"true"`
 	Mpls	*GribiAft_Afts_Mpls	`path:"mpls" module:"gribi-aft"`
+	ΛMpls	[]ygot.Annotation	`path:"@mpls" ygotAnnotation:"true"`
 	NextHopGroups	*GribiAft_Afts_NextHopGroups	`path:"next-hop-groups" module:"gribi-aft"`
+	ΛNextHopGroups	[]ygot.Annotation	`path:"@next-hop-groups" ygotAnnotation:"true"`
 	NextHops	*GribiAft_Afts_NextHops	`path:"next-hops" module:"gribi-aft"`
+	ΛNextHops	[]ygot.Annotation	`path:"@next-hops" ygotAnnotation:"true"`
 	PolicyForwarding	*GribiAft_Afts_PolicyForwarding	`path:"policy-forwarding" module:"gribi-aft"`
+	ΛPolicyForwarding	[]ygot.Annotation	`path:"@policy-forwarding" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts implements the yang.GoStruct
@@ -157,7 +206,9 @@ func (t *GribiAft_Afts) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnu
 
 // GribiAft_Afts_Ethernet represents the /gribi-aft/afts/ethernet YANG schema element.
 type GribiAft_Afts_Ethernet struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	MacEntry	map[string]*GribiAft_Afts_Ethernet_MacEntry	`path:"mac-entry" module:"gribi-aft"`
+	ΛMacEntry	[]ygot.Annotation	`path:"@mac-entry" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Ethernet implements the yang.GoStruct
@@ -192,6 +243,50 @@ func (t *GribiAft_Afts_Ethernet) NewMacEntry(MacAddress string) (*GribiAft_Afts_
 	return t.MacEntry[key], nil
 }
 
+// RenameMacEntry renames an entry in the list MacEntry within
+// the GribiAft_Afts_Ethernet struct. The entry with key oldK is renamed to newK updating
+// the key within the value.
+func (t *GribiAft_Afts_Ethernet) RenameMacEntry(oldK, newK string) error {
+	if _, ok := t.MacEntry[newK]; ok {
+		return fmt.Errorf("key %v already exists in MacEntry", newK)
+	}
+
+	e, ok := t.MacEntry[oldK]
+	if !ok {
+		return fmt.Errorf("key %v not found in MacEntry", oldK)
+	}
+	e.MacAddress = &newK
+
+	t.MacEntry[newK] = e
+	delete(t.MacEntry, oldK)
+	return nil
+}
+
+// AppendMacEntry appends the supplied GribiAft_Afts_Ethernet_MacEntry struct to the
+// list MacEntry of GribiAft_Afts_Ethernet. If the key value(s) specified in
+// the supplied GribiAft_Afts_Ethernet_MacEntry already exist in the list, an error is
+// returned.
+func (t *GribiAft_Afts_Ethernet) AppendMacEntry(v *GribiAft_Afts_Ethernet_MacEntry) error {
+	if v.MacAddress == nil {
+		return fmt.Errorf("invalid nil key received for MacAddress")
+	}
+
+	key := *v.MacAddress
+
+	// Initialise the list within the receiver struct if it has not already been
+	// created.
+	if t.MacEntry == nil {
+		t.MacEntry = make(map[string]*GribiAft_Afts_Ethernet_MacEntry)
+	}
+
+	if _, ok := t.MacEntry[key]; ok {
+		return fmt.Errorf("duplicate key for list MacEntry %v", key)
+	}
+
+	t.MacEntry[key] = v
+	return nil
+}
+
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_Ethernet) Validate(opts ...ygot.ValidationOption) error {
 	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_Ethernet"], t, opts...); err != nil {
@@ -207,15 +302,31 @@ func (t *GribiAft_Afts_Ethernet) ΛEnumTypeMap() map[string][]reflect.Type { ret
 
 // GribiAft_Afts_Ethernet_MacEntry represents the /gribi-aft/afts/ethernet/mac-entry YANG schema element.
 type GribiAft_Afts_Ethernet_MacEntry struct {
-	Config	*GribiAft_Afts_Ethernet_MacEntry_Config	`path:"config" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	MacAddress	*string	`path:"mac-address" module:"gribi-aft"`
+	ΛMacAddress	[]ygot.Annotation	`path:"@mac-address" ygotAnnotation:"true"`
 	State	*GribiAft_Afts_Ethernet_MacEntry_State	`path:"state" module:"gribi-aft"`
+	ΛState	[]ygot.Annotation	`path:"@state" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Ethernet_MacEntry implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_Ethernet_MacEntry) IsYANGGoStruct() {}
+
+// GetMacAddress retrieves the value of the leaf MacAddress from the GribiAft_Afts_Ethernet_MacEntry
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if MacAddress is set, it can safely use t.GetMacAddress()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.MacAddress == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ethernet_MacEntry) GetMacAddress() string {
+	if t == nil || t.MacAddress == nil {
+		return ""
+	}
+	return *t.MacAddress
+}
 
 // ΛListKeyMap returns the keys of the GribiAft_Afts_Ethernet_MacEntry struct, which is a YANG list entry.
 func (t *GribiAft_Afts_Ethernet_MacEntry) ΛListKeyMap() (map[string]interface{}, error) {
@@ -241,41 +352,79 @@ func (t *GribiAft_Afts_Ethernet_MacEntry) Validate(opts ...ygot.ValidationOption
 func (t *GribiAft_Afts_Ethernet_MacEntry) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
 
 
-// GribiAft_Afts_Ethernet_MacEntry_Config represents the /gribi-aft/afts/ethernet/mac-entry/config YANG schema element.
-type GribiAft_Afts_Ethernet_MacEntry_Config struct {
-	MacAddress	*string	`path:"mac-address" module:"gribi-aft"`
-}
-
-// IsYANGGoStruct ensures that GribiAft_Afts_Ethernet_MacEntry_Config implements the yang.GoStruct
-// interface. This allows functions that need to handle this struct to
-// identify it as being generated by ygen.
-func (*GribiAft_Afts_Ethernet_MacEntry_Config) IsYANGGoStruct() {}
-
-// Validate validates s against the YANG schema corresponding to its type.
-func (t *GribiAft_Afts_Ethernet_MacEntry_Config) Validate(opts ...ygot.ValidationOption) error {
-	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_Ethernet_MacEntry_Config"], t, opts...); err != nil {
-		return err
-	}
-	return nil
-}
-
-// ΛEnumTypeMap returns a map, keyed by YANG schema path, of the enumerated types
-// that are included in the generated code.
-func (t *GribiAft_Afts_Ethernet_MacEntry_Config) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
-
-
 // GribiAft_Afts_Ethernet_MacEntry_State represents the /gribi-aft/afts/ethernet/mac-entry/state YANG schema element.
 type GribiAft_Afts_Ethernet_MacEntry_State struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	MacAddress	*string	`path:"mac-address" module:"gribi-aft"`
+	ΛMacAddress	[]ygot.Annotation	`path:"@mac-address" ygotAnnotation:"true"`
 	NextHopGroup	*uint64	`path:"next-hop-group" module:"gribi-aft"`
+	ΛNextHopGroup	[]ygot.Annotation	`path:"@next-hop-group" ygotAnnotation:"true"`
 	OctetsForwarded	*uint64	`path:"octets-forwarded" module:"gribi-aft"`
+	ΛOctetsForwarded	[]ygot.Annotation	`path:"@octets-forwarded" ygotAnnotation:"true"`
 	PacketsForwarded	*uint64	`path:"packets-forwarded" module:"gribi-aft"`
+	ΛPacketsForwarded	[]ygot.Annotation	`path:"@packets-forwarded" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Ethernet_MacEntry_State implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_Ethernet_MacEntry_State) IsYANGGoStruct() {}
+
+// GetMacAddress retrieves the value of the leaf MacAddress from the GribiAft_Afts_Ethernet_MacEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if MacAddress is set, it can safely use t.GetMacAddress()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.MacAddress == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ethernet_MacEntry_State) GetMacAddress() string {
+	if t == nil || t.MacAddress == nil {
+		return ""
+	}
+	return *t.MacAddress
+}
+
+// GetNextHopGroup retrieves the value of the leaf NextHopGroup from the GribiAft_Afts_Ethernet_MacEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if NextHopGroup is set, it can safely use t.GetNextHopGroup()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.NextHopGroup == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ethernet_MacEntry_State) GetNextHopGroup() uint64 {
+	if t == nil || t.NextHopGroup == nil {
+		return 0
+	}
+	return *t.NextHopGroup
+}
+
+// GetOctetsForwarded retrieves the value of the leaf OctetsForwarded from the GribiAft_Afts_Ethernet_MacEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if OctetsForwarded is set, it can safely use t.GetOctetsForwarded()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.OctetsForwarded == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ethernet_MacEntry_State) GetOctetsForwarded() uint64 {
+	if t == nil || t.OctetsForwarded == nil {
+		return 0
+	}
+	return *t.OctetsForwarded
+}
+
+// GetPacketsForwarded retrieves the value of the leaf PacketsForwarded from the GribiAft_Afts_Ethernet_MacEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if PacketsForwarded is set, it can safely use t.GetPacketsForwarded()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.PacketsForwarded == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ethernet_MacEntry_State) GetPacketsForwarded() uint64 {
+	if t == nil || t.PacketsForwarded == nil {
+		return 0
+	}
+	return *t.PacketsForwarded
+}
 
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_Ethernet_MacEntry_State) Validate(opts ...ygot.ValidationOption) error {
@@ -292,7 +441,9 @@ func (t *GribiAft_Afts_Ethernet_MacEntry_State) ΛEnumTypeMap() map[string][]ref
 
 // GribiAft_Afts_Ipv4Unicast represents the /gribi-aft/afts/ipv4-unicast YANG schema element.
 type GribiAft_Afts_Ipv4Unicast struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Ipv4Entry	map[string]*GribiAft_Afts_Ipv4Unicast_Ipv4Entry	`path:"ipv4-entry" module:"gribi-aft"`
+	ΛIpv4Entry	[]ygot.Annotation	`path:"@ipv4-entry" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Ipv4Unicast implements the yang.GoStruct
@@ -327,6 +478,50 @@ func (t *GribiAft_Afts_Ipv4Unicast) NewIpv4Entry(Prefix string) (*GribiAft_Afts_
 	return t.Ipv4Entry[key], nil
 }
 
+// RenameIpv4Entry renames an entry in the list Ipv4Entry within
+// the GribiAft_Afts_Ipv4Unicast struct. The entry with key oldK is renamed to newK updating
+// the key within the value.
+func (t *GribiAft_Afts_Ipv4Unicast) RenameIpv4Entry(oldK, newK string) error {
+	if _, ok := t.Ipv4Entry[newK]; ok {
+		return fmt.Errorf("key %v already exists in Ipv4Entry", newK)
+	}
+
+	e, ok := t.Ipv4Entry[oldK]
+	if !ok {
+		return fmt.Errorf("key %v not found in Ipv4Entry", oldK)
+	}
+	e.Prefix = &newK
+
+	t.Ipv4Entry[newK] = e
+	delete(t.Ipv4Entry, oldK)
+	return nil
+}
+
+// AppendIpv4Entry appends the supplied GribiAft_Afts_Ipv4Unicast_Ipv4Entry struct to the
+// list Ipv4Entry of GribiAft_Afts_Ipv4Unicast. If the key value(s) specified in
+// the supplied GribiAft_Afts_Ipv4Unicast_Ipv4Entry already exist in the list, an error is
+// returned.
+func (t *GribiAft_Afts_Ipv4Unicast) AppendIpv4Entry(v *GribiAft_Afts_Ipv4Unicast_Ipv4Entry) error {
+	if v.Prefix == nil {
+		return fmt.Errorf("invalid nil key received for Prefix")
+	}
+
+	key := *v.Prefix
+
+	// Initialise the list within the receiver struct if it has not already been
+	// created.
+	if t.Ipv4Entry == nil {
+		t.Ipv4Entry = make(map[string]*GribiAft_Afts_Ipv4Unicast_Ipv4Entry)
+	}
+
+	if _, ok := t.Ipv4Entry[key]; ok {
+		return fmt.Errorf("duplicate key for list Ipv4Entry %v", key)
+	}
+
+	t.Ipv4Entry[key] = v
+	return nil
+}
+
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_Ipv4Unicast) Validate(opts ...ygot.ValidationOption) error {
 	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_Ipv4Unicast"], t, opts...); err != nil {
@@ -342,15 +537,31 @@ func (t *GribiAft_Afts_Ipv4Unicast) ΛEnumTypeMap() map[string][]reflect.Type { 
 
 // GribiAft_Afts_Ipv4Unicast_Ipv4Entry represents the /gribi-aft/afts/ipv4-unicast/ipv4-entry YANG schema element.
 type GribiAft_Afts_Ipv4Unicast_Ipv4Entry struct {
-	Config	*GribiAft_Afts_Ipv4Unicast_Ipv4Entry_Config	`path:"config" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Prefix	*string	`path:"prefix" module:"gribi-aft"`
+	ΛPrefix	[]ygot.Annotation	`path:"@prefix" ygotAnnotation:"true"`
 	State	*GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State	`path:"state" module:"gribi-aft"`
+	ΛState	[]ygot.Annotation	`path:"@state" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Ipv4Unicast_Ipv4Entry implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_Ipv4Unicast_Ipv4Entry) IsYANGGoStruct() {}
+
+// GetPrefix retrieves the value of the leaf Prefix from the GribiAft_Afts_Ipv4Unicast_Ipv4Entry
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Prefix is set, it can safely use t.GetPrefix()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Prefix == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry) GetPrefix() string {
+	if t == nil || t.Prefix == nil {
+		return ""
+	}
+	return *t.Prefix
+}
 
 // ΛListKeyMap returns the keys of the GribiAft_Afts_Ipv4Unicast_Ipv4Entry struct, which is a YANG list entry.
 func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry) ΛListKeyMap() (map[string]interface{}, error) {
@@ -376,42 +587,95 @@ func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry) Validate(opts ...ygot.ValidationOp
 func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
 
 
-// GribiAft_Afts_Ipv4Unicast_Ipv4Entry_Config represents the /gribi-aft/afts/ipv4-unicast/ipv4-entry/config YANG schema element.
-type GribiAft_Afts_Ipv4Unicast_Ipv4Entry_Config struct {
-	Prefix	*string	`path:"prefix" module:"gribi-aft"`
-}
-
-// IsYANGGoStruct ensures that GribiAft_Afts_Ipv4Unicast_Ipv4Entry_Config implements the yang.GoStruct
-// interface. This allows functions that need to handle this struct to
-// identify it as being generated by ygen.
-func (*GribiAft_Afts_Ipv4Unicast_Ipv4Entry_Config) IsYANGGoStruct() {}
-
-// Validate validates s against the YANG schema corresponding to its type.
-func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry_Config) Validate(opts ...ygot.ValidationOption) error {
-	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_Ipv4Unicast_Ipv4Entry_Config"], t, opts...); err != nil {
-		return err
-	}
-	return nil
-}
-
-// ΛEnumTypeMap returns a map, keyed by YANG schema path, of the enumerated types
-// that are included in the generated code.
-func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry_Config) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
-
-
 // GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State represents the /gribi-aft/afts/ipv4-unicast/ipv4-entry/state YANG schema element.
 type GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State struct {
-	DecapsulateHeader	E_OpenconfigAft_EncapsulationHeaderType	`path:"decapsulate-header" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
+	DecapsulateHeader	E_OpenconfigAftTypes_EncapsulationHeaderType	`path:"decapsulate-header" module:"gribi-aft"`
+	ΛDecapsulateHeader	[]ygot.Annotation	`path:"@decapsulate-header" ygotAnnotation:"true"`
 	NextHopGroup	*uint64	`path:"next-hop-group" module:"gribi-aft"`
+	ΛNextHopGroup	[]ygot.Annotation	`path:"@next-hop-group" ygotAnnotation:"true"`
 	OctetsForwarded	*uint64	`path:"octets-forwarded" module:"gribi-aft"`
+	ΛOctetsForwarded	[]ygot.Annotation	`path:"@octets-forwarded" ygotAnnotation:"true"`
 	PacketsForwarded	*uint64	`path:"packets-forwarded" module:"gribi-aft"`
+	ΛPacketsForwarded	[]ygot.Annotation	`path:"@packets-forwarded" ygotAnnotation:"true"`
 	Prefix	*string	`path:"prefix" module:"gribi-aft"`
+	ΛPrefix	[]ygot.Annotation	`path:"@prefix" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State) IsYANGGoStruct() {}
+
+// GetDecapsulateHeader retrieves the value of the leaf DecapsulateHeader from the GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if DecapsulateHeader is set, it can safely use t.GetDecapsulateHeader()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.DecapsulateHeader == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State) GetDecapsulateHeader() E_OpenconfigAftTypes_EncapsulationHeaderType {
+	if t == nil || t.DecapsulateHeader ==  0 {
+		return 0
+	}
+	return t.DecapsulateHeader
+}
+
+// GetNextHopGroup retrieves the value of the leaf NextHopGroup from the GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if NextHopGroup is set, it can safely use t.GetNextHopGroup()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.NextHopGroup == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State) GetNextHopGroup() uint64 {
+	if t == nil || t.NextHopGroup == nil {
+		return 0
+	}
+	return *t.NextHopGroup
+}
+
+// GetOctetsForwarded retrieves the value of the leaf OctetsForwarded from the GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if OctetsForwarded is set, it can safely use t.GetOctetsForwarded()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.OctetsForwarded == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State) GetOctetsForwarded() uint64 {
+	if t == nil || t.OctetsForwarded == nil {
+		return 0
+	}
+	return *t.OctetsForwarded
+}
+
+// GetPacketsForwarded retrieves the value of the leaf PacketsForwarded from the GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if PacketsForwarded is set, it can safely use t.GetPacketsForwarded()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.PacketsForwarded == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State) GetPacketsForwarded() uint64 {
+	if t == nil || t.PacketsForwarded == nil {
+		return 0
+	}
+	return *t.PacketsForwarded
+}
+
+// GetPrefix retrieves the value of the leaf Prefix from the GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Prefix is set, it can safely use t.GetPrefix()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Prefix == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State) GetPrefix() string {
+	if t == nil || t.Prefix == nil {
+		return ""
+	}
+	return *t.Prefix
+}
 
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State) Validate(opts ...ygot.ValidationOption) error {
@@ -428,7 +692,9 @@ func (t *GribiAft_Afts_Ipv4Unicast_Ipv4Entry_State) ΛEnumTypeMap() map[string][
 
 // GribiAft_Afts_Ipv6Unicast represents the /gribi-aft/afts/ipv6-unicast YANG schema element.
 type GribiAft_Afts_Ipv6Unicast struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Ipv6Entry	map[string]*GribiAft_Afts_Ipv6Unicast_Ipv6Entry	`path:"ipv6-entry" module:"gribi-aft"`
+	ΛIpv6Entry	[]ygot.Annotation	`path:"@ipv6-entry" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Ipv6Unicast implements the yang.GoStruct
@@ -463,6 +729,50 @@ func (t *GribiAft_Afts_Ipv6Unicast) NewIpv6Entry(Prefix string) (*GribiAft_Afts_
 	return t.Ipv6Entry[key], nil
 }
 
+// RenameIpv6Entry renames an entry in the list Ipv6Entry within
+// the GribiAft_Afts_Ipv6Unicast struct. The entry with key oldK is renamed to newK updating
+// the key within the value.
+func (t *GribiAft_Afts_Ipv6Unicast) RenameIpv6Entry(oldK, newK string) error {
+	if _, ok := t.Ipv6Entry[newK]; ok {
+		return fmt.Errorf("key %v already exists in Ipv6Entry", newK)
+	}
+
+	e, ok := t.Ipv6Entry[oldK]
+	if !ok {
+		return fmt.Errorf("key %v not found in Ipv6Entry", oldK)
+	}
+	e.Prefix = &newK
+
+	t.Ipv6Entry[newK] = e
+	delete(t.Ipv6Entry, oldK)
+	return nil
+}
+
+// AppendIpv6Entry appends the supplied GribiAft_Afts_Ipv6Unicast_Ipv6Entry struct to the
+// list Ipv6Entry of GribiAft_Afts_Ipv6Unicast. If the key value(s) specified in
+// the supplied GribiAft_Afts_Ipv6Unicast_Ipv6Entry already exist in the list, an error is
+// returned.
+func (t *GribiAft_Afts_Ipv6Unicast) AppendIpv6Entry(v *GribiAft_Afts_Ipv6Unicast_Ipv6Entry) error {
+	if v.Prefix == nil {
+		return fmt.Errorf("invalid nil key received for Prefix")
+	}
+
+	key := *v.Prefix
+
+	// Initialise the list within the receiver struct if it has not already been
+	// created.
+	if t.Ipv6Entry == nil {
+		t.Ipv6Entry = make(map[string]*GribiAft_Afts_Ipv6Unicast_Ipv6Entry)
+	}
+
+	if _, ok := t.Ipv6Entry[key]; ok {
+		return fmt.Errorf("duplicate key for list Ipv6Entry %v", key)
+	}
+
+	t.Ipv6Entry[key] = v
+	return nil
+}
+
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_Ipv6Unicast) Validate(opts ...ygot.ValidationOption) error {
 	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_Ipv6Unicast"], t, opts...); err != nil {
@@ -478,15 +788,31 @@ func (t *GribiAft_Afts_Ipv6Unicast) ΛEnumTypeMap() map[string][]reflect.Type { 
 
 // GribiAft_Afts_Ipv6Unicast_Ipv6Entry represents the /gribi-aft/afts/ipv6-unicast/ipv6-entry YANG schema element.
 type GribiAft_Afts_Ipv6Unicast_Ipv6Entry struct {
-	Config	*GribiAft_Afts_Ipv6Unicast_Ipv6Entry_Config	`path:"config" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Prefix	*string	`path:"prefix" module:"gribi-aft"`
+	ΛPrefix	[]ygot.Annotation	`path:"@prefix" ygotAnnotation:"true"`
 	State	*GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State	`path:"state" module:"gribi-aft"`
+	ΛState	[]ygot.Annotation	`path:"@state" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Ipv6Unicast_Ipv6Entry implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_Ipv6Unicast_Ipv6Entry) IsYANGGoStruct() {}
+
+// GetPrefix retrieves the value of the leaf Prefix from the GribiAft_Afts_Ipv6Unicast_Ipv6Entry
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Prefix is set, it can safely use t.GetPrefix()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Prefix == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry) GetPrefix() string {
+	if t == nil || t.Prefix == nil {
+		return ""
+	}
+	return *t.Prefix
+}
 
 // ΛListKeyMap returns the keys of the GribiAft_Afts_Ipv6Unicast_Ipv6Entry struct, which is a YANG list entry.
 func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry) ΛListKeyMap() (map[string]interface{}, error) {
@@ -512,42 +838,95 @@ func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry) Validate(opts ...ygot.ValidationOp
 func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
 
 
-// GribiAft_Afts_Ipv6Unicast_Ipv6Entry_Config represents the /gribi-aft/afts/ipv6-unicast/ipv6-entry/config YANG schema element.
-type GribiAft_Afts_Ipv6Unicast_Ipv6Entry_Config struct {
-	Prefix	*string	`path:"prefix" module:"gribi-aft"`
-}
-
-// IsYANGGoStruct ensures that GribiAft_Afts_Ipv6Unicast_Ipv6Entry_Config implements the yang.GoStruct
-// interface. This allows functions that need to handle this struct to
-// identify it as being generated by ygen.
-func (*GribiAft_Afts_Ipv6Unicast_Ipv6Entry_Config) IsYANGGoStruct() {}
-
-// Validate validates s against the YANG schema corresponding to its type.
-func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry_Config) Validate(opts ...ygot.ValidationOption) error {
-	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_Ipv6Unicast_Ipv6Entry_Config"], t, opts...); err != nil {
-		return err
-	}
-	return nil
-}
-
-// ΛEnumTypeMap returns a map, keyed by YANG schema path, of the enumerated types
-// that are included in the generated code.
-func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry_Config) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
-
-
 // GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State represents the /gribi-aft/afts/ipv6-unicast/ipv6-entry/state YANG schema element.
 type GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State struct {
-	DecapsulateHeader	E_OpenconfigAft_EncapsulationHeaderType	`path:"decapsulate-header" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
+	DecapsulateHeader	E_OpenconfigAftTypes_EncapsulationHeaderType	`path:"decapsulate-header" module:"gribi-aft"`
+	ΛDecapsulateHeader	[]ygot.Annotation	`path:"@decapsulate-header" ygotAnnotation:"true"`
 	NextHopGroup	*uint64	`path:"next-hop-group" module:"gribi-aft"`
+	ΛNextHopGroup	[]ygot.Annotation	`path:"@next-hop-group" ygotAnnotation:"true"`
 	OctetsForwarded	*uint64	`path:"octets-forwarded" module:"gribi-aft"`
+	ΛOctetsForwarded	[]ygot.Annotation	`path:"@octets-forwarded" ygotAnnotation:"true"`
 	PacketsForwarded	*uint64	`path:"packets-forwarded" module:"gribi-aft"`
+	ΛPacketsForwarded	[]ygot.Annotation	`path:"@packets-forwarded" ygotAnnotation:"true"`
 	Prefix	*string	`path:"prefix" module:"gribi-aft"`
+	ΛPrefix	[]ygot.Annotation	`path:"@prefix" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State) IsYANGGoStruct() {}
+
+// GetDecapsulateHeader retrieves the value of the leaf DecapsulateHeader from the GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if DecapsulateHeader is set, it can safely use t.GetDecapsulateHeader()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.DecapsulateHeader == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State) GetDecapsulateHeader() E_OpenconfigAftTypes_EncapsulationHeaderType {
+	if t == nil || t.DecapsulateHeader ==  0 {
+		return 0
+	}
+	return t.DecapsulateHeader
+}
+
+// GetNextHopGroup retrieves the value of the leaf NextHopGroup from the GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if NextHopGroup is set, it can safely use t.GetNextHopGroup()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.NextHopGroup == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State) GetNextHopGroup() uint64 {
+	if t == nil || t.NextHopGroup == nil {
+		return 0
+	}
+	return *t.NextHopGroup
+}
+
+// GetOctetsForwarded retrieves the value of the leaf OctetsForwarded from the GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if OctetsForwarded is set, it can safely use t.GetOctetsForwarded()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.OctetsForwarded == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State) GetOctetsForwarded() uint64 {
+	if t == nil || t.OctetsForwarded == nil {
+		return 0
+	}
+	return *t.OctetsForwarded
+}
+
+// GetPacketsForwarded retrieves the value of the leaf PacketsForwarded from the GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if PacketsForwarded is set, it can safely use t.GetPacketsForwarded()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.PacketsForwarded == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State) GetPacketsForwarded() uint64 {
+	if t == nil || t.PacketsForwarded == nil {
+		return 0
+	}
+	return *t.PacketsForwarded
+}
+
+// GetPrefix retrieves the value of the leaf Prefix from the GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Prefix is set, it can safely use t.GetPrefix()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Prefix == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State) GetPrefix() string {
+	if t == nil || t.Prefix == nil {
+		return ""
+	}
+	return *t.Prefix
+}
 
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State) Validate(opts ...ygot.ValidationOption) error {
@@ -564,7 +943,9 @@ func (t *GribiAft_Afts_Ipv6Unicast_Ipv6Entry_State) ΛEnumTypeMap() map[string][
 
 // GribiAft_Afts_Mpls represents the /gribi-aft/afts/mpls YANG schema element.
 type GribiAft_Afts_Mpls struct {
-	LabelEntry	map[GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union]*GribiAft_Afts_Mpls_LabelEntry	`path:"label-entry" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
+	LabelEntry	map[GribiAft_Afts_Mpls_LabelEntry_State_Label_Union]*GribiAft_Afts_Mpls_LabelEntry	`path:"label-entry" module:"gribi-aft"`
+	ΛLabelEntry	[]ygot.Annotation	`path:"@label-entry" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Mpls implements the yang.GoStruct
@@ -575,12 +956,12 @@ func (*GribiAft_Afts_Mpls) IsYANGGoStruct() {}
 // NewLabelEntry creates a new entry in the LabelEntry list of the
 // GribiAft_Afts_Mpls struct. The keys of the list are populated from the input
 // arguments.
-func (t *GribiAft_Afts_Mpls) NewLabelEntry(Label GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union) (*GribiAft_Afts_Mpls_LabelEntry, error){
+func (t *GribiAft_Afts_Mpls) NewLabelEntry(Label GribiAft_Afts_Mpls_LabelEntry_State_Label_Union) (*GribiAft_Afts_Mpls_LabelEntry, error){
 
 	// Initialise the list within the receiver struct if it has not already been
 	// created.
 	if t.LabelEntry == nil {
-		t.LabelEntry = make(map[GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union]*GribiAft_Afts_Mpls_LabelEntry)
+		t.LabelEntry = make(map[GribiAft_Afts_Mpls_LabelEntry_State_Label_Union]*GribiAft_Afts_Mpls_LabelEntry)
 	}
 
 	key := Label
@@ -599,6 +980,46 @@ func (t *GribiAft_Afts_Mpls) NewLabelEntry(Label GribiAft_Afts_Mpls_LabelEntry_C
 	return t.LabelEntry[key], nil
 }
 
+// RenameLabelEntry renames an entry in the list LabelEntry within
+// the GribiAft_Afts_Mpls struct. The entry with key oldK is renamed to newK updating
+// the key within the value.
+func (t *GribiAft_Afts_Mpls) RenameLabelEntry(oldK, newK GribiAft_Afts_Mpls_LabelEntry_State_Label_Union) error {
+	if _, ok := t.LabelEntry[newK]; ok {
+		return fmt.Errorf("key %v already exists in LabelEntry", newK)
+	}
+
+	e, ok := t.LabelEntry[oldK]
+	if !ok {
+		return fmt.Errorf("key %v not found in LabelEntry", oldK)
+	}
+	e.Label = newK
+
+	t.LabelEntry[newK] = e
+	delete(t.LabelEntry, oldK)
+	return nil
+}
+
+// AppendLabelEntry appends the supplied GribiAft_Afts_Mpls_LabelEntry struct to the
+// list LabelEntry of GribiAft_Afts_Mpls. If the key value(s) specified in
+// the supplied GribiAft_Afts_Mpls_LabelEntry already exist in the list, an error is
+// returned.
+func (t *GribiAft_Afts_Mpls) AppendLabelEntry(v *GribiAft_Afts_Mpls_LabelEntry) error {
+	key := v.Label
+
+	// Initialise the list within the receiver struct if it has not already been
+	// created.
+	if t.LabelEntry == nil {
+		t.LabelEntry = make(map[GribiAft_Afts_Mpls_LabelEntry_State_Label_Union]*GribiAft_Afts_Mpls_LabelEntry)
+	}
+
+	if _, ok := t.LabelEntry[key]; ok {
+		return fmt.Errorf("duplicate key for list LabelEntry %v", key)
+	}
+
+	t.LabelEntry[key] = v
+	return nil
+}
+
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_Mpls) Validate(opts ...ygot.ValidationOption) error {
 	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_Mpls"], t, opts...); err != nil {
@@ -614,15 +1035,31 @@ func (t *GribiAft_Afts_Mpls) ΛEnumTypeMap() map[string][]reflect.Type { return 
 
 // GribiAft_Afts_Mpls_LabelEntry represents the /gribi-aft/afts/mpls/label-entry YANG schema element.
 type GribiAft_Afts_Mpls_LabelEntry struct {
-	Config	*GribiAft_Afts_Mpls_LabelEntry_Config	`path:"config" module:"gribi-aft"`
-	Label	GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union	`path:"label" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
+	Label	GribiAft_Afts_Mpls_LabelEntry_State_Label_Union	`path:"label" module:"gribi-aft"`
+	ΛLabel	[]ygot.Annotation	`path:"@label" ygotAnnotation:"true"`
 	State	*GribiAft_Afts_Mpls_LabelEntry_State	`path:"state" module:"gribi-aft"`
+	ΛState	[]ygot.Annotation	`path:"@state" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Mpls_LabelEntry implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_Mpls_LabelEntry) IsYANGGoStruct() {}
+
+// GetLabel retrieves the value of the leaf Label from the GribiAft_Afts_Mpls_LabelEntry
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Label is set, it can safely use t.GetLabel()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Label == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Mpls_LabelEntry) GetLabel() GribiAft_Afts_Mpls_LabelEntry_State_Label_Union {
+	if t == nil || t.Label ==  nil {
+		return nil
+	}
+	return t.Label
+}
 
 // ΛListKeyMap returns the keys of the GribiAft_Afts_Mpls_LabelEntry struct, which is a YANG list entry.
 func (t *GribiAft_Afts_Mpls_LabelEntry) ΛListKeyMap() (map[string]interface{}, error) {
@@ -644,97 +1081,126 @@ func (t *GribiAft_Afts_Mpls_LabelEntry) Validate(opts ...ygot.ValidationOption) 
 // that are included in the generated code.
 func (t *GribiAft_Afts_Mpls_LabelEntry) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
 
-// GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union is an interface that is implemented by valid types for the union
+// GribiAft_Afts_Mpls_LabelEntry_State_Label_Union is an interface that is implemented by valid types for the union
 // for the leaf /gribi-aft/afts/mpls/label-entry/label within the YANG schema.
-type GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union interface {
-	Is_GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union()
+// Union type can be one of [E_OpenconfigMplsTypes_MplsLabel_Enum, UnionUint32].
+type GribiAft_Afts_Mpls_LabelEntry_State_Label_Union interface {
+	// Union type can be one of [E_OpenconfigMplsTypes_MplsLabel_Enum, UnionUint32]
+	Documentation_for_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union()
 }
 
-// GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_E_GribiAft_Afts_Mpls_LabelEntry_Config_Label is used when /gribi-aft/afts/mpls/label-entry/label
-// is to be set to a E_GribiAft_Afts_Mpls_LabelEntry_Config_Label value.
-type GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_E_GribiAft_Afts_Mpls_LabelEntry_Config_Label struct {
-	E_GribiAft_Afts_Mpls_LabelEntry_Config_Label	E_GribiAft_Afts_Mpls_LabelEntry_Config_Label
-}
+// Documentation_for_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union ensures that E_OpenconfigMplsTypes_MplsLabel_Enum
+// implements the GribiAft_Afts_Mpls_LabelEntry_State_Label_Union interface.
+func (E_OpenconfigMplsTypes_MplsLabel_Enum) Documentation_for_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union() {}
 
-// Is_GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union ensures that GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_E_GribiAft_Afts_Mpls_LabelEntry_Config_Label
-// implements the GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union interface.
-func (*GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_E_GribiAft_Afts_Mpls_LabelEntry_Config_Label) Is_GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union() {}
+// Documentation_for_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union ensures that UnionUint32
+// implements the GribiAft_Afts_Mpls_LabelEntry_State_Label_Union interface.
+func (UnionUint32) Documentation_for_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union() {}
 
-// GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_Uint32 is used when /gribi-aft/afts/mpls/label-entry/label
-// is to be set to a uint32 value.
-type GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_Uint32 struct {
-	Uint32	uint32
-}
-
-// Is_GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union ensures that GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_Uint32
-// implements the GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union interface.
-func (*GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_Uint32) Is_GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union() {}
-
-// To_GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union takes an input interface{} and attempts to convert it to a struct
-// which implements the GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union union. It returns an error if the interface{} supplied
+// To_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union takes an input interface{} and attempts to convert it to a struct
+// which implements the GribiAft_Afts_Mpls_LabelEntry_State_Label_Union union. It returns an error if the interface{} supplied
 // cannot be converted to a type within the union.
-func (t *GribiAft_Afts_Mpls_LabelEntry) To_GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union(i interface{}) (GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union, error) {
+func (t *GribiAft_Afts_Mpls_LabelEntry) To_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union(i interface{}) (GribiAft_Afts_Mpls_LabelEntry_State_Label_Union, error) {
+	if v, ok := i.(GribiAft_Afts_Mpls_LabelEntry_State_Label_Union); ok {
+		return v, nil
+	}
 	switch v := i.(type) {
-	case E_GribiAft_Afts_Mpls_LabelEntry_Config_Label:
-		return &GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_E_GribiAft_Afts_Mpls_LabelEntry_Config_Label{v}, nil
 	case uint32:
-		return &GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_Uint32{v}, nil
-	default:
-		return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union, unknown union type, got: %T, want any of [E_GribiAft_Afts_Mpls_LabelEntry_Config_Label, uint32]", i, i)
+		return UnionUint32(v), nil
 	}
-}
-
-
-// GribiAft_Afts_Mpls_LabelEntry_Config represents the /gribi-aft/afts/mpls/label-entry/config YANG schema element.
-type GribiAft_Afts_Mpls_LabelEntry_Config struct {
-	Label	GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union	`path:"label" module:"gribi-aft"`
-}
-
-// IsYANGGoStruct ensures that GribiAft_Afts_Mpls_LabelEntry_Config implements the yang.GoStruct
-// interface. This allows functions that need to handle this struct to
-// identify it as being generated by ygen.
-func (*GribiAft_Afts_Mpls_LabelEntry_Config) IsYANGGoStruct() {}
-
-// Validate validates s against the YANG schema corresponding to its type.
-func (t *GribiAft_Afts_Mpls_LabelEntry_Config) Validate(opts ...ygot.ValidationOption) error {
-	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_Mpls_LabelEntry_Config"], t, opts...); err != nil {
-		return err
-	}
-	return nil
-}
-
-// ΛEnumTypeMap returns a map, keyed by YANG schema path, of the enumerated types
-// that are included in the generated code.
-func (t *GribiAft_Afts_Mpls_LabelEntry_Config) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
-
-// To_GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union takes an input interface{} and attempts to convert it to a struct
-// which implements the GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union union. It returns an error if the interface{} supplied
-// cannot be converted to a type within the union.
-func (t *GribiAft_Afts_Mpls_LabelEntry_Config) To_GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union(i interface{}) (GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union, error) {
-	switch v := i.(type) {
-	case E_GribiAft_Afts_Mpls_LabelEntry_Config_Label:
-		return &GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_E_GribiAft_Afts_Mpls_LabelEntry_Config_Label{v}, nil
-	case uint32:
-		return &GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union_Uint32{v}, nil
-	default:
-		return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_Mpls_LabelEntry_Config_Label_Union, unknown union type, got: %T, want any of [E_GribiAft_Afts_Mpls_LabelEntry_Config_Label, uint32]", i, i)
-	}
+	return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_Mpls_LabelEntry_State_Label_Union, unknown union type, got: %T, want any of [E_OpenconfigMplsTypes_MplsLabel_Enum, uint32]", i, i)
 }
 
 
 // GribiAft_Afts_Mpls_LabelEntry_State represents the /gribi-aft/afts/mpls/label-entry/state YANG schema element.
 type GribiAft_Afts_Mpls_LabelEntry_State struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Label	GribiAft_Afts_Mpls_LabelEntry_State_Label_Union	`path:"label" module:"gribi-aft"`
+	ΛLabel	[]ygot.Annotation	`path:"@label" ygotAnnotation:"true"`
 	NextHopGroup	*uint64	`path:"next-hop-group" module:"gribi-aft"`
+	ΛNextHopGroup	[]ygot.Annotation	`path:"@next-hop-group" ygotAnnotation:"true"`
 	OctetsForwarded	*uint64	`path:"octets-forwarded" module:"gribi-aft"`
+	ΛOctetsForwarded	[]ygot.Annotation	`path:"@octets-forwarded" ygotAnnotation:"true"`
 	PacketsForwarded	*uint64	`path:"packets-forwarded" module:"gribi-aft"`
+	ΛPacketsForwarded	[]ygot.Annotation	`path:"@packets-forwarded" ygotAnnotation:"true"`
 	PoppedMplsLabelStack	[]GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union	`path:"popped-mpls-label-stack" module:"gribi-aft"`
+	ΛPoppedMplsLabelStack	[]ygot.Annotation	`path:"@popped-mpls-label-stack" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_Mpls_LabelEntry_State implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_Mpls_LabelEntry_State) IsYANGGoStruct() {}
+
+// GetLabel retrieves the value of the leaf Label from the GribiAft_Afts_Mpls_LabelEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Label is set, it can safely use t.GetLabel()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Label == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Mpls_LabelEntry_State) GetLabel() GribiAft_Afts_Mpls_LabelEntry_State_Label_Union {
+	if t == nil || t.Label ==  nil {
+		return nil
+	}
+	return t.Label
+}
+
+// GetNextHopGroup retrieves the value of the leaf NextHopGroup from the GribiAft_Afts_Mpls_LabelEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if NextHopGroup is set, it can safely use t.GetNextHopGroup()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.NextHopGroup == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Mpls_LabelEntry_State) GetNextHopGroup() uint64 {
+	if t == nil || t.NextHopGroup == nil {
+		return 0
+	}
+	return *t.NextHopGroup
+}
+
+// GetOctetsForwarded retrieves the value of the leaf OctetsForwarded from the GribiAft_Afts_Mpls_LabelEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if OctetsForwarded is set, it can safely use t.GetOctetsForwarded()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.OctetsForwarded == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Mpls_LabelEntry_State) GetOctetsForwarded() uint64 {
+	if t == nil || t.OctetsForwarded == nil {
+		return 0
+	}
+	return *t.OctetsForwarded
+}
+
+// GetPacketsForwarded retrieves the value of the leaf PacketsForwarded from the GribiAft_Afts_Mpls_LabelEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if PacketsForwarded is set, it can safely use t.GetPacketsForwarded()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.PacketsForwarded == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Mpls_LabelEntry_State) GetPacketsForwarded() uint64 {
+	if t == nil || t.PacketsForwarded == nil {
+		return 0
+	}
+	return *t.PacketsForwarded
+}
+
+// GetPoppedMplsLabelStack retrieves the value of the leaf PoppedMplsLabelStack from the GribiAft_Afts_Mpls_LabelEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if PoppedMplsLabelStack is set, it can safely use t.GetPoppedMplsLabelStack()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.PoppedMplsLabelStack == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_Mpls_LabelEntry_State) GetPoppedMplsLabelStack() []GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union {
+	if t == nil || t.PoppedMplsLabelStack ==  nil {
+		return nil
+	}
+	return t.PoppedMplsLabelStack
+}
 
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_Mpls_LabelEntry_State) Validate(opts ...ygot.ValidationOption) error {
@@ -748,90 +1214,56 @@ func (t *GribiAft_Afts_Mpls_LabelEntry_State) Validate(opts ...ygot.ValidationOp
 // that are included in the generated code.
 func (t *GribiAft_Afts_Mpls_LabelEntry_State) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
 
-// GribiAft_Afts_Mpls_LabelEntry_State_Label_Union is an interface that is implemented by valid types for the union
-// for the leaf /gribi-aft/afts/mpls/label-entry/state/label within the YANG schema.
-type GribiAft_Afts_Mpls_LabelEntry_State_Label_Union interface {
-	Is_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union()
-}
-
-// GribiAft_Afts_Mpls_LabelEntry_State_Label_Union_E_GribiAft_Afts_Mpls_LabelEntry_Config_Label is used when /gribi-aft/afts/mpls/label-entry/state/label
-// is to be set to a E_GribiAft_Afts_Mpls_LabelEntry_Config_Label value.
-type GribiAft_Afts_Mpls_LabelEntry_State_Label_Union_E_GribiAft_Afts_Mpls_LabelEntry_Config_Label struct {
-	E_GribiAft_Afts_Mpls_LabelEntry_Config_Label	E_GribiAft_Afts_Mpls_LabelEntry_Config_Label
-}
-
-// Is_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union ensures that GribiAft_Afts_Mpls_LabelEntry_State_Label_Union_E_GribiAft_Afts_Mpls_LabelEntry_Config_Label
-// implements the GribiAft_Afts_Mpls_LabelEntry_State_Label_Union interface.
-func (*GribiAft_Afts_Mpls_LabelEntry_State_Label_Union_E_GribiAft_Afts_Mpls_LabelEntry_Config_Label) Is_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union() {}
-
-// GribiAft_Afts_Mpls_LabelEntry_State_Label_Union_Uint32 is used when /gribi-aft/afts/mpls/label-entry/state/label
-// is to be set to a uint32 value.
-type GribiAft_Afts_Mpls_LabelEntry_State_Label_Union_Uint32 struct {
-	Uint32	uint32
-}
-
-// Is_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union ensures that GribiAft_Afts_Mpls_LabelEntry_State_Label_Union_Uint32
-// implements the GribiAft_Afts_Mpls_LabelEntry_State_Label_Union interface.
-func (*GribiAft_Afts_Mpls_LabelEntry_State_Label_Union_Uint32) Is_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union() {}
-
 // To_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union takes an input interface{} and attempts to convert it to a struct
 // which implements the GribiAft_Afts_Mpls_LabelEntry_State_Label_Union union. It returns an error if the interface{} supplied
 // cannot be converted to a type within the union.
 func (t *GribiAft_Afts_Mpls_LabelEntry_State) To_GribiAft_Afts_Mpls_LabelEntry_State_Label_Union(i interface{}) (GribiAft_Afts_Mpls_LabelEntry_State_Label_Union, error) {
-	switch v := i.(type) {
-	case E_GribiAft_Afts_Mpls_LabelEntry_Config_Label:
-		return &GribiAft_Afts_Mpls_LabelEntry_State_Label_Union_E_GribiAft_Afts_Mpls_LabelEntry_Config_Label{v}, nil
-	case uint32:
-		return &GribiAft_Afts_Mpls_LabelEntry_State_Label_Union_Uint32{v}, nil
-	default:
-		return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_Mpls_LabelEntry_State_Label_Union, unknown union type, got: %T, want any of [E_GribiAft_Afts_Mpls_LabelEntry_Config_Label, uint32]", i, i)
+	if v, ok := i.(GribiAft_Afts_Mpls_LabelEntry_State_Label_Union); ok {
+		return v, nil
 	}
+	switch v := i.(type) {
+	case uint32:
+		return UnionUint32(v), nil
+	}
+	return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_Mpls_LabelEntry_State_Label_Union, unknown union type, got: %T, want any of [E_OpenconfigMplsTypes_MplsLabel_Enum, uint32]", i, i)
 }
 
 // GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union is an interface that is implemented by valid types for the union
 // for the leaf /gribi-aft/afts/mpls/label-entry/state/popped-mpls-label-stack within the YANG schema.
+// Union type can be one of [E_OpenconfigMplsTypes_MplsLabel_Enum, UnionUint32].
 type GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union interface {
-	Is_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union()
+	// Union type can be one of [E_OpenconfigMplsTypes_MplsLabel_Enum, UnionUint32]
+	Documentation_for_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union()
 }
 
-// GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union_E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack is used when /gribi-aft/afts/mpls/label-entry/state/popped-mpls-label-stack
-// is to be set to a E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack value.
-type GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union_E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack struct {
-	E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack	E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack
-}
-
-// Is_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union ensures that GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union_E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack
+// Documentation_for_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union ensures that E_OpenconfigMplsTypes_MplsLabel_Enum
 // implements the GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union interface.
-func (*GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union_E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack) Is_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union() {}
+func (E_OpenconfigMplsTypes_MplsLabel_Enum) Documentation_for_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union() {}
 
-// GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union_Uint32 is used when /gribi-aft/afts/mpls/label-entry/state/popped-mpls-label-stack
-// is to be set to a uint32 value.
-type GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union_Uint32 struct {
-	Uint32	uint32
-}
-
-// Is_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union ensures that GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union_Uint32
+// Documentation_for_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union ensures that UnionUint32
 // implements the GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union interface.
-func (*GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union_Uint32) Is_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union() {}
+func (UnionUint32) Documentation_for_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union() {}
 
 // To_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union takes an input interface{} and attempts to convert it to a struct
 // which implements the GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union union. It returns an error if the interface{} supplied
 // cannot be converted to a type within the union.
 func (t *GribiAft_Afts_Mpls_LabelEntry_State) To_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union(i interface{}) (GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union, error) {
-	switch v := i.(type) {
-	case E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack:
-		return &GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union_E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack{v}, nil
-	case uint32:
-		return &GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union_Uint32{v}, nil
-	default:
-		return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union, unknown union type, got: %T, want any of [E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack, uint32]", i, i)
+	if v, ok := i.(GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union); ok {
+		return v, nil
 	}
+	switch v := i.(type) {
+	case uint32:
+		return UnionUint32(v), nil
+	}
+	return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_Union, unknown union type, got: %T, want any of [E_OpenconfigMplsTypes_MplsLabel_Enum, uint32]", i, i)
 }
 
 
 // GribiAft_Afts_NextHopGroups represents the /gribi-aft/afts/next-hop-groups YANG schema element.
 type GribiAft_Afts_NextHopGroups struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	NextHopGroup	map[uint64]*GribiAft_Afts_NextHopGroups_NextHopGroup	`path:"next-hop-group" module:"gribi-aft"`
+	ΛNextHopGroup	[]ygot.Annotation	`path:"@next-hop-group" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_NextHopGroups implements the yang.GoStruct
@@ -866,6 +1298,50 @@ func (t *GribiAft_Afts_NextHopGroups) NewNextHopGroup(Id uint64) (*GribiAft_Afts
 	return t.NextHopGroup[key], nil
 }
 
+// RenameNextHopGroup renames an entry in the list NextHopGroup within
+// the GribiAft_Afts_NextHopGroups struct. The entry with key oldK is renamed to newK updating
+// the key within the value.
+func (t *GribiAft_Afts_NextHopGroups) RenameNextHopGroup(oldK, newK uint64) error {
+	if _, ok := t.NextHopGroup[newK]; ok {
+		return fmt.Errorf("key %v already exists in NextHopGroup", newK)
+	}
+
+	e, ok := t.NextHopGroup[oldK]
+	if !ok {
+		return fmt.Errorf("key %v not found in NextHopGroup", oldK)
+	}
+	e.Id = &newK
+
+	t.NextHopGroup[newK] = e
+	delete(t.NextHopGroup, oldK)
+	return nil
+}
+
+// AppendNextHopGroup appends the supplied GribiAft_Afts_NextHopGroups_NextHopGroup struct to the
+// list NextHopGroup of GribiAft_Afts_NextHopGroups. If the key value(s) specified in
+// the supplied GribiAft_Afts_NextHopGroups_NextHopGroup already exist in the list, an error is
+// returned.
+func (t *GribiAft_Afts_NextHopGroups) AppendNextHopGroup(v *GribiAft_Afts_NextHopGroups_NextHopGroup) error {
+	if v.Id == nil {
+		return fmt.Errorf("invalid nil key received for Id")
+	}
+
+	key := *v.Id
+
+	// Initialise the list within the receiver struct if it has not already been
+	// created.
+	if t.NextHopGroup == nil {
+		t.NextHopGroup = make(map[uint64]*GribiAft_Afts_NextHopGroups_NextHopGroup)
+	}
+
+	if _, ok := t.NextHopGroup[key]; ok {
+		return fmt.Errorf("duplicate key for list NextHopGroup %v", key)
+	}
+
+	t.NextHopGroup[key] = v
+	return nil
+}
+
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_NextHopGroups) Validate(opts ...ygot.ValidationOption) error {
 	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_NextHopGroups"], t, opts...); err != nil {
@@ -881,16 +1357,33 @@ func (t *GribiAft_Afts_NextHopGroups) ΛEnumTypeMap() map[string][]reflect.Type 
 
 // GribiAft_Afts_NextHopGroups_NextHopGroup represents the /gribi-aft/afts/next-hop-groups/next-hop-group YANG schema element.
 type GribiAft_Afts_NextHopGroups_NextHopGroup struct {
-	Config	*GribiAft_Afts_NextHopGroups_NextHopGroup_Config	`path:"config" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Id	*uint64	`path:"id" module:"gribi-aft"`
+	ΛId	[]ygot.Annotation	`path:"@id" ygotAnnotation:"true"`
 	NextHops	*GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops	`path:"next-hops" module:"gribi-aft"`
+	ΛNextHops	[]ygot.Annotation	`path:"@next-hops" ygotAnnotation:"true"`
 	State	*GribiAft_Afts_NextHopGroups_NextHopGroup_State	`path:"state" module:"gribi-aft"`
+	ΛState	[]ygot.Annotation	`path:"@state" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_NextHopGroups_NextHopGroup implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_NextHopGroups_NextHopGroup) IsYANGGoStruct() {}
+
+// GetId retrieves the value of the leaf Id from the GribiAft_Afts_NextHopGroups_NextHopGroup
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Id is set, it can safely use t.GetId()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Id == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHopGroups_NextHopGroup) GetId() uint64 {
+	if t == nil || t.Id == nil {
+		return 0
+	}
+	return *t.Id
+}
 
 // ΛListKeyMap returns the keys of the GribiAft_Afts_NextHopGroups_NextHopGroup struct, which is a YANG list entry.
 func (t *GribiAft_Afts_NextHopGroups_NextHopGroup) ΛListKeyMap() (map[string]interface{}, error) {
@@ -916,32 +1409,11 @@ func (t *GribiAft_Afts_NextHopGroups_NextHopGroup) Validate(opts ...ygot.Validat
 func (t *GribiAft_Afts_NextHopGroups_NextHopGroup) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
 
 
-// GribiAft_Afts_NextHopGroups_NextHopGroup_Config represents the /gribi-aft/afts/next-hop-groups/next-hop-group/config YANG schema element.
-type GribiAft_Afts_NextHopGroups_NextHopGroup_Config struct {
-	Id	*uint64	`path:"id" module:"gribi-aft"`
-}
-
-// IsYANGGoStruct ensures that GribiAft_Afts_NextHopGroups_NextHopGroup_Config implements the yang.GoStruct
-// interface. This allows functions that need to handle this struct to
-// identify it as being generated by ygen.
-func (*GribiAft_Afts_NextHopGroups_NextHopGroup_Config) IsYANGGoStruct() {}
-
-// Validate validates s against the YANG schema corresponding to its type.
-func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_Config) Validate(opts ...ygot.ValidationOption) error {
-	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_NextHopGroups_NextHopGroup_Config"], t, opts...); err != nil {
-		return err
-	}
-	return nil
-}
-
-// ΛEnumTypeMap returns a map, keyed by YANG schema path, of the enumerated types
-// that are included in the generated code.
-func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_Config) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
-
-
 // GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops represents the /gribi-aft/afts/next-hop-groups/next-hop-group/next-hops YANG schema element.
 type GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	NextHop	map[uint64]*GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop	`path:"next-hop" module:"gribi-aft"`
+	ΛNextHop	[]ygot.Annotation	`path:"@next-hop" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops implements the yang.GoStruct
@@ -976,6 +1448,50 @@ func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops) NewNextHop(Index uin
 	return t.NextHop[key], nil
 }
 
+// RenameNextHop renames an entry in the list NextHop within
+// the GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops struct. The entry with key oldK is renamed to newK updating
+// the key within the value.
+func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops) RenameNextHop(oldK, newK uint64) error {
+	if _, ok := t.NextHop[newK]; ok {
+		return fmt.Errorf("key %v already exists in NextHop", newK)
+	}
+
+	e, ok := t.NextHop[oldK]
+	if !ok {
+		return fmt.Errorf("key %v not found in NextHop", oldK)
+	}
+	e.Index = &newK
+
+	t.NextHop[newK] = e
+	delete(t.NextHop, oldK)
+	return nil
+}
+
+// AppendNextHop appends the supplied GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop struct to the
+// list NextHop of GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops. If the key value(s) specified in
+// the supplied GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop already exist in the list, an error is
+// returned.
+func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops) AppendNextHop(v *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop) error {
+	if v.Index == nil {
+		return fmt.Errorf("invalid nil key received for Index")
+	}
+
+	key := *v.Index
+
+	// Initialise the list within the receiver struct if it has not already been
+	// created.
+	if t.NextHop == nil {
+		t.NextHop = make(map[uint64]*GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop)
+	}
+
+	if _, ok := t.NextHop[key]; ok {
+		return fmt.Errorf("duplicate key for list NextHop %v", key)
+	}
+
+	t.NextHop[key] = v
+	return nil
+}
+
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops) Validate(opts ...ygot.ValidationOption) error {
 	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops"], t, opts...); err != nil {
@@ -991,15 +1507,31 @@ func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops) ΛEnumTypeMap() map[
 
 // GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop represents the /gribi-aft/afts/next-hop-groups/next-hop-group/next-hops/next-hop YANG schema element.
 type GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop struct {
-	Config	*GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_Config	`path:"config" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Index	*uint64	`path:"index" module:"gribi-aft"`
+	ΛIndex	[]ygot.Annotation	`path:"@index" ygotAnnotation:"true"`
 	State	*GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_State	`path:"state" module:"gribi-aft"`
+	ΛState	[]ygot.Annotation	`path:"@state" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop) IsYANGGoStruct() {}
+
+// GetIndex retrieves the value of the leaf Index from the GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Index is set, it can safely use t.GetIndex()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Index == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop) GetIndex() uint64 {
+	if t == nil || t.Index == nil {
+		return 0
+	}
+	return *t.Index
+}
 
 // ΛListKeyMap returns the keys of the GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop struct, which is a YANG list entry.
 func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop) ΛListKeyMap() (map[string]interface{}, error) {
@@ -1025,39 +1557,47 @@ func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop) Validate(opt
 func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
 
 
-// GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_Config represents the /gribi-aft/afts/next-hop-groups/next-hop-group/next-hops/next-hop/config YANG schema element.
-type GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_Config struct {
-	Index	*uint64	`path:"index" module:"gribi-aft"`
-}
-
-// IsYANGGoStruct ensures that GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_Config implements the yang.GoStruct
-// interface. This allows functions that need to handle this struct to
-// identify it as being generated by ygen.
-func (*GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_Config) IsYANGGoStruct() {}
-
-// Validate validates s against the YANG schema corresponding to its type.
-func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_Config) Validate(opts ...ygot.ValidationOption) error {
-	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_Config"], t, opts...); err != nil {
-		return err
-	}
-	return nil
-}
-
-// ΛEnumTypeMap returns a map, keyed by YANG schema path, of the enumerated types
-// that are included in the generated code.
-func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_Config) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
-
-
 // GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_State represents the /gribi-aft/afts/next-hop-groups/next-hop-group/next-hops/next-hop/state YANG schema element.
 type GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_State struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Index	*uint64	`path:"index" module:"gribi-aft"`
+	ΛIndex	[]ygot.Annotation	`path:"@index" ygotAnnotation:"true"`
 	Weight	*uint64	`path:"weight" module:"gribi-aft"`
+	ΛWeight	[]ygot.Annotation	`path:"@weight" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_State implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_State) IsYANGGoStruct() {}
+
+// GetIndex retrieves the value of the leaf Index from the GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Index is set, it can safely use t.GetIndex()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Index == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_State) GetIndex() uint64 {
+	if t == nil || t.Index == nil {
+		return 0
+	}
+	return *t.Index
+}
+
+// GetWeight retrieves the value of the leaf Weight from the GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Weight is set, it can safely use t.GetWeight()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Weight == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_State) GetWeight() uint64 {
+	if t == nil || t.Weight == nil {
+		return 0
+	}
+	return *t.Weight
+}
 
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_State) Validate(opts ...ygot.ValidationOption) error {
@@ -1074,15 +1614,61 @@ func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_NextHops_NextHop_State) ΛEnum
 
 // GribiAft_Afts_NextHopGroups_NextHopGroup_State represents the /gribi-aft/afts/next-hop-groups/next-hop-group/state YANG schema element.
 type GribiAft_Afts_NextHopGroups_NextHopGroup_State struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	BackupNextHopGroup	*uint64	`path:"backup-next-hop-group" module:"gribi-aft"`
+	ΛBackupNextHopGroup	[]ygot.Annotation	`path:"@backup-next-hop-group" ygotAnnotation:"true"`
 	Color	*uint64	`path:"color" module:"gribi-aft"`
+	ΛColor	[]ygot.Annotation	`path:"@color" ygotAnnotation:"true"`
 	Id	*uint64	`path:"id" module:"gribi-aft"`
+	ΛId	[]ygot.Annotation	`path:"@id" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_NextHopGroups_NextHopGroup_State implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_NextHopGroups_NextHopGroup_State) IsYANGGoStruct() {}
+
+// GetBackupNextHopGroup retrieves the value of the leaf BackupNextHopGroup from the GribiAft_Afts_NextHopGroups_NextHopGroup_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if BackupNextHopGroup is set, it can safely use t.GetBackupNextHopGroup()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.BackupNextHopGroup == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_State) GetBackupNextHopGroup() uint64 {
+	if t == nil || t.BackupNextHopGroup == nil {
+		return 0
+	}
+	return *t.BackupNextHopGroup
+}
+
+// GetColor retrieves the value of the leaf Color from the GribiAft_Afts_NextHopGroups_NextHopGroup_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Color is set, it can safely use t.GetColor()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Color == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_State) GetColor() uint64 {
+	if t == nil || t.Color == nil {
+		return 0
+	}
+	return *t.Color
+}
+
+// GetId retrieves the value of the leaf Id from the GribiAft_Afts_NextHopGroups_NextHopGroup_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Id is set, it can safely use t.GetId()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Id == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_State) GetId() uint64 {
+	if t == nil || t.Id == nil {
+		return 0
+	}
+	return *t.Id
+}
 
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_State) Validate(opts ...ygot.ValidationOption) error {
@@ -1099,7 +1685,9 @@ func (t *GribiAft_Afts_NextHopGroups_NextHopGroup_State) ΛEnumTypeMap() map[str
 
 // GribiAft_Afts_NextHops represents the /gribi-aft/afts/next-hops YANG schema element.
 type GribiAft_Afts_NextHops struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	NextHop	map[uint64]*GribiAft_Afts_NextHops_NextHop	`path:"next-hop" module:"gribi-aft"`
+	ΛNextHop	[]ygot.Annotation	`path:"@next-hop" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_NextHops implements the yang.GoStruct
@@ -1134,6 +1722,50 @@ func (t *GribiAft_Afts_NextHops) NewNextHop(Index uint64) (*GribiAft_Afts_NextHo
 	return t.NextHop[key], nil
 }
 
+// RenameNextHop renames an entry in the list NextHop within
+// the GribiAft_Afts_NextHops struct. The entry with key oldK is renamed to newK updating
+// the key within the value.
+func (t *GribiAft_Afts_NextHops) RenameNextHop(oldK, newK uint64) error {
+	if _, ok := t.NextHop[newK]; ok {
+		return fmt.Errorf("key %v already exists in NextHop", newK)
+	}
+
+	e, ok := t.NextHop[oldK]
+	if !ok {
+		return fmt.Errorf("key %v not found in NextHop", oldK)
+	}
+	e.Index = &newK
+
+	t.NextHop[newK] = e
+	delete(t.NextHop, oldK)
+	return nil
+}
+
+// AppendNextHop appends the supplied GribiAft_Afts_NextHops_NextHop struct to the
+// list NextHop of GribiAft_Afts_NextHops. If the key value(s) specified in
+// the supplied GribiAft_Afts_NextHops_NextHop already exist in the list, an error is
+// returned.
+func (t *GribiAft_Afts_NextHops) AppendNextHop(v *GribiAft_Afts_NextHops_NextHop) error {
+	if v.Index == nil {
+		return fmt.Errorf("invalid nil key received for Index")
+	}
+
+	key := *v.Index
+
+	// Initialise the list within the receiver struct if it has not already been
+	// created.
+	if t.NextHop == nil {
+		t.NextHop = make(map[uint64]*GribiAft_Afts_NextHops_NextHop)
+	}
+
+	if _, ok := t.NextHop[key]; ok {
+		return fmt.Errorf("duplicate key for list NextHop %v", key)
+	}
+
+	t.NextHop[key] = v
+	return nil
+}
+
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_NextHops) Validate(opts ...ygot.ValidationOption) error {
 	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_NextHops"], t, opts...); err != nil {
@@ -1149,16 +1781,33 @@ func (t *GribiAft_Afts_NextHops) ΛEnumTypeMap() map[string][]reflect.Type { ret
 
 // GribiAft_Afts_NextHops_NextHop represents the /gribi-aft/afts/next-hops/next-hop YANG schema element.
 type GribiAft_Afts_NextHops_NextHop struct {
-	Config	*GribiAft_Afts_NextHops_NextHop_Config	`path:"config" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Index	*uint64	`path:"index" module:"gribi-aft"`
+	ΛIndex	[]ygot.Annotation	`path:"@index" ygotAnnotation:"true"`
 	InterfaceRef	*GribiAft_Afts_NextHops_NextHop_InterfaceRef	`path:"interface-ref" module:"gribi-aft"`
+	ΛInterfaceRef	[]ygot.Annotation	`path:"@interface-ref" ygotAnnotation:"true"`
 	State	*GribiAft_Afts_NextHops_NextHop_State	`path:"state" module:"gribi-aft"`
+	ΛState	[]ygot.Annotation	`path:"@state" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_NextHops_NextHop implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_NextHops_NextHop) IsYANGGoStruct() {}
+
+// GetIndex retrieves the value of the leaf Index from the GribiAft_Afts_NextHops_NextHop
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Index is set, it can safely use t.GetIndex()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Index == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHops_NextHop) GetIndex() uint64 {
+	if t == nil || t.Index == nil {
+		return 0
+	}
+	return *t.Index
+}
 
 // ΛListKeyMap returns the keys of the GribiAft_Afts_NextHops_NextHop struct, which is a YANG list entry.
 func (t *GribiAft_Afts_NextHops_NextHop) ΛListKeyMap() (map[string]interface{}, error) {
@@ -1184,33 +1833,11 @@ func (t *GribiAft_Afts_NextHops_NextHop) Validate(opts ...ygot.ValidationOption)
 func (t *GribiAft_Afts_NextHops_NextHop) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
 
 
-// GribiAft_Afts_NextHops_NextHop_Config represents the /gribi-aft/afts/next-hops/next-hop/config YANG schema element.
-type GribiAft_Afts_NextHops_NextHop_Config struct {
-	Index	*uint64	`path:"index" module:"gribi-aft"`
-}
-
-// IsYANGGoStruct ensures that GribiAft_Afts_NextHops_NextHop_Config implements the yang.GoStruct
-// interface. This allows functions that need to handle this struct to
-// identify it as being generated by ygen.
-func (*GribiAft_Afts_NextHops_NextHop_Config) IsYANGGoStruct() {}
-
-// Validate validates s against the YANG schema corresponding to its type.
-func (t *GribiAft_Afts_NextHops_NextHop_Config) Validate(opts ...ygot.ValidationOption) error {
-	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_NextHops_NextHop_Config"], t, opts...); err != nil {
-		return err
-	}
-	return nil
-}
-
-// ΛEnumTypeMap returns a map, keyed by YANG schema path, of the enumerated types
-// that are included in the generated code.
-func (t *GribiAft_Afts_NextHops_NextHop_Config) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
-
-
 // GribiAft_Afts_NextHops_NextHop_InterfaceRef represents the /gribi-aft/afts/next-hops/next-hop/interface-ref YANG schema element.
 type GribiAft_Afts_NextHops_NextHop_InterfaceRef struct {
-	Config	*GribiAft_Afts_NextHops_NextHop_InterfaceRef_Config	`path:"config" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	State	*GribiAft_Afts_NextHops_NextHop_InterfaceRef_State	`path:"state" module:"gribi-aft"`
+	ΛState	[]ygot.Annotation	`path:"@state" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_NextHops_NextHop_InterfaceRef implements the yang.GoStruct
@@ -1231,40 +1858,47 @@ func (t *GribiAft_Afts_NextHops_NextHop_InterfaceRef) Validate(opts ...ygot.Vali
 func (t *GribiAft_Afts_NextHops_NextHop_InterfaceRef) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
 
 
-// GribiAft_Afts_NextHops_NextHop_InterfaceRef_Config represents the /gribi-aft/afts/next-hops/next-hop/interface-ref/config YANG schema element.
-type GribiAft_Afts_NextHops_NextHop_InterfaceRef_Config struct {
-	Interface	*string	`path:"interface" module:"gribi-aft"`
-	Subinterface	*uint32	`path:"subinterface" module:"gribi-aft"`
-}
-
-// IsYANGGoStruct ensures that GribiAft_Afts_NextHops_NextHop_InterfaceRef_Config implements the yang.GoStruct
-// interface. This allows functions that need to handle this struct to
-// identify it as being generated by ygen.
-func (*GribiAft_Afts_NextHops_NextHop_InterfaceRef_Config) IsYANGGoStruct() {}
-
-// Validate validates s against the YANG schema corresponding to its type.
-func (t *GribiAft_Afts_NextHops_NextHop_InterfaceRef_Config) Validate(opts ...ygot.ValidationOption) error {
-	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_NextHops_NextHop_InterfaceRef_Config"], t, opts...); err != nil {
-		return err
-	}
-	return nil
-}
-
-// ΛEnumTypeMap returns a map, keyed by YANG schema path, of the enumerated types
-// that are included in the generated code.
-func (t *GribiAft_Afts_NextHops_NextHop_InterfaceRef_Config) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
-
-
 // GribiAft_Afts_NextHops_NextHop_InterfaceRef_State represents the /gribi-aft/afts/next-hops/next-hop/interface-ref/state YANG schema element.
 type GribiAft_Afts_NextHops_NextHop_InterfaceRef_State struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Interface	*string	`path:"interface" module:"gribi-aft"`
+	ΛInterface	[]ygot.Annotation	`path:"@interface" ygotAnnotation:"true"`
 	Subinterface	*uint32	`path:"subinterface" module:"gribi-aft"`
+	ΛSubinterface	[]ygot.Annotation	`path:"@subinterface" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_NextHops_NextHop_InterfaceRef_State implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_NextHops_NextHop_InterfaceRef_State) IsYANGGoStruct() {}
+
+// GetInterface retrieves the value of the leaf Interface from the GribiAft_Afts_NextHops_NextHop_InterfaceRef_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Interface is set, it can safely use t.GetInterface()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Interface == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHops_NextHop_InterfaceRef_State) GetInterface() string {
+	if t == nil || t.Interface == nil {
+		return ""
+	}
+	return *t.Interface
+}
+
+// GetSubinterface retrieves the value of the leaf Subinterface from the GribiAft_Afts_NextHops_NextHop_InterfaceRef_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Subinterface is set, it can safely use t.GetSubinterface()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Subinterface == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHops_NextHop_InterfaceRef_State) GetSubinterface() uint32 {
+	if t == nil || t.Subinterface == nil {
+		return 0
+	}
+	return *t.Subinterface
+}
 
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_NextHops_NextHop_InterfaceRef_State) Validate(opts ...ygot.ValidationOption) error {
@@ -1281,18 +1915,93 @@ func (t *GribiAft_Afts_NextHops_NextHop_InterfaceRef_State) ΛEnumTypeMap() map[
 
 // GribiAft_Afts_NextHops_NextHop_State represents the /gribi-aft/afts/next-hops/next-hop/state YANG schema element.
 type GribiAft_Afts_NextHops_NextHop_State struct {
-	EncapsulateHeader	E_OpenconfigAft_EncapsulationHeaderType	`path:"encapsulate-header" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
+	EncapsulateHeader	E_OpenconfigAftTypes_EncapsulationHeaderType	`path:"encapsulate-header" module:"gribi-aft"`
+	ΛEncapsulateHeader	[]ygot.Annotation	`path:"@encapsulate-header" ygotAnnotation:"true"`
 	Index	*uint64	`path:"index" module:"gribi-aft"`
+	ΛIndex	[]ygot.Annotation	`path:"@index" ygotAnnotation:"true"`
 	IpAddress	*string	`path:"ip-address" module:"gribi-aft"`
+	ΛIpAddress	[]ygot.Annotation	`path:"@ip-address" ygotAnnotation:"true"`
 	MacAddress	*string	`path:"mac-address" module:"gribi-aft"`
-	OriginProtocol	E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE	`path:"origin-protocol" module:"gribi-aft"`
+	ΛMacAddress	[]ygot.Annotation	`path:"@mac-address" ygotAnnotation:"true"`
 	PushedMplsLabelStack	[]GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union	`path:"pushed-mpls-label-stack" module:"gribi-aft"`
+	ΛPushedMplsLabelStack	[]ygot.Annotation	`path:"@pushed-mpls-label-stack" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_NextHops_NextHop_State implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_NextHops_NextHop_State) IsYANGGoStruct() {}
+
+// GetEncapsulateHeader retrieves the value of the leaf EncapsulateHeader from the GribiAft_Afts_NextHops_NextHop_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if EncapsulateHeader is set, it can safely use t.GetEncapsulateHeader()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.EncapsulateHeader == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHops_NextHop_State) GetEncapsulateHeader() E_OpenconfigAftTypes_EncapsulationHeaderType {
+	if t == nil || t.EncapsulateHeader ==  0 {
+		return 0
+	}
+	return t.EncapsulateHeader
+}
+
+// GetIndex retrieves the value of the leaf Index from the GribiAft_Afts_NextHops_NextHop_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Index is set, it can safely use t.GetIndex()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Index == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHops_NextHop_State) GetIndex() uint64 {
+	if t == nil || t.Index == nil {
+		return 0
+	}
+	return *t.Index
+}
+
+// GetIpAddress retrieves the value of the leaf IpAddress from the GribiAft_Afts_NextHops_NextHop_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if IpAddress is set, it can safely use t.GetIpAddress()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.IpAddress == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHops_NextHop_State) GetIpAddress() string {
+	if t == nil || t.IpAddress == nil {
+		return ""
+	}
+	return *t.IpAddress
+}
+
+// GetMacAddress retrieves the value of the leaf MacAddress from the GribiAft_Afts_NextHops_NextHop_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if MacAddress is set, it can safely use t.GetMacAddress()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.MacAddress == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHops_NextHop_State) GetMacAddress() string {
+	if t == nil || t.MacAddress == nil {
+		return ""
+	}
+	return *t.MacAddress
+}
+
+// GetPushedMplsLabelStack retrieves the value of the leaf PushedMplsLabelStack from the GribiAft_Afts_NextHops_NextHop_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if PushedMplsLabelStack is set, it can safely use t.GetPushedMplsLabelStack()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.PushedMplsLabelStack == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_NextHops_NextHop_State) GetPushedMplsLabelStack() []GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union {
+	if t == nil || t.PushedMplsLabelStack ==  nil {
+		return nil
+	}
+	return t.PushedMplsLabelStack
+}
 
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_NextHops_NextHop_State) Validate(opts ...ygot.ValidationOption) error {
@@ -1308,48 +2017,40 @@ func (t *GribiAft_Afts_NextHops_NextHop_State) ΛEnumTypeMap() map[string][]refl
 
 // GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union is an interface that is implemented by valid types for the union
 // for the leaf /gribi-aft/afts/next-hops/next-hop/state/pushed-mpls-label-stack within the YANG schema.
+// Union type can be one of [E_OpenconfigMplsTypes_MplsLabel_Enum, UnionUint32].
 type GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union interface {
-	Is_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union()
+	// Union type can be one of [E_OpenconfigMplsTypes_MplsLabel_Enum, UnionUint32]
+	Documentation_for_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union()
 }
 
-// GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union_E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack is used when /gribi-aft/afts/next-hops/next-hop/state/pushed-mpls-label-stack
-// is to be set to a E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack value.
-type GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union_E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack struct {
-	E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack	E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack
-}
-
-// Is_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union ensures that GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union_E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack
+// Documentation_for_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union ensures that E_OpenconfigMplsTypes_MplsLabel_Enum
 // implements the GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union interface.
-func (*GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union_E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack) Is_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union() {}
+func (E_OpenconfigMplsTypes_MplsLabel_Enum) Documentation_for_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union() {}
 
-// GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union_Uint32 is used when /gribi-aft/afts/next-hops/next-hop/state/pushed-mpls-label-stack
-// is to be set to a uint32 value.
-type GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union_Uint32 struct {
-	Uint32	uint32
-}
-
-// Is_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union ensures that GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union_Uint32
+// Documentation_for_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union ensures that UnionUint32
 // implements the GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union interface.
-func (*GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union_Uint32) Is_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union() {}
+func (UnionUint32) Documentation_for_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union() {}
 
 // To_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union takes an input interface{} and attempts to convert it to a struct
 // which implements the GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union union. It returns an error if the interface{} supplied
 // cannot be converted to a type within the union.
 func (t *GribiAft_Afts_NextHops_NextHop_State) To_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union(i interface{}) (GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union, error) {
-	switch v := i.(type) {
-	case E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack:
-		return &GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union_E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack{v}, nil
-	case uint32:
-		return &GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union_Uint32{v}, nil
-	default:
-		return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union, unknown union type, got: %T, want any of [E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack, uint32]", i, i)
+	if v, ok := i.(GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union); ok {
+		return v, nil
 	}
+	switch v := i.(type) {
+	case uint32:
+		return UnionUint32(v), nil
+	}
+	return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_Union, unknown union type, got: %T, want any of [E_OpenconfigMplsTypes_MplsLabel_Enum, uint32]", i, i)
 }
 
 
 // GribiAft_Afts_PolicyForwarding represents the /gribi-aft/afts/policy-forwarding YANG schema element.
 type GribiAft_Afts_PolicyForwarding struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	PolicyForwardingEntry	map[uint64]*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry	`path:"policy-forwarding-entry" module:"gribi-aft"`
+	ΛPolicyForwardingEntry	[]ygot.Annotation	`path:"@policy-forwarding-entry" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_PolicyForwarding implements the yang.GoStruct
@@ -1384,6 +2085,50 @@ func (t *GribiAft_Afts_PolicyForwarding) NewPolicyForwardingEntry(Index uint64) 
 	return t.PolicyForwardingEntry[key], nil
 }
 
+// RenamePolicyForwardingEntry renames an entry in the list PolicyForwardingEntry within
+// the GribiAft_Afts_PolicyForwarding struct. The entry with key oldK is renamed to newK updating
+// the key within the value.
+func (t *GribiAft_Afts_PolicyForwarding) RenamePolicyForwardingEntry(oldK, newK uint64) error {
+	if _, ok := t.PolicyForwardingEntry[newK]; ok {
+		return fmt.Errorf("key %v already exists in PolicyForwardingEntry", newK)
+	}
+
+	e, ok := t.PolicyForwardingEntry[oldK]
+	if !ok {
+		return fmt.Errorf("key %v not found in PolicyForwardingEntry", oldK)
+	}
+	e.Index = &newK
+
+	t.PolicyForwardingEntry[newK] = e
+	delete(t.PolicyForwardingEntry, oldK)
+	return nil
+}
+
+// AppendPolicyForwardingEntry appends the supplied GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry struct to the
+// list PolicyForwardingEntry of GribiAft_Afts_PolicyForwarding. If the key value(s) specified in
+// the supplied GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry already exist in the list, an error is
+// returned.
+func (t *GribiAft_Afts_PolicyForwarding) AppendPolicyForwardingEntry(v *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry) error {
+	if v.Index == nil {
+		return fmt.Errorf("invalid nil key received for Index")
+	}
+
+	key := *v.Index
+
+	// Initialise the list within the receiver struct if it has not already been
+	// created.
+	if t.PolicyForwardingEntry == nil {
+		t.PolicyForwardingEntry = make(map[uint64]*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry)
+	}
+
+	if _, ok := t.PolicyForwardingEntry[key]; ok {
+		return fmt.Errorf("duplicate key for list PolicyForwardingEntry %v", key)
+	}
+
+	t.PolicyForwardingEntry[key] = v
+	return nil
+}
+
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_PolicyForwarding) Validate(opts ...ygot.ValidationOption) error {
 	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_PolicyForwarding"], t, opts...); err != nil {
@@ -1399,15 +2144,31 @@ func (t *GribiAft_Afts_PolicyForwarding) ΛEnumTypeMap() map[string][]reflect.Ty
 
 // GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry represents the /gribi-aft/afts/policy-forwarding/policy-forwarding-entry YANG schema element.
 type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry struct {
-	Config	*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config	`path:"config" module:"gribi-aft"`
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Index	*uint64	`path:"index" module:"gribi-aft"`
+	ΛIndex	[]ygot.Annotation	`path:"@index" ygotAnnotation:"true"`
 	State	*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State	`path:"state" module:"gribi-aft"`
+	ΛState	[]ygot.Annotation	`path:"@state" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry) IsYANGGoStruct() {}
+
+// GetIndex retrieves the value of the leaf Index from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Index is set, it can safely use t.GetIndex()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Index == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry) GetIndex() uint64 {
+	if t == nil || t.Index == nil {
+		return 0
+	}
+	return *t.Index
+}
 
 // ΛListKeyMap returns the keys of the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry struct, which is a YANG list entry.
 func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry) ΛListKeyMap() (map[string]interface{}, error) {
@@ -1433,137 +2194,207 @@ func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry) Validate(opts ...
 func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
 
 
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config represents the /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/config YANG schema element.
-type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config struct {
-	Index	*uint64	`path:"index" module:"gribi-aft"`
-	IpDscp	*uint8	`path:"ip-dscp" module:"gribi-aft"`
-	IpPrefix	*string	`path:"ip-prefix" module:"gribi-aft"`
-	IpProtocol	GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union	`path:"ip-protocol" module:"gribi-aft"`
-	L4DstPort	*uint16	`path:"l4-dst-port" module:"gribi-aft"`
-	L4SrcPort	*uint16	`path:"l4-src-port" module:"gribi-aft"`
-	MacAddress	*string	`path:"mac-address" module:"gribi-aft"`
-	MplsLabel	GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union	`path:"mpls-label" module:"gribi-aft"`
-	MplsTc	*uint8	`path:"mpls-tc" module:"gribi-aft"`
-}
-
-// IsYANGGoStruct ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config implements the yang.GoStruct
-// interface. This allows functions that need to handle this struct to
-// identify it as being generated by ygen.
-func (*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config) IsYANGGoStruct() {}
-
-// Validate validates s against the YANG schema corresponding to its type.
-func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config) Validate(opts ...ygot.ValidationOption) error {
-	if err := ytypes.Validate(SchemaTree["GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config"], t, opts...); err != nil {
-		return err
-	}
-	return nil
-}
-
-// ΛEnumTypeMap returns a map, keyed by YANG schema path, of the enumerated types
-// that are included in the generated code.
-func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config) ΛEnumTypeMap() map[string][]reflect.Type { return ΛEnumTypes }
-
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union is an interface that is implemented by valid types for the union
-// for the leaf /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/config/ip-protocol within the YANG schema.
-type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union interface {
-	Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union()
-}
-
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union_E_OpenconfigPacketMatchTypes_IP_PROTOCOL is used when /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/config/ip-protocol
-// is to be set to a E_OpenconfigPacketMatchTypes_IP_PROTOCOL value.
-type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union_E_OpenconfigPacketMatchTypes_IP_PROTOCOL struct {
-	E_OpenconfigPacketMatchTypes_IP_PROTOCOL	E_OpenconfigPacketMatchTypes_IP_PROTOCOL
-}
-
-// Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union_E_OpenconfigPacketMatchTypes_IP_PROTOCOL
-// implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union interface.
-func (*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union_E_OpenconfigPacketMatchTypes_IP_PROTOCOL) Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union() {}
-
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union_Uint8 is used when /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/config/ip-protocol
-// is to be set to a uint8 value.
-type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union_Uint8 struct {
-	Uint8	uint8
-}
-
-// Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union_Uint8
-// implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union interface.
-func (*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union_Uint8) Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union() {}
-
-// To_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union takes an input interface{} and attempts to convert it to a struct
-// which implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union union. It returns an error if the interface{} supplied
-// cannot be converted to a type within the union.
-func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config) To_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union(i interface{}) (GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union, error) {
-	switch v := i.(type) {
-	case E_OpenconfigPacketMatchTypes_IP_PROTOCOL:
-		return &GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union_E_OpenconfigPacketMatchTypes_IP_PROTOCOL{v}, nil
-	case uint8:
-		return &GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union_Uint8{v}, nil
-	default:
-		return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_IpProtocol_Union, unknown union type, got: %T, want any of [E_OpenconfigPacketMatchTypes_IP_PROTOCOL, uint8]", i, i)
-	}
-}
-
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union is an interface that is implemented by valid types for the union
-// for the leaf /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/config/mpls-label within the YANG schema.
-type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union interface {
-	Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union()
-}
-
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union_E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel is used when /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/config/mpls-label
-// is to be set to a E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel value.
-type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union_E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel struct {
-	E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel	E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel
-}
-
-// Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union_E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel
-// implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union interface.
-func (*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union_E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel) Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union() {}
-
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union_Uint32 is used when /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/config/mpls-label
-// is to be set to a uint32 value.
-type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union_Uint32 struct {
-	Uint32	uint32
-}
-
-// Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union_Uint32
-// implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union interface.
-func (*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union_Uint32) Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union() {}
-
-// To_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union takes an input interface{} and attempts to convert it to a struct
-// which implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union union. It returns an error if the interface{} supplied
-// cannot be converted to a type within the union.
-func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config) To_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union(i interface{}) (GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union, error) {
-	switch v := i.(type) {
-	case E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel:
-		return &GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union_E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel{v}, nil
-	case uint32:
-		return &GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union_Uint32{v}, nil
-	default:
-		return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_Union, unknown union type, got: %T, want any of [E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel, uint32]", i, i)
-	}
-}
-
-
 // GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State represents the /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/state YANG schema element.
 type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State struct {
+	ΛMetadata	[]ygot.Annotation	`path:"@" ygotAnnotation:"true"`
 	Index	*uint64	`path:"index" module:"gribi-aft"`
+	ΛIndex	[]ygot.Annotation	`path:"@index" ygotAnnotation:"true"`
 	IpDscp	*uint8	`path:"ip-dscp" module:"gribi-aft"`
+	ΛIpDscp	[]ygot.Annotation	`path:"@ip-dscp" ygotAnnotation:"true"`
 	IpPrefix	*string	`path:"ip-prefix" module:"gribi-aft"`
+	ΛIpPrefix	[]ygot.Annotation	`path:"@ip-prefix" ygotAnnotation:"true"`
 	IpProtocol	GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union	`path:"ip-protocol" module:"gribi-aft"`
+	ΛIpProtocol	[]ygot.Annotation	`path:"@ip-protocol" ygotAnnotation:"true"`
 	L4DstPort	*uint16	`path:"l4-dst-port" module:"gribi-aft"`
+	ΛL4DstPort	[]ygot.Annotation	`path:"@l4-dst-port" ygotAnnotation:"true"`
 	L4SrcPort	*uint16	`path:"l4-src-port" module:"gribi-aft"`
+	ΛL4SrcPort	[]ygot.Annotation	`path:"@l4-src-port" ygotAnnotation:"true"`
 	MacAddress	*string	`path:"mac-address" module:"gribi-aft"`
+	ΛMacAddress	[]ygot.Annotation	`path:"@mac-address" ygotAnnotation:"true"`
 	MplsLabel	GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union	`path:"mpls-label" module:"gribi-aft"`
+	ΛMplsLabel	[]ygot.Annotation	`path:"@mpls-label" ygotAnnotation:"true"`
 	MplsTc	*uint8	`path:"mpls-tc" module:"gribi-aft"`
+	ΛMplsTc	[]ygot.Annotation	`path:"@mpls-tc" ygotAnnotation:"true"`
 	NextHopGroup	*uint64	`path:"next-hop-group" module:"gribi-aft"`
+	ΛNextHopGroup	[]ygot.Annotation	`path:"@next-hop-group" ygotAnnotation:"true"`
 	OctetsForwarded	*uint64	`path:"octets-forwarded" module:"gribi-aft"`
+	ΛOctetsForwarded	[]ygot.Annotation	`path:"@octets-forwarded" ygotAnnotation:"true"`
 	PacketsForwarded	*uint64	`path:"packets-forwarded" module:"gribi-aft"`
+	ΛPacketsForwarded	[]ygot.Annotation	`path:"@packets-forwarded" ygotAnnotation:"true"`
 }
 
 // IsYANGGoStruct ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State implements the yang.GoStruct
 // interface. This allows functions that need to handle this struct to
 // identify it as being generated by ygen.
 func (*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) IsYANGGoStruct() {}
+
+// GetIndex retrieves the value of the leaf Index from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if Index is set, it can safely use t.GetIndex()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.Index == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetIndex() uint64 {
+	if t == nil || t.Index == nil {
+		return 0
+	}
+	return *t.Index
+}
+
+// GetIpDscp retrieves the value of the leaf IpDscp from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if IpDscp is set, it can safely use t.GetIpDscp()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.IpDscp == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetIpDscp() uint8 {
+	if t == nil || t.IpDscp == nil {
+		return 0
+	}
+	return *t.IpDscp
+}
+
+// GetIpPrefix retrieves the value of the leaf IpPrefix from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if IpPrefix is set, it can safely use t.GetIpPrefix()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.IpPrefix == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetIpPrefix() string {
+	if t == nil || t.IpPrefix == nil {
+		return ""
+	}
+	return *t.IpPrefix
+}
+
+// GetIpProtocol retrieves the value of the leaf IpProtocol from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if IpProtocol is set, it can safely use t.GetIpProtocol()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.IpProtocol == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetIpProtocol() GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union {
+	if t == nil || t.IpProtocol ==  nil {
+		return nil
+	}
+	return t.IpProtocol
+}
+
+// GetL4DstPort retrieves the value of the leaf L4DstPort from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if L4DstPort is set, it can safely use t.GetL4DstPort()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.L4DstPort == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetL4DstPort() uint16 {
+	if t == nil || t.L4DstPort == nil {
+		return 0
+	}
+	return *t.L4DstPort
+}
+
+// GetL4SrcPort retrieves the value of the leaf L4SrcPort from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if L4SrcPort is set, it can safely use t.GetL4SrcPort()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.L4SrcPort == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetL4SrcPort() uint16 {
+	if t == nil || t.L4SrcPort == nil {
+		return 0
+	}
+	return *t.L4SrcPort
+}
+
+// GetMacAddress retrieves the value of the leaf MacAddress from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if MacAddress is set, it can safely use t.GetMacAddress()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.MacAddress == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetMacAddress() string {
+	if t == nil || t.MacAddress == nil {
+		return ""
+	}
+	return *t.MacAddress
+}
+
+// GetMplsLabel retrieves the value of the leaf MplsLabel from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if MplsLabel is set, it can safely use t.GetMplsLabel()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.MplsLabel == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetMplsLabel() GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union {
+	if t == nil || t.MplsLabel ==  nil {
+		return nil
+	}
+	return t.MplsLabel
+}
+
+// GetMplsTc retrieves the value of the leaf MplsTc from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if MplsTc is set, it can safely use t.GetMplsTc()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.MplsTc == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetMplsTc() uint8 {
+	if t == nil || t.MplsTc == nil {
+		return 0
+	}
+	return *t.MplsTc
+}
+
+// GetNextHopGroup retrieves the value of the leaf NextHopGroup from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if NextHopGroup is set, it can safely use t.GetNextHopGroup()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.NextHopGroup == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetNextHopGroup() uint64 {
+	if t == nil || t.NextHopGroup == nil {
+		return 0
+	}
+	return *t.NextHopGroup
+}
+
+// GetOctetsForwarded retrieves the value of the leaf OctetsForwarded from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if OctetsForwarded is set, it can safely use t.GetOctetsForwarded()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.OctetsForwarded == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetOctetsForwarded() uint64 {
+	if t == nil || t.OctetsForwarded == nil {
+		return 0
+	}
+	return *t.OctetsForwarded
+}
+
+// GetPacketsForwarded retrieves the value of the leaf PacketsForwarded from the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State
+// struct. Caution should be exercised whilst using this method since it will return
+// the Go zero value if the field is explicitly unset. If the caller explicitly does
+// not care if PacketsForwarded is set, it can safely use t.GetPacketsForwarded()
+// to retrieve the value. In the case that the caller has different actions based on
+// whether the leaf is set or unset, it should use 'if t.PacketsForwarded == nil'
+// before retrieving the leaf's value.
+func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) GetPacketsForwarded() uint64 {
+	if t == nil || t.PacketsForwarded == nil {
+		return 0
+	}
+	return *t.PacketsForwarded
+}
 
 // Validate validates s against the YANG schema corresponding to its type.
 func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) Validate(opts ...ygot.ValidationOption) error {
@@ -1579,268 +2410,134 @@ func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) ΛEnumTypeM
 
 // GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union is an interface that is implemented by valid types for the union
 // for the leaf /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/state/ip-protocol within the YANG schema.
+// Union type can be one of [E_OpenconfigPacketMatchTypes_IP_PROTOCOL, UnionUint8].
 type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union interface {
-	Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union()
+	// Union type can be one of [E_OpenconfigPacketMatchTypes_IP_PROTOCOL, UnionUint8]
+	Documentation_for_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union()
 }
 
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union_E_OpenconfigPacketMatchTypes_IP_PROTOCOL is used when /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/state/ip-protocol
-// is to be set to a E_OpenconfigPacketMatchTypes_IP_PROTOCOL value.
-type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union_E_OpenconfigPacketMatchTypes_IP_PROTOCOL struct {
-	E_OpenconfigPacketMatchTypes_IP_PROTOCOL	E_OpenconfigPacketMatchTypes_IP_PROTOCOL
-}
-
-// Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union_E_OpenconfigPacketMatchTypes_IP_PROTOCOL
+// Documentation_for_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union ensures that E_OpenconfigPacketMatchTypes_IP_PROTOCOL
 // implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union interface.
-func (*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union_E_OpenconfigPacketMatchTypes_IP_PROTOCOL) Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union() {}
+func (E_OpenconfigPacketMatchTypes_IP_PROTOCOL) Documentation_for_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union() {}
 
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union_Uint8 is used when /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/state/ip-protocol
-// is to be set to a uint8 value.
-type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union_Uint8 struct {
-	Uint8	uint8
-}
-
-// Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union_Uint8
+// Documentation_for_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union ensures that UnionUint8
 // implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union interface.
-func (*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union_Uint8) Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union() {}
+func (UnionUint8) Documentation_for_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union() {}
 
 // To_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union takes an input interface{} and attempts to convert it to a struct
 // which implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union union. It returns an error if the interface{} supplied
 // cannot be converted to a type within the union.
 func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) To_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union(i interface{}) (GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union, error) {
-	switch v := i.(type) {
-	case E_OpenconfigPacketMatchTypes_IP_PROTOCOL:
-		return &GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union_E_OpenconfigPacketMatchTypes_IP_PROTOCOL{v}, nil
-	case uint8:
-		return &GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union_Uint8{v}, nil
-	default:
-		return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union, unknown union type, got: %T, want any of [E_OpenconfigPacketMatchTypes_IP_PROTOCOL, uint8]", i, i)
+	if v, ok := i.(GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union); ok {
+		return v, nil
 	}
+	switch v := i.(type) {
+	case uint8:
+		return UnionUint8(v), nil
+	}
+	return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_IpProtocol_Union, unknown union type, got: %T, want any of [E_OpenconfigPacketMatchTypes_IP_PROTOCOL, uint8]", i, i)
 }
 
 // GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union is an interface that is implemented by valid types for the union
 // for the leaf /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/state/mpls-label within the YANG schema.
+// Union type can be one of [E_OpenconfigMplsTypes_MplsLabel_Enum, UnionUint32].
 type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union interface {
-	Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union()
+	// Union type can be one of [E_OpenconfigMplsTypes_MplsLabel_Enum, UnionUint32]
+	Documentation_for_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union()
 }
 
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union_E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel is used when /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/state/mpls-label
-// is to be set to a E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel value.
-type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union_E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel struct {
-	E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel	E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel
-}
-
-// Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union_E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel
+// Documentation_for_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union ensures that E_OpenconfigMplsTypes_MplsLabel_Enum
 // implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union interface.
-func (*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union_E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel) Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union() {}
+func (E_OpenconfigMplsTypes_MplsLabel_Enum) Documentation_for_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union() {}
 
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union_Uint32 is used when /gribi-aft/afts/policy-forwarding/policy-forwarding-entry/state/mpls-label
-// is to be set to a uint32 value.
-type GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union_Uint32 struct {
-	Uint32	uint32
-}
-
-// Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union_Uint32
+// Documentation_for_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union ensures that UnionUint32
 // implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union interface.
-func (*GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union_Uint32) Is_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union() {}
+func (UnionUint32) Documentation_for_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union() {}
 
 // To_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union takes an input interface{} and attempts to convert it to a struct
 // which implements the GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union union. It returns an error if the interface{} supplied
 // cannot be converted to a type within the union.
 func (t *GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State) To_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union(i interface{}) (GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union, error) {
-	switch v := i.(type) {
-	case E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel:
-		return &GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union_E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel{v}, nil
-	case uint32:
-		return &GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union_Uint32{v}, nil
-	default:
-		return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union, unknown union type, got: %T, want any of [E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel, uint32]", i, i)
+	if v, ok := i.(GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union); ok {
+		return v, nil
 	}
+	switch v := i.(type) {
+	case uint32:
+		return UnionUint32(v), nil
+	}
+	return nil, fmt.Errorf("cannot convert %v to GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_State_MplsLabel_Union, unknown union type, got: %T, want any of [E_OpenconfigMplsTypes_MplsLabel_Enum, uint32]", i, i)
 }
 
 
-// E_GribiAft_Afts_Mpls_LabelEntry_Config_Label is a derived int64 type which is used to represent
-// the enumerated node GribiAft_Afts_Mpls_LabelEntry_Config_Label. An additional value named
-// GribiAft_Afts_Mpls_LabelEntry_Config_Label_UNSET is added to the enumeration which is used as
+// E_OpenconfigAftTypes_EncapsulationHeaderType is a derived int64 type which is used to represent
+// the enumerated node OpenconfigAftTypes_EncapsulationHeaderType. An additional value named
+// OpenconfigAftTypes_EncapsulationHeaderType_UNSET is added to the enumeration which is used as
 // the nil value, indicating that the enumeration was not explicitly set by
 // the program importing the generated structures.
-type E_GribiAft_Afts_Mpls_LabelEntry_Config_Label int64
+type E_OpenconfigAftTypes_EncapsulationHeaderType int64
 
-// IsYANGGoEnum ensures that GribiAft_Afts_Mpls_LabelEntry_Config_Label implements the yang.GoEnum
-// interface. This ensures that GribiAft_Afts_Mpls_LabelEntry_Config_Label can be identified as a
+// IsYANGGoEnum ensures that OpenconfigAftTypes_EncapsulationHeaderType implements the yang.GoEnum
+// interface. This ensures that OpenconfigAftTypes_EncapsulationHeaderType can be identified as a
 // mapped type for a YANG enumeration.
-func (E_GribiAft_Afts_Mpls_LabelEntry_Config_Label) IsYANGGoEnum() {}
+func (E_OpenconfigAftTypes_EncapsulationHeaderType) IsYANGGoEnum() {}
 
-// ΛMap returns the value lookup map associated with  GribiAft_Afts_Mpls_LabelEntry_Config_Label.
-func (E_GribiAft_Afts_Mpls_LabelEntry_Config_Label) ΛMap() map[string]map[int64]ygot.EnumDefinition { return ΛEnum; }
+// ΛMap returns the value lookup map associated with  OpenconfigAftTypes_EncapsulationHeaderType.
+func (E_OpenconfigAftTypes_EncapsulationHeaderType) ΛMap() map[string]map[int64]ygot.EnumDefinition { return ΛEnum; }
 
-// String returns a logging-friendly string for E_GribiAft_Afts_Mpls_LabelEntry_Config_Label.
-func (e E_GribiAft_Afts_Mpls_LabelEntry_Config_Label) String() string {
-	return ygot.EnumLogString(e, int64(e), "E_GribiAft_Afts_Mpls_LabelEntry_Config_Label")
+// String returns a logging-friendly string for E_OpenconfigAftTypes_EncapsulationHeaderType.
+func (e E_OpenconfigAftTypes_EncapsulationHeaderType) String() string {
+	return ygot.EnumLogString(e, int64(e), "E_OpenconfigAftTypes_EncapsulationHeaderType")
 }
 
 const (
-	// GribiAft_Afts_Mpls_LabelEntry_Config_Label_UNSET corresponds to the value UNSET of GribiAft_Afts_Mpls_LabelEntry_Config_Label
-	GribiAft_Afts_Mpls_LabelEntry_Config_Label_UNSET E_GribiAft_Afts_Mpls_LabelEntry_Config_Label = 0
-	// GribiAft_Afts_Mpls_LabelEntry_Config_Label_IPV4_EXPLICIT_NULL corresponds to the value IPV4_EXPLICIT_NULL of GribiAft_Afts_Mpls_LabelEntry_Config_Label
-	GribiAft_Afts_Mpls_LabelEntry_Config_Label_IPV4_EXPLICIT_NULL E_GribiAft_Afts_Mpls_LabelEntry_Config_Label = 1
-	// GribiAft_Afts_Mpls_LabelEntry_Config_Label_ROUTER_ALERT corresponds to the value ROUTER_ALERT of GribiAft_Afts_Mpls_LabelEntry_Config_Label
-	GribiAft_Afts_Mpls_LabelEntry_Config_Label_ROUTER_ALERT E_GribiAft_Afts_Mpls_LabelEntry_Config_Label = 2
-	// GribiAft_Afts_Mpls_LabelEntry_Config_Label_IPV6_EXPLICIT_NULL corresponds to the value IPV6_EXPLICIT_NULL of GribiAft_Afts_Mpls_LabelEntry_Config_Label
-	GribiAft_Afts_Mpls_LabelEntry_Config_Label_IPV6_EXPLICIT_NULL E_GribiAft_Afts_Mpls_LabelEntry_Config_Label = 3
-	// GribiAft_Afts_Mpls_LabelEntry_Config_Label_IMPLICIT_NULL corresponds to the value IMPLICIT_NULL of GribiAft_Afts_Mpls_LabelEntry_Config_Label
-	GribiAft_Afts_Mpls_LabelEntry_Config_Label_IMPLICIT_NULL E_GribiAft_Afts_Mpls_LabelEntry_Config_Label = 4
-	// GribiAft_Afts_Mpls_LabelEntry_Config_Label_ENTROPY_LABEL_INDICATOR corresponds to the value ENTROPY_LABEL_INDICATOR of GribiAft_Afts_Mpls_LabelEntry_Config_Label
-	GribiAft_Afts_Mpls_LabelEntry_Config_Label_ENTROPY_LABEL_INDICATOR E_GribiAft_Afts_Mpls_LabelEntry_Config_Label = 8
-	// GribiAft_Afts_Mpls_LabelEntry_Config_Label_NO_LABEL corresponds to the value NO_LABEL of GribiAft_Afts_Mpls_LabelEntry_Config_Label
-	GribiAft_Afts_Mpls_LabelEntry_Config_Label_NO_LABEL E_GribiAft_Afts_Mpls_LabelEntry_Config_Label = 9
+	// OpenconfigAftTypes_EncapsulationHeaderType_UNSET corresponds to the value UNSET of OpenconfigAftTypes_EncapsulationHeaderType
+	OpenconfigAftTypes_EncapsulationHeaderType_UNSET E_OpenconfigAftTypes_EncapsulationHeaderType = 0
+	// OpenconfigAftTypes_EncapsulationHeaderType_GRE corresponds to the value GRE of OpenconfigAftTypes_EncapsulationHeaderType
+	OpenconfigAftTypes_EncapsulationHeaderType_GRE E_OpenconfigAftTypes_EncapsulationHeaderType = 1
+	// OpenconfigAftTypes_EncapsulationHeaderType_IPV4 corresponds to the value IPV4 of OpenconfigAftTypes_EncapsulationHeaderType
+	OpenconfigAftTypes_EncapsulationHeaderType_IPV4 E_OpenconfigAftTypes_EncapsulationHeaderType = 2
+	// OpenconfigAftTypes_EncapsulationHeaderType_IPV6 corresponds to the value IPV6 of OpenconfigAftTypes_EncapsulationHeaderType
+	OpenconfigAftTypes_EncapsulationHeaderType_IPV6 E_OpenconfigAftTypes_EncapsulationHeaderType = 3
+	// OpenconfigAftTypes_EncapsulationHeaderType_MPLS corresponds to the value MPLS of OpenconfigAftTypes_EncapsulationHeaderType
+	OpenconfigAftTypes_EncapsulationHeaderType_MPLS E_OpenconfigAftTypes_EncapsulationHeaderType = 4
 )
 
 
-// E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack is a derived int64 type which is used to represent
-// the enumerated node GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack. An additional value named
-// GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_UNSET is added to the enumeration which is used as
+// E_OpenconfigMplsTypes_MplsLabel_Enum is a derived int64 type which is used to represent
+// the enumerated node OpenconfigMplsTypes_MplsLabel_Enum. An additional value named
+// OpenconfigMplsTypes_MplsLabel_Enum_UNSET is added to the enumeration which is used as
 // the nil value, indicating that the enumeration was not explicitly set by
 // the program importing the generated structures.
-type E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack int64
+type E_OpenconfigMplsTypes_MplsLabel_Enum int64
 
-// IsYANGGoEnum ensures that GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack implements the yang.GoEnum
-// interface. This ensures that GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack can be identified as a
+// IsYANGGoEnum ensures that OpenconfigMplsTypes_MplsLabel_Enum implements the yang.GoEnum
+// interface. This ensures that OpenconfigMplsTypes_MplsLabel_Enum can be identified as a
 // mapped type for a YANG enumeration.
-func (E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack) IsYANGGoEnum() {}
+func (E_OpenconfigMplsTypes_MplsLabel_Enum) IsYANGGoEnum() {}
 
-// ΛMap returns the value lookup map associated with  GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack.
-func (E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack) ΛMap() map[string]map[int64]ygot.EnumDefinition { return ΛEnum; }
+// ΛMap returns the value lookup map associated with  OpenconfigMplsTypes_MplsLabel_Enum.
+func (E_OpenconfigMplsTypes_MplsLabel_Enum) ΛMap() map[string]map[int64]ygot.EnumDefinition { return ΛEnum; }
 
-// String returns a logging-friendly string for E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack.
-func (e E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack) String() string {
-	return ygot.EnumLogString(e, int64(e), "E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack")
+// String returns a logging-friendly string for E_OpenconfigMplsTypes_MplsLabel_Enum.
+func (e E_OpenconfigMplsTypes_MplsLabel_Enum) String() string {
+	return ygot.EnumLogString(e, int64(e), "E_OpenconfigMplsTypes_MplsLabel_Enum")
 }
 
 const (
-	// GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_UNSET corresponds to the value UNSET of GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack
-	GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_UNSET E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack = 0
-	// GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_IPV4_EXPLICIT_NULL corresponds to the value IPV4_EXPLICIT_NULL of GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack
-	GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_IPV4_EXPLICIT_NULL E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack = 1
-	// GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_ROUTER_ALERT corresponds to the value ROUTER_ALERT of GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack
-	GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_ROUTER_ALERT E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack = 2
-	// GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_IPV6_EXPLICIT_NULL corresponds to the value IPV6_EXPLICIT_NULL of GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack
-	GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_IPV6_EXPLICIT_NULL E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack = 3
-	// GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_IMPLICIT_NULL corresponds to the value IMPLICIT_NULL of GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack
-	GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_IMPLICIT_NULL E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack = 4
-	// GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_ENTROPY_LABEL_INDICATOR corresponds to the value ENTROPY_LABEL_INDICATOR of GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack
-	GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_ENTROPY_LABEL_INDICATOR E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack = 8
-	// GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_NO_LABEL corresponds to the value NO_LABEL of GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack
-	GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack_NO_LABEL E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack = 9
-)
-
-
-// E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack is a derived int64 type which is used to represent
-// the enumerated node GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack. An additional value named
-// GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_UNSET is added to the enumeration which is used as
-// the nil value, indicating that the enumeration was not explicitly set by
-// the program importing the generated structures.
-type E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack int64
-
-// IsYANGGoEnum ensures that GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack implements the yang.GoEnum
-// interface. This ensures that GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack can be identified as a
-// mapped type for a YANG enumeration.
-func (E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack) IsYANGGoEnum() {}
-
-// ΛMap returns the value lookup map associated with  GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack.
-func (E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack) ΛMap() map[string]map[int64]ygot.EnumDefinition { return ΛEnum; }
-
-// String returns a logging-friendly string for E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack.
-func (e E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack) String() string {
-	return ygot.EnumLogString(e, int64(e), "E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack")
-}
-
-const (
-	// GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_UNSET corresponds to the value UNSET of GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack
-	GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_UNSET E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack = 0
-	// GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_IPV4_EXPLICIT_NULL corresponds to the value IPV4_EXPLICIT_NULL of GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack
-	GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_IPV4_EXPLICIT_NULL E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack = 1
-	// GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_ROUTER_ALERT corresponds to the value ROUTER_ALERT of GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack
-	GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_ROUTER_ALERT E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack = 2
-	// GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_IPV6_EXPLICIT_NULL corresponds to the value IPV6_EXPLICIT_NULL of GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack
-	GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_IPV6_EXPLICIT_NULL E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack = 3
-	// GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_IMPLICIT_NULL corresponds to the value IMPLICIT_NULL of GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack
-	GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_IMPLICIT_NULL E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack = 4
-	// GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_ENTROPY_LABEL_INDICATOR corresponds to the value ENTROPY_LABEL_INDICATOR of GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack
-	GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_ENTROPY_LABEL_INDICATOR E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack = 8
-	// GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_NO_LABEL corresponds to the value NO_LABEL of GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack
-	GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack_NO_LABEL E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack = 9
-)
-
-
-// E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel is a derived int64 type which is used to represent
-// the enumerated node GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel. An additional value named
-// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_UNSET is added to the enumeration which is used as
-// the nil value, indicating that the enumeration was not explicitly set by
-// the program importing the generated structures.
-type E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel int64
-
-// IsYANGGoEnum ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel implements the yang.GoEnum
-// interface. This ensures that GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel can be identified as a
-// mapped type for a YANG enumeration.
-func (E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel) IsYANGGoEnum() {}
-
-// ΛMap returns the value lookup map associated with  GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel.
-func (E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel) ΛMap() map[string]map[int64]ygot.EnumDefinition { return ΛEnum; }
-
-// String returns a logging-friendly string for E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel.
-func (e E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel) String() string {
-	return ygot.EnumLogString(e, int64(e), "E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel")
-}
-
-const (
-	// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_UNSET corresponds to the value UNSET of GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel
-	GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_UNSET E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel = 0
-	// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_IPV4_EXPLICIT_NULL corresponds to the value IPV4_EXPLICIT_NULL of GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel
-	GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_IPV4_EXPLICIT_NULL E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel = 1
-	// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_ROUTER_ALERT corresponds to the value ROUTER_ALERT of GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel
-	GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_ROUTER_ALERT E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel = 2
-	// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_IPV6_EXPLICIT_NULL corresponds to the value IPV6_EXPLICIT_NULL of GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel
-	GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_IPV6_EXPLICIT_NULL E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel = 3
-	// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_IMPLICIT_NULL corresponds to the value IMPLICIT_NULL of GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel
-	GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_IMPLICIT_NULL E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel = 4
-	// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_ENTROPY_LABEL_INDICATOR corresponds to the value ENTROPY_LABEL_INDICATOR of GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel
-	GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_ENTROPY_LABEL_INDICATOR E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel = 8
-	// GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_NO_LABEL corresponds to the value NO_LABEL of GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel
-	GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel_NO_LABEL E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel = 9
-)
-
-
-// E_OpenconfigAft_EncapsulationHeaderType is a derived int64 type which is used to represent
-// the enumerated node OpenconfigAft_EncapsulationHeaderType. An additional value named
-// OpenconfigAft_EncapsulationHeaderType_UNSET is added to the enumeration which is used as
-// the nil value, indicating that the enumeration was not explicitly set by
-// the program importing the generated structures.
-type E_OpenconfigAft_EncapsulationHeaderType int64
-
-// IsYANGGoEnum ensures that OpenconfigAft_EncapsulationHeaderType implements the yang.GoEnum
-// interface. This ensures that OpenconfigAft_EncapsulationHeaderType can be identified as a
-// mapped type for a YANG enumeration.
-func (E_OpenconfigAft_EncapsulationHeaderType) IsYANGGoEnum() {}
-
-// ΛMap returns the value lookup map associated with  OpenconfigAft_EncapsulationHeaderType.
-func (E_OpenconfigAft_EncapsulationHeaderType) ΛMap() map[string]map[int64]ygot.EnumDefinition { return ΛEnum; }
-
-// String returns a logging-friendly string for E_OpenconfigAft_EncapsulationHeaderType.
-func (e E_OpenconfigAft_EncapsulationHeaderType) String() string {
-	return ygot.EnumLogString(e, int64(e), "E_OpenconfigAft_EncapsulationHeaderType")
-}
-
-const (
-	// OpenconfigAft_EncapsulationHeaderType_UNSET corresponds to the value UNSET of OpenconfigAft_EncapsulationHeaderType
-	OpenconfigAft_EncapsulationHeaderType_UNSET E_OpenconfigAft_EncapsulationHeaderType = 0
-	// OpenconfigAft_EncapsulationHeaderType_GRE corresponds to the value GRE of OpenconfigAft_EncapsulationHeaderType
-	OpenconfigAft_EncapsulationHeaderType_GRE E_OpenconfigAft_EncapsulationHeaderType = 1
-	// OpenconfigAft_EncapsulationHeaderType_IPV4 corresponds to the value IPV4 of OpenconfigAft_EncapsulationHeaderType
-	OpenconfigAft_EncapsulationHeaderType_IPV4 E_OpenconfigAft_EncapsulationHeaderType = 2
-	// OpenconfigAft_EncapsulationHeaderType_IPV6 corresponds to the value IPV6 of OpenconfigAft_EncapsulationHeaderType
-	OpenconfigAft_EncapsulationHeaderType_IPV6 E_OpenconfigAft_EncapsulationHeaderType = 3
-	// OpenconfigAft_EncapsulationHeaderType_MPLS corresponds to the value MPLS of OpenconfigAft_EncapsulationHeaderType
-	OpenconfigAft_EncapsulationHeaderType_MPLS E_OpenconfigAft_EncapsulationHeaderType = 4
+	// OpenconfigMplsTypes_MplsLabel_Enum_UNSET corresponds to the value UNSET of OpenconfigMplsTypes_MplsLabel_Enum
+	OpenconfigMplsTypes_MplsLabel_Enum_UNSET E_OpenconfigMplsTypes_MplsLabel_Enum = 0
+	// OpenconfigMplsTypes_MplsLabel_Enum_IPV4_EXPLICIT_NULL corresponds to the value IPV4_EXPLICIT_NULL of OpenconfigMplsTypes_MplsLabel_Enum
+	OpenconfigMplsTypes_MplsLabel_Enum_IPV4_EXPLICIT_NULL E_OpenconfigMplsTypes_MplsLabel_Enum = 1
+	// OpenconfigMplsTypes_MplsLabel_Enum_ROUTER_ALERT corresponds to the value ROUTER_ALERT of OpenconfigMplsTypes_MplsLabel_Enum
+	OpenconfigMplsTypes_MplsLabel_Enum_ROUTER_ALERT E_OpenconfigMplsTypes_MplsLabel_Enum = 2
+	// OpenconfigMplsTypes_MplsLabel_Enum_IPV6_EXPLICIT_NULL corresponds to the value IPV6_EXPLICIT_NULL of OpenconfigMplsTypes_MplsLabel_Enum
+	OpenconfigMplsTypes_MplsLabel_Enum_IPV6_EXPLICIT_NULL E_OpenconfigMplsTypes_MplsLabel_Enum = 3
+	// OpenconfigMplsTypes_MplsLabel_Enum_IMPLICIT_NULL corresponds to the value IMPLICIT_NULL of OpenconfigMplsTypes_MplsLabel_Enum
+	OpenconfigMplsTypes_MplsLabel_Enum_IMPLICIT_NULL E_OpenconfigMplsTypes_MplsLabel_Enum = 4
+	// OpenconfigMplsTypes_MplsLabel_Enum_ENTROPY_LABEL_INDICATOR corresponds to the value ENTROPY_LABEL_INDICATOR of OpenconfigMplsTypes_MplsLabel_Enum
+	OpenconfigMplsTypes_MplsLabel_Enum_ENTROPY_LABEL_INDICATOR E_OpenconfigMplsTypes_MplsLabel_Enum = 8
+	// OpenconfigMplsTypes_MplsLabel_Enum_NO_LABEL corresponds to the value NO_LABEL of OpenconfigMplsTypes_MplsLabel_Enum
+	OpenconfigMplsTypes_MplsLabel_Enum_NO_LABEL E_OpenconfigMplsTypes_MplsLabel_Enum = 9
 )
 
 
@@ -1888,89 +2585,25 @@ const (
 )
 
 
-// E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE is a derived int64 type which is used to represent
-// the enumerated node OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE. An additional value named
-// OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_UNSET is added to the enumeration which is used as
-// the nil value, indicating that the enumeration was not explicitly set by
-// the program importing the generated structures.
-type E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE int64
-
-// IsYANGGoEnum ensures that OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE implements the yang.GoEnum
-// interface. This ensures that OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE can be identified as a
-// mapped type for a YANG enumeration.
-func (E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE) IsYANGGoEnum() {}
-
-// ΛMap returns the value lookup map associated with  OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE.
-func (E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE) ΛMap() map[string]map[int64]ygot.EnumDefinition { return ΛEnum; }
-
-// String returns a logging-friendly string for E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE.
-func (e E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE) String() string {
-	return ygot.EnumLogString(e, int64(e), "E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE")
-}
-
-const (
-	// OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_UNSET corresponds to the value UNSET of OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE
-	OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_UNSET E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE = 0
-	// OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_BGP corresponds to the value BGP of OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE
-	OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_BGP E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE = 1
-	// OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_DIRECTLY_CONNECTED corresponds to the value DIRECTLY_CONNECTED of OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE
-	OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_DIRECTLY_CONNECTED E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE = 2
-	// OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_ISIS corresponds to the value ISIS of OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE
-	OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_ISIS E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE = 3
-	// OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_LOCAL_AGGREGATE corresponds to the value LOCAL_AGGREGATE of OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE
-	OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_LOCAL_AGGREGATE E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE = 4
-	// OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_OSPF corresponds to the value OSPF of OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE
-	OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_OSPF E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE = 5
-	// OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_OSPF3 corresponds to the value OSPF3 of OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE
-	OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_OSPF3 E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE = 6
-	// OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_STATIC corresponds to the value STATIC of OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE
-	OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE_STATIC E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE = 7
-)
-
-
 // ΛEnum is a map, keyed by the name of the type defined for each enum in the
 // generated Go code, which provides a mapping between the constant int64 value
 // of each value of the enumeration, and the string that is used to represent it
 // in the YANG schema. The map is named ΛEnum in order to avoid clash with any
 // valid YANG identifier.
 var ΛEnum = map[string]map[int64]ygot.EnumDefinition{
-	"E_GribiAft_Afts_Mpls_LabelEntry_Config_Label": {
-		1: {Name: "IPV4_EXPLICIT_NULL"},
-		2: {Name: "ROUTER_ALERT"},
-		3: {Name: "IPV6_EXPLICIT_NULL"},
-		4: {Name: "IMPLICIT_NULL"},
-		8: {Name: "ENTROPY_LABEL_INDICATOR"},
-		9: {Name: "NO_LABEL"},
-	},
-	"E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack": {
-		1: {Name: "IPV4_EXPLICIT_NULL"},
-		2: {Name: "ROUTER_ALERT"},
-		3: {Name: "IPV6_EXPLICIT_NULL"},
-		4: {Name: "IMPLICIT_NULL"},
-		8: {Name: "ENTROPY_LABEL_INDICATOR"},
-		9: {Name: "NO_LABEL"},
-	},
-	"E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack": {
-		1: {Name: "IPV4_EXPLICIT_NULL"},
-		2: {Name: "ROUTER_ALERT"},
-		3: {Name: "IPV6_EXPLICIT_NULL"},
-		4: {Name: "IMPLICIT_NULL"},
-		8: {Name: "ENTROPY_LABEL_INDICATOR"},
-		9: {Name: "NO_LABEL"},
-	},
-	"E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel": {
-		1: {Name: "IPV4_EXPLICIT_NULL"},
-		2: {Name: "ROUTER_ALERT"},
-		3: {Name: "IPV6_EXPLICIT_NULL"},
-		4: {Name: "IMPLICIT_NULL"},
-		8: {Name: "ENTROPY_LABEL_INDICATOR"},
-		9: {Name: "NO_LABEL"},
-	},
-	"E_OpenconfigAft_EncapsulationHeaderType": {
+	"E_OpenconfigAftTypes_EncapsulationHeaderType": {
 		1: {Name: "GRE"},
 		2: {Name: "IPV4"},
 		3: {Name: "IPV6"},
 		4: {Name: "MPLS"},
+	},
+	"E_OpenconfigMplsTypes_MplsLabel_Enum": {
+		1: {Name: "IPV4_EXPLICIT_NULL"},
+		2: {Name: "ROUTER_ALERT"},
+		3: {Name: "IPV6_EXPLICIT_NULL"},
+		4: {Name: "IMPLICIT_NULL"},
+		8: {Name: "ENTROPY_LABEL_INDICATOR"},
+		9: {Name: "NO_LABEL"},
 	},
 	"E_OpenconfigPacketMatchTypes_IP_PROTOCOL": {
 		1: {Name: "IP_AUTH", DefiningModule: "openconfig-packet-match-types"},
@@ -1983,15 +2616,6 @@ var ΛEnum = map[string]map[int64]ygot.EnumDefinition{
 		8: {Name: "IP_TCP", DefiningModule: "openconfig-packet-match-types"},
 		9: {Name: "IP_UDP", DefiningModule: "openconfig-packet-match-types"},
 	},
-	"E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE": {
-		1: {Name: "BGP", DefiningModule: "openconfig-policy-types"},
-		2: {Name: "DIRECTLY_CONNECTED", DefiningModule: "openconfig-policy-types"},
-		3: {Name: "ISIS", DefiningModule: "openconfig-policy-types"},
-		4: {Name: "LOCAL_AGGREGATE", DefiningModule: "openconfig-policy-types"},
-		5: {Name: "OSPF", DefiningModule: "openconfig-policy-types"},
-		6: {Name: "OSPF3", DefiningModule: "openconfig-policy-types"},
-		7: {Name: "STATIC", DefiningModule: "openconfig-policy-types"},
-	},
 }
 
 
@@ -2003,305 +2627,252 @@ var (
 	// contents of a goyang yang.Entry struct, which defines the schema for the
 	// fields within the struct.
 	ySchema = []byte{
-		0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5d, 0x5b, 0x4f, 0xe3, 0x48,
-		0x13, 0x7d, 0xe7, 0x57, 0x58, 0xd6, 0x3e, 0x10, 0x09, 0x93, 0x0b, 0xb9, 0x40, 0xa4, 0xef, 0x81,
-		0x61, 0x18, 0x16, 0x2d, 0x33, 0x20, 0x60, 0x57, 0x5a, 0x65, 0xb2, 0xc8, 0x38, 0x1d, 0xb0, 0x26,
-		0xd8, 0x91, 0xed, 0xcc, 0x0c, 0x02, 0xff, 0xf7, 0x4f, 0x8e, 0x1d, 0xe7, 0x62, 0x3b, 0x71, 0x5f,
-		0x9c, 0xd8, 0xe6, 0xac, 0x46, 0xda, 0x90, 0xb8, 0xdb, 0xee, 0xee, 0xaa, 0x3a, 0x55, 0xe5, 0xae,
-		0xd3, 0x6f, 0x7b, 0x92, 0x24, 0x49, 0xf2, 0x37, 0xf5, 0x85, 0xc8, 0x5d, 0x49, 0x1e, 0x90, 0x9f,
-		0xba, 0x46, 0xe4, 0x03, 0xff, 0xdb, 0xbf, 0x74, 0x63, 0x20, 0x77, 0xa5, 0x7a, 0xf0, 0xe7, 0x99,
-		0x69, 0x0c, 0xf5, 0x27, 0xb9, 0x2b, 0xd5, 0x82, 0x2f, 0x3e, 0xeb, 0x96, 0xdc, 0x95, 0xfc, 0x2e,
-		0xa6, 0x5f, 0xa8, 0x43, 0xc7, 0x5e, 0xfa, 0x66, 0xa9, 0xf3, 0xe9, 0xaf, 0x07, 0xcb, 0xbf, 0x2d,
-		0xdf, 0x22, 0xfc, 0x7a, 0xf5, 0x56, 0xe1, 0x0f, 0x37, 0x16, 0x19, 0xea, 0xbf, 0x23, 0xf7, 0x58,
-		0xba, 0x8f, 0xa9, 0x29, 0xea, 0xd0, 0x59, 0xb9, 0xd3, 0xf4, 0x8a, 0x3b, 0x73, 0x62, 0x69, 0x24,
-		0xb6, 0xb5, 0xff, 0x34, 0xe4, 0xf5, 0x97, 0x69, 0x79, 0x0f, 0x24, 0x8f, 0xfd, 0x1b, 0x1d, 0xc4,
-		0x5f, 0xf8, 0xa7, 0x6a, 0x9f, 0x5a, 0x4f, 0x93, 0x17, 0x62, 0x38, 0x72, 0x57, 0x72, 0xac, 0x09,
-		0x49, 0xb8, 0x70, 0xe1, 0xaa, 0xd9, 0x73, 0x45, 0x2e, 0x74, 0x97, 0xbe, 0x71, 0x57, 0x46, 0xbc,
-		0x3a, 0xc9, 0xe1, 0x0f, 0xc4, 0x79, 0x26, 0x96, 0x41, 0x9c, 0xe4, 0xe1, 0xcc, 0x26, 0x24, 0xbc,
-		0x32, 0xe1, 0x21, 0xe3, 0x17, 0x61, 0xe3, 0x62, 0xa4, 0x59, 0x94, 0xf4, 0x8b, 0x93, 0x76, 0x91,
-		0xa8, 0x17, 0x8b, 0x7a, 0xd1, 0xa8, 0x16, 0x2f, 0x7e, 0x11, 0x13, 0x16, 0x73, 0xe3, 0xa2, 0x86,
-		0x17, 0xbc, 0xa8, 0x9a, 0x42, 0x0c, 0xc7, 0x7a, 0xdd, 0x3c, 0x0f, 0xb3, 0x99, 0x9d, 0x37, 0xd9,
-		0x30, 0xac, 0xf5, 0xcb, 0x9d, 0x7a, 0xd9, 0x69, 0x96, 0x9f, 0x5e, 0x0c, 0x68, 0xc5, 0x81, 0x59,
-		0x2c, 0x98, 0xc5, 0x83, 0x49, 0x4c, 0xd6, 0x8b, 0xcb, 0x06, 0xb1, 0x49, 0x2d, 0x3e, 0xe1, 0x85,
-		0xda, 0x6c, 0x0d, 0x53, 0x4e, 0xde, 0x6c, 0x79, 0x82, 0x76, 0x29, 0x27, 0x20, 0x9d, 0x40, 0x51,
-		0x0b, 0x16, 0x8b, 0x80, 0xb1, 0x0b, 0x1a, 0xab, 0xc0, 0x71, 0x0b, 0x1e, 0xb7, 0x00, 0x72, 0x09,
-		0x62, 0x3a, 0x81, 0x4c, 0x29, 0x98, 0xd4, 0x02, 0xba, 0x64, 0xef, 0xd4, 0xc1, 0xc0, 0x22, 0xb6,
-		0x4d, 0x3f, 0xf3, 0x8b, 0x16, 0x70, 0xd6, 0x09, 0xe5, 0xd4, 0x05, 0x22, 0x5c, 0xa3, 0x6c, 0x46,
-		0x2b, 0xca, 0x3c, 0x22, 0xcd, 0x2f, 0xda, 0xbc, 0x22, 0x2e, 0x4c, 0xd4, 0x85, 0x89, 0xbc, 0x10,
-		0xd1, 0xa7, 0x53, 0x01, 0x4a, 0x55, 0x08, 0x9f, 0xf0, 0xfe, 0x75, 0x4c, 0xf8, 0xd6, 0x9b, 0x5d,
-		0xbc, 0x97, 0xac, 0xf4, 0x31, 0x43, 0xdb, 0x1b, 0xd5, 0x71, 0x88, 0x65, 0xc8, 0x5d, 0xa9, 0xc7,
-		0xb6, 0x3e, 0xff, 0xf5, 0x6a, 0xca, 0x89, 0xaa, 0x0c, 0x4f, 0x95, 0x2f, 0xfd, 0xb7, 0x86, 0xbb,
-		0xdf, 0x5d, 0xfe, 0xbb, 0xf2, 0xd6, 0x72, 0xff, 0xa0, 0x5f, 0xb1, 0xfe, 0x5e, 0x36, 0xeb, 0x2b,
-		0xd6, 0x18, 0x9e, 0x1a, 0x86, 0xe9, 0xa8, 0x8e, 0x6e, 0x1a, 0x74, 0x36, 0xd1, 0xd6, 0x9e, 0xc9,
-		0x8b, 0x3a, 0x56, 0x9d, 0x67, 0x6f, 0xf5, 0xab, 0x4f, 0x96, 0xfe, 0xa8, 0x7b, 0x92, 0x5d, 0xf5,
-		0x02, 0xa9, 0xea, 0xcc, 0xa9, 0xaf, 0x86, 0x7e, 0x5f, 0x95, 0x0a, 0xb5, 0xfd, 0x5b, 0x38, 0xd6,
-		0x44, 0x73, 0x8c, 0x40, 0xc0, 0x2e, 0xbc, 0x3b, 0x9c, 0x0e, 0x9d, 0x87, 0xd3, 0xa1, 0x63, 0x3f,
-		0x9c, 0x07, 0x37, 0x78, 0xf8, 0xaa, 0x6a, 0xe7, 0x5e, 0xff, 0x0f, 0x81, 0xb5, 0xdb, 0x13, 0x33,
-		0x85, 0x29, 0xa6, 0x8f, 0x09, 0x16, 0x38, 0xf4, 0x85, 0x12, 0x06, 0xe0, 0xc9, 0x94, 0xdf, 0x93,
-		0xa1, 0x36, 0xdb, 0xe1, 0x7a, 0x8d, 0x88, 0x3a, 0xb4, 0xc8, 0x90, 0x66, 0xc1, 0x66, 0x26, 0xba,
-		0x43, 0xd1, 0xe6, 0x26, 0xb0, 0x0f, 0x87, 0x87, 0x81, 0xfe, 0x57, 0x17, 0xe5, 0x7e, 0x8b, 0xba,
-		0x6a, 0x3b, 0xaa, 0x43, 0xe8, 0xb5, 0xd4, 0x6f, 0x96, 0x71, 0xa4, 0xd1, 0x80, 0x7e, 0x22, 0xd2,
-		0x40, 0xa4, 0x81, 0x48, 0x03, 0x91, 0x06, 0x22, 0x8d, 0x5c, 0x45, 0x1a, 0x14, 0x70, 0x61, 0x90,
-		0xdf, 0x8e, 0xf2, 0x6c, 0x8e, 0x95, 0x27, 0xcb, 0x9c, 0x8c, 0xd9, 0x8d, 0xd7, 0x4a, 0x3f, 0xb0,
-		0x5f, 0xb0, 0x5f, 0x25, 0xb3, 0x5f, 0xf4, 0xae, 0x37, 0x8f, 0x0b, 0x1e, 0xe7, 0x8a, 0x87, 0xff,
-		0x96, 0x95, 0xcd, 0x5e, 0xf9, 0xbb, 0x3a, 0xf5, 0x7e, 0xab, 0xfa, 0x40, 0xce, 0x81, 0x7d, 0x31,
-		0x35, 0x87, 0x38, 0xb6, 0x32, 0x34, 0xad, 0x5f, 0xaa, 0x35, 0x20, 0x03, 0x76, 0x0b, 0x13, 0xe9,
-		0x09, 0x36, 0x06, 0x36, 0xa6, 0x64, 0x36, 0x46, 0x33, 0x27, 0x86, 0x43, 0xac, 0x76, 0x93, 0xc3,
-		0xca, 0xb0, 0x38, 0x48, 0xb7, 0xaa, 0xf1, 0x44, 0x98, 0xdd, 0x23, 0x36, 0x11, 0x9b, 0xde, 0xf8,
-		0xab, 0x6e, 0x30, 0xcb, 0x28, 0xa7, 0x66, 0x47, 0xba, 0xf9, 0x47, 0x1d, 0x4d, 0x88, 0x80, 0x7e,
-		0xbe, 0x58, 0xaa, 0xe6, 0xe8, 0xa6, 0xf1, 0x59, 0x7f, 0xd2, 0xa7, 0x5b, 0x57, 0x6a, 0xcc, 0xfd,
-		0xb9, 0x07, 0x1c, 0x53, 0xab, 0xfe, 0xce, 0xdd, 0xd4, 0xd6, 0x8f, 0x9b, 0xcd, 0x76, 0xa7, 0xd9,
-		0xac, 0x75, 0x8e, 0x3a, 0xb5, 0x93, 0x56, 0xab, 0xde, 0xae, 0xb7, 0x72, 0x34, 0xdb, 0x7b, 0xdb,
-		0x69, 0x95, 0x07, 0xbf, 0x7f, 0xac, 0x6a, 0x3f, 0x04, 0x01, 0x73, 0xb4, 0x2b, 0x20, 0x33, 0x90,
-		0x19, 0xc8, 0x0c, 0x64, 0x06, 0x32, 0x03, 0x99, 0x81, 0xcc, 0xc5, 0x7d, 0xf7, 0x4f, 0xf3, 0x1a,
-		0x4d, 0xa2, 0x7f, 0xf5, 0x7f, 0x37, 0xed, 0x5e, 0xd4, 0xdb, 0x44, 0xae, 0xcd, 0x8f, 0x7f, 0x91,
-		0x57, 0xba, 0x1c, 0xb5, 0x7c, 0xa5, 0xdb, 0xce, 0xa9, 0xe3, 0xa4, 0xdc, 0x33, 0xf9, 0x55, 0x37,
-		0xce, 0x47, 0xc4, 0x03, 0x49, 0x3b, 0x9d, 0xd2, 0x7a, 0x46, 0x62, 0xa1, 0x05, 0x9b, 0x7a, 0xca,
-		0xd7, 0xd6, 0x80, 0x58, 0x64, 0xf0, 0xc9, 0x1b, 0x9c, 0x31, 0x19, 0x8d, 0xb8, 0xe6, 0x88, 0x52,
-		0xec, 0xa8, 0xc5, 0x4d, 0x4e, 0xf5, 0x3e, 0x98, 0x42, 0xc0, 0xd6, 0x8b, 0x96, 0x2b, 0x68, 0xdb,
-		0x75, 0xca, 0x69, 0x49, 0x39, 0x1d, 0xeb, 0x36, 0xb1, 0xa7, 0x19, 0x7c, 0xfc, 0x98, 0xa3, 0x23,
-		0x8a, 0x19, 0x8d, 0xac, 0x8f, 0x7f, 0x36, 0x95, 0x89, 0xa1, 0x6b, 0xaa, 0x9d, 0xa2, 0x00, 0x60,
-		0xe9, 0x6a, 0x14, 0x01, 0x14, 0xa5, 0x08, 0x60, 0xba, 0x6c, 0x94, 0x55, 0x00, 0x0b, 0x6d, 0x50,
-		0x06, 0x80, 0x32, 0x00, 0xff, 0x42, 0x94, 0x01, 0x60, 0x73, 0xce, 0x2e, 0xbc, 0x5f, 0xea, 0xcd,
-		0x39, 0x63, 0xb6, 0x74, 0xcf, 0x3c, 0xbf, 0xc5, 0x34, 0xe3, 0x48, 0x6a, 0x21, 0xa9, 0x95, 0xf7,
-		0xa4, 0xd6, 0x14, 0xd7, 0x99, 0xe7, 0x7b, 0xc7, 0x5b, 0x72, 0xf6, 0xf7, 0x7b, 0x35, 0xe5, 0xa4,
-		0xff, 0xde, 0xab, 0x2b, 0x27, 0x7d, 0xff, 0x63, 0x7d, 0xfa, 0x3f, 0xff, 0x73, 0xa3, 0x57, 0x53,
-		0x9a, 0xb3, 0xcf, 0xad, 0x5e, 0x4d, 0x69, 0xf5, 0x2b, 0xdf, 0xbf, 0x1f, 0x56, 0xde, 0x8e, 0x5c,
-		0xfa, 0x86, 0xd5, 0xe0, 0x66, 0x95, 0xf7, 0xfd, 0x5e, 0x5d, 0x69, 0xf4, 0x67, 0x7f, 0x1c, 0xf5,
-		0x6a, 0x4a, 0xa3, 0x5f, 0xa9, 0xa0, 0xcc, 0x80, 0x2a, 0xd8, 0x59, 0x0c, 0x1d, 0xaa, 0x73, 0xe7,
-		0x52, 0x70, 0xad, 0xc1, 0xe5, 0xf8, 0x67, 0xf3, 0x6f, 0xff, 0x26, 0xd3, 0xcf, 0xbb, 0xaa, 0x37,
-		0xa0, 0xc4, 0x1f, 0x36, 0xdc, 0x41, 0x95, 0x01, 0x1c, 0x25, 0x5e, 0x7c, 0xd8, 0x7d, 0x95, 0x41,
-		0xb0, 0x66, 0x28, 0x30, 0x40, 0x81, 0x01, 0x62, 0x98, 0xc5, 0x06, 0x03, 0xa2, 0xa9, 0x63, 0x7b,
-		0x32, 0x52, 0x1d, 0xa2, 0x3c, 0x13, 0x75, 0x40, 0x2c, 0xf6, 0x78, 0x26, 0xa6, 0x2f, 0xc4, 0x36,
-		0x88, 0x6d, 0x4a, 0x16, 0xdb, 0x10, 0x63, 0x26, 0xe5, 0xba, 0x69, 0x04, 0x72, 0xae, 0x38, 0x5e,
-		0xb7, 0x1c, 0x91, 0x4e, 0x93, 0xa1, 0xed, 0xb9, 0x31, 0x79, 0xf1, 0x86, 0xe2, 0x62, 0xb7, 0x3f,
-		0xcc, 0x07, 0xcc, 0x47, 0x41, 0xcc, 0x07, 0x76, 0xfb, 0xb3, 0xd8, 0x17, 0xec, 0xf6, 0x87, 0x8d,
-		0x81, 0x8d, 0x49, 0xbb, 0xde, 0xd8, 0x53, 0xc8, 0x24, 0xab, 0xd8, 0x53, 0x18, 0x37, 0xb5, 0xd8,
-		0x53, 0x98, 0xa9, 0x75, 0x60, 0x6f, 0x85, 0xdd, 0xfe, 0x40, 0x66, 0x20, 0x33, 0x90, 0x19, 0xc8,
-		0x0c, 0x64, 0x06, 0x32, 0x03, 0x99, 0x57, 0x90, 0x19, 0x9b, 0x93, 0x80, 0xc1, 0xc0, 0xe0, 0x98,
-		0xf5, 0xc6, 0xe6, 0x24, 0x6c, 0x4e, 0xda, 0xa0, 0x05, 0x5b, 0xdd, 0x9c, 0x24, 0xb4, 0x18, 0x2a,
-		0x7e, 0x6f, 0x52, 0xfe, 0x0a, 0xa2, 0xd2, 0xd5, 0x3f, 0xa0, 0x16, 0x2a, 0x13, 0x91, 0xe3, 0x2d,
-		0x88, 0x8a, 0x15, 0xb2, 0x22, 0x15, 0x45, 0xa5, 0x28, 0x31, 0xa2, 0x99, 0x04, 0xce, 0xda, 0xa8,
-		0x36, 0x55, 0x6d, 0x54, 0x1b, 0xb5, 0x51, 0x52, 0x01, 0x6b, 0xa3, 0xda, 0x0c, 0xb5, 0x51, 0x6d,
-		0xd4, 0x46, 0xa1, 0x36, 0x6a, 0xe9, 0x42, 0xd4, 0x46, 0x61, 0x5f, 0xe1, 0x2e, 0x3c, 0x62, 0xd4,
-		0x46, 0x21, 0xfd, 0x80, 0xf4, 0x83, 0xa8, 0xf4, 0x43, 0xbb, 0xe0, 0xe9, 0x87, 0x19, 0x41, 0x71,
-		0xfd, 0xa0, 0xe9, 0x76, 0x2b, 0x6f, 0x1d, 0x77, 0xf5, 0xcb, 0xf7, 0xb8, 0xcb, 0xea, 0x07, 0x1d,
-		0xb7, 0x9b, 0xf0, 0x4b, 0xdb, 0xed, 0xae, 0x7e, 0x1f, 0x7f, 0x61, 0x6b, 0x85, 0x23, 0xd9, 0xfb,
-		0xc1, 0xfb, 0xbe, 0x91, 0x74, 0xcf, 0x66, 0x42, 0x83, 0xa3, 0xa4, 0x06, 0x47, 0x09, 0x0d, 0x12,
-		0x47, 0xd5, 0x48, 0x68, 0xd0, 0x72, 0xdf, 0x23, 0xd7, 0xef, 0xc7, 0x5f, 0xda, 0x76, 0x2b, 0xef,
-		0x49, 0xbf, 0x75, 0xdc, 0xf7, 0x6e, 0xa5, 0x52, 0xdd, 0xaf, 0x37, 0x7a, 0x35, 0xe5, 0xd8, 0xcf,
-		0xda, 0xd4, 0xfb, 0x91, 0x64, 0x8e, 0x9f, 0x9c, 0x41, 0x4a, 0x86, 0x36, 0x0e, 0x6c, 0x2f, 0xc6,
-		0xc7, 0xed, 0xac, 0xea, 0xc5, 0xda, 0x0b, 0xe1, 0x72, 0x1b, 0xf5, 0x62, 0x70, 0x1e, 0x3f, 0x92,
-		0xf3, 0x88, 0x7a, 0x31, 0xd4, 0x8b, 0x41, 0x35, 0xcb, 0x11, 0xd7, 0xa1, 0x5e, 0x0c, 0xf1, 0x1e,
-		0xe2, 0x3d, 0x9a, 0xf5, 0x46, 0xbd, 0x58, 0xcc, 0xb3, 0xa0, 0x5e, 0x0c, 0xe6, 0x03, 0xe6, 0x23,
-		0x1b, 0x17, 0x98, 0xc7, 0x15, 0x8e, 0x73, 0x89, 0x51, 0x2f, 0x86, 0x5d, 0xe9, 0xb0, 0x31, 0xd8,
-		0x95, 0xbe, 0x5e, 0xc0, 0xb1, 0x2b, 0x9d, 0xb1, 0x1b, 0xec, 0x4a, 0xcf, 0x7c, 0x6a, 0xb1, 0x2b,
-		0x5d, 0x42, 0xbd, 0x18, 0x90, 0x19, 0xc8, 0x0c, 0x64, 0x06, 0x32, 0x03, 0x99, 0x81, 0xcc, 0x40,
-		0xe6, 0x28, 0x32, 0x63, 0xc3, 0x16, 0x30, 0x18, 0x18, 0x1c, 0xb3, 0xde, 0xd8, 0xb0, 0x85, 0x0d,
-		0x5b, 0xd8, 0xb0, 0x45, 0xa9, 0x7f, 0x5b, 0xde, 0xb0, 0x25, 0xba, 0x86, 0x2e, 0x66, 0xbf, 0x16,
-		0x6a, 0xe8, 0x12, 0xdd, 0xca, 0xb2, 0xd7, 0xd0, 0xc5, 0x89, 0x9c, 0x80, 0x1a, 0xba, 0xa8, 0x90,
-		0x15, 0xac, 0x86, 0xae, 0x2d, 0xa0, 0x86, 0xae, 0x2d, 0xa0, 0x86, 0xee, 0x65, 0x3c, 0xb2, 0x37,
-		0xd7, 0xce, 0x4d, 0xaf, 0x42, 0xcd, 0x5c, 0x51, 0x6a, 0xe6, 0x46, 0xea, 0x23, 0x19, 0xd1, 0x16,
-		0xcd, 0x2d, 0x36, 0x42, 0xd5, 0x1c, 0xaa, 0xe6, 0xfc, 0x0b, 0x51, 0x35, 0x87, 0xdd, 0x95, 0xbb,
-		0xf0, 0x81, 0xa9, 0x77, 0x57, 0x4e, 0xcd, 0x17, 0x7b, 0x0e, 0xc6, 0x6f, 0x8e, 0x14, 0x0c, 0x52,
-		0x30, 0x25, 0x4b, 0xc1, 0x78, 0xae, 0x9b, 0xc2, 0x22, 0xdd, 0x4b, 0x86, 0xf9, 0x84, 0xa1, 0x6d,
-		0xf0, 0xec, 0x5b, 0x7f, 0x0f, 0x32, 0x1b, 0xf9, 0x44, 0x37, 0x9c, 0xa3, 0x86, 0xcc, 0x91, 0xf6,
-		0x0f, 0x46, 0xdf, 0xe1, 0xe8, 0x82, 0xef, 0x6d, 0x10, 0xff, 0x6c, 0x2c, 0x46, 0xa7, 0xdc, 0xaf,
-		0x30, 0x04, 0xbf, 0xca, 0x88, 0xbe, 0xd2, 0x68, 0x0b, 0xea, 0x50, 0xe0, 0x8b, 0x0c, 0x46, 0xcd,
-		0x4d, 0x8a, 0xf7, 0xf3, 0xbf, 0x06, 0xb5, 0xe6, 0x71, 0xab, 0xd3, 0xca, 0xf1, 0x42, 0xec, 0xed,
-		0xa6, 0x75, 0x7f, 0x6f, 0x8b, 0x62, 0x23, 0xc0, 0xfc, 0x11, 0x63, 0xf2, 0x42, 0x2c, 0x3f, 0x57,
-		0xc1, 0x6f, 0x03, 0x59, 0xb6, 0xcd, 0x87, 0x7d, 0xb0, 0x6d, 0x9f, 0x67, 0x5f, 0xb2, 0x8f, 0x9c,
-		0xe6, 0xf5, 0xf0, 0xbe, 0xba, 0x10, 0xcb, 0x0b, 0x2e, 0xc8, 0xfd, 0x3a, 0x1e, 0xd9, 0x0f, 0x57,
-		0x5e, 0xf7, 0xbb, 0x2a, 0xc5, 0xa5, 0x73, 0xf4, 0x99, 0x1c, 0x7c, 0x14, 0xe2, 0x22, 0x1e, 0xe5,
-		0x75, 0xc4, 0x77, 0x5f, 0x88, 0xeb, 0x4b, 0x3c, 0xea, 0x70, 0x51, 0x87, 0x8b, 0x4c, 0x11, 0x32,
-		0x45, 0xc8, 0x14, 0x21, 0x53, 0x84, 0x4c, 0x11, 0x32, 0x45, 0xc8, 0x14, 0x21, 0x53, 0x84, 0x4c,
-		0x11, 0x32, 0x45, 0xc8, 0x14, 0x49, 0x39, 0xd9, 0x3e, 0x0e, 0x42, 0x07, 0x78, 0xa8, 0xf0, 0x50,
-		0xb3, 0x49, 0xa5, 0xf0, 0xa4, 0x54, 0xe2, 0x52, 0x2b, 0x20, 0x74, 0x40, 0xd9, 0x28, 0x6c, 0x0c,
-		0xca, 0x46, 0xd7, 0x0b, 0x38, 0xca, 0x46, 0x39, 0x43, 0x0b, 0x94, 0x8d, 0x66, 0x36, 0xb5, 0x28,
-		0x1b, 0x95, 0x40, 0xe8, 0x00, 0x64, 0x06, 0x32, 0x03, 0x99, 0x81, 0xcc, 0x40, 0x66, 0x20, 0x33,
-		0x90, 0x39, 0x8a, 0xcc, 0xe6, 0x78, 0x4c, 0x06, 0xca, 0xfc, 0x85, 0x98, 0x62, 0x3b, 0xaa, 0xf6,
-		0x83, 0x03, 0x9f, 0x13, 0x3a, 0x04, 0x4a, 0x03, 0xa5, 0x4b, 0x86, 0xd2, 0x78, 0x8b, 0x8c, 0xb7,
-		0xc8, 0x78, 0x8b, 0x8c, 0xb7, 0xc8, 0xa9, 0xd7, 0x00, 0x6f, 0x91, 0x45, 0x38, 0x42, 0x9c, 0x62,
-		0x83, 0xb7, 0xc8, 0x5b, 0xf4, 0x59, 0x29, 0x31, 0x99, 0x8a, 0x85, 0x24, 0xce, 0x0e, 0xd3, 0xb1,
-		0x92, 0xc4, 0x59, 0x11, 0x6e, 0x96, 0x92, 0x48, 0xa7, 0x54, 0xac, 0x25, 0x1c, 0x5e, 0x7f, 0x11,
-		0x2b, 0x36, 0x84, 0x32, 0xf2, 0xac, 0x16, 0x6c, 0xe4, 0x8f, 0x8b, 0x27, 0x8d, 0xb3, 0x08, 0x2a,
-		0x1e, 0xc1, 0x42, 0xc6, 0xcb, 0xc1, 0xb3, 0x22, 0x56, 0x45, 0x62, 0xdf, 0x59, 0x43, 0x66, 0x93,
-		0x6a, 0xd8, 0x3c, 0x74, 0x3b, 0x2b, 0xdb, 0x06, 0x36, 0x33, 0xef, 0xac, 0x36, 0x00, 0x09, 0x4f,
-		0x51, 0x48, 0x78, 0x28, 0xb7, 0x75, 0xb1, 0x6d, 0xe3, 0x02, 0x15, 0x8f, 0xd8, 0x94, 0x0d, 0xa8,
-		0x78, 0x40, 0xc5, 0x83, 0x02, 0x2b, 0x36, 0x01, 0x0d, 0x1b, 0xe8, 0x1c, 0x6f, 0xb2, 0x75, 0xbc,
-		0xba, 0x46, 0x52, 0xbc, 0x74, 0x49, 0xf1, 0x89, 0x6e, 0x38, 0x78, 0x6f, 0xbd, 0x83, 0x74, 0x23,
-		0xde, 0x5b, 0x67, 0x3f, 0xb5, 0x78, 0x6f, 0x2d, 0x7d, 0x70, 0xce, 0x91, 0x0d, 0x9b, 0xe1, 0xc5,
-		0x32, 0x90, 0x7c, 0x23, 0xbf, 0x9d, 0x3f, 0xcd, 0xf1, 0xc5, 0xf4, 0x56, 0x4b, 0x7f, 0xed, 0x80,
-		0x8c, 0x84, 0xc2, 0xd5, 0xa1, 0x77, 0x71, 0x40, 0x43, 0x02, 0x5f, 0x9c, 0xd7, 0x15, 0xd9, 0x3d,
-		0x0d, 0x49, 0xda, 0x22, 0x18, 0x31, 0x0a, 0x39, 0x33, 0x3d, 0x36, 0xbd, 0x5e, 0xce, 0x9b, 0x22,
-		0x54, 0x86, 0x7a, 0x6e, 0x27, 0x54, 0x9e, 0xc9, 0x1c, 0x7f, 0xd5, 0x27, 0x63, 0xd8, 0x5c, 0x47,
-		0xd8, 0x8c, 0xb0, 0x39, 0x9b, 0xb0, 0x99, 0x56, 0x19, 0x58, 0x13, 0x9d, 0x62, 0x12, 0x9f, 0x82,
-		0x14, 0x84, 0x5b, 0x51, 0x44, 0x28, 0x8c, 0x38, 0xc5, 0x11, 0xa5, 0x40, 0xc2, 0x15, 0x49, 0xb8,
-		0x42, 0x09, 0x55, 0x2c, 0xce, 0xe0, 0x93, 0x51, 0x62, 0x58, 0x15, 0x6e, 0x1e, 0xcd, 0x18, 0x03,
-		0x22, 0x20, 0xbf, 0x10, 0x06, 0x3a, 0xd3, 0xee, 0x0e, 0x72, 0x91, 0xac, 0xe0, 0x55, 0x47, 0x91,
-		0x6a, 0x29, 0x5e, 0x3d, 0x45, 0xab, 0x69, 0x66, 0xea, 0x9a, 0x99, 0xda, 0x66, 0xa2, 0xbe, 0x7c,
-		0x6a, 0x2c, 0x20, 0xdf, 0x27, 0x71, 0xa5, 0x9f, 0x05, 0xc6, 0x82, 0x22, 0x63, 0xc4, 0x34, 0xb1,
-		0xe3, 0xca, 0xbf, 0x30, 0x34, 0x0b, 0x3f, 0x85, 0xd1, 0xe5, 0xd4, 0xc6, 0xec, 0x68, 0x8b, 0xe6,
-		0x76, 0xcd, 0x3b, 0x63, 0xee, 0x4e, 0x6c, 0x2e, 0x2f, 0x71, 0x25, 0x78, 0x9c, 0x0b, 0xc6, 0x74,
-		0x5f, 0xf0, 0x47, 0xf8, 0x2d, 0x55, 0xfe, 0x8f, 0x7f, 0x2d, 0x19, 0xd6, 0x91, 0x13, 0x61, 0x85,
-		0x20, 0x2b, 0x27, 0xa2, 0xc2, 0xb1, 0x85, 0x63, 0xbb, 0x6d, 0xcb, 0xc7, 0x8d, 0x80, 0x02, 0x91,
-		0x4f, 0x04, 0xe2, 0xc5, 0x65, 0x49, 0xd9, 0x71, 0x6c, 0x3b, 0x96, 0x8b, 0x8e, 0xdc, 0x39, 0x71,
-		0x01, 0x68, 0xf7, 0x36, 0x67, 0x12, 0x92, 0x37, 0x60, 0xb9, 0x60, 0xb9, 0x10, 0x92, 0x23, 0x24,
-		0x47, 0x48, 0x8e, 0x90, 0x1c, 0x21, 0x79, 0xa9, 0x42, 0x72, 0x0e, 0x40, 0xfd, 0x45, 0xf4, 0xa7,
-		0x67, 0x47, 0x9c, 0xb1, 0x0d, 0xfa, 0x83, 0xb5, 0x85, 0xb5, 0x85, 0xb5, 0xcd, 0x95, 0xb5, 0x65,
-		0xde, 0x8f, 0x9b, 0xa4, 0x9d, 0xc7, 0x02, 0xba, 0x12, 0x43, 0xdd, 0x30, 0xfb, 0x4f, 0x8c, 0xfc,
-		0x4b, 0xa2, 0xa9, 0x1c, 0x04, 0x9b, 0xb5, 0x48, 0xb7, 0x82, 0xf6, 0xfb, 0x46, 0xfa, 0xcd, 0x80,
-		0x58, 0x40, 0x90, 0x7a, 0x2c, 0x2f, 0x95, 0x40, 0xc6, 0x87, 0x6d, 0x2d, 0x95, 0xf8, 0xfd, 0xc3,
-		0x5b, 0x5d, 0xbd, 0xbd, 0x7c, 0xf4, 0xd2, 0xc7, 0x3b, 0x10, 0x9a, 0x6c, 0x96, 0xe0, 0x77, 0x20,
-		0x3c, 0x69, 0x2d, 0x49, 0xe4, 0x2b, 0x10, 0x8a, 0xf2, 0x7e, 0x01, 0x79, 0xc4, 0x4c, 0xf7, 0x0f,
-		0x05, 0xf4, 0x00, 0x2c, 0x29, 0x0b, 0x70, 0x66, 0x70, 0xcf, 0x3e, 0xa7, 0xa6, 0x89, 0xd6, 0x30,
-		0x99, 0x29, 0x65, 0x2d, 0x44, 0xa7, 0x64, 0x54, 0x76, 0x6c, 0x5c, 0xa7, 0x2d, 0x14, 0x77, 0xcc,
-		0x96, 0x05, 0x27, 0x5a, 0xe2, 0x44, 0xcb, 0x0c, 0xe2, 0xe9, 0x22, 0xef, 0x22, 0x7f, 0x54, 0xb5,
-		0x1f, 0x93, 0xb1, 0x22, 0xea, 0x20, 0xa1, 0xf8, 0xee, 0x50, 0x96, 0x9d, 0x5d, 0xda, 0x09, 0xfb,
-		0xcb, 0x3f, 0xf4, 0x79, 0x42, 0x2b, 0xa8, 0x9a, 0x8f, 0x63, 0x83, 0x34, 0x73, 0x64, 0x5a, 0xec,
-		0x46, 0xc4, 0x6f, 0x0e, 0xa3, 0x01, 0xa3, 0x51, 0x32, 0xa3, 0x01, 0x2e, 0x87, 0x1d, 0x25, 0x10,
-		0xc1, 0xe5, 0x90, 0xfd, 0xd4, 0x82, 0xcb, 0x41, 0xca, 0xc9, 0x19, 0x04, 0x20, 0x51, 0x02, 0xf0,
-		0x02, 0x78, 0x01, 0xbc, 0x00, 0x5e, 0x00, 0x2f, 0x80, 0x97, 0x17, 0x78, 0x8b, 0x9f, 0x6a, 0x17,
-		0x4a, 0x0a, 0xbe, 0x26, 0xcd, 0x9e, 0x3f, 0x7e, 0xf0, 0x8d, 0xde, 0x0c, 0xc8, 0xc1, 0x33, 0x15,
-		0x3d, 0x5e, 0xaa, 0xf0, 0x64, 0x61, 0x2b, 0x12, 0x6b, 0x78, 0x3a, 0x22, 0x6e, 0xba, 0xc9, 0x10,
-		0xc1, 0x24, 0x4e, 0xc1, 0x21, 0x0e, 0xf6, 0xf0, 0xe2, 0xb1, 0x87, 0xd3, 0xf3, 0x86, 0x83, 0x31,
-		0x1c, 0x8c, 0xe1, 0xc1, 0x85, 0x60, 0x0c, 0xc7, 0x0b, 0xec, 0x5d, 0x38, 0xc8, 0xf4, 0x8c, 0xe1,
-		0x4c, 0x55, 0x6e, 0x5c, 0x55, 0x6d, 0x48, 0x79, 0x21, 0xe5, 0x85, 0x94, 0x17, 0x52, 0x5e, 0x48,
-		0x79, 0x21, 0xe5, 0x85, 0x94, 0xd7, 0x6e, 0x53, 0x5e, 0x3c, 0x64, 0x42, 0x69, 0xa2, 0x6d, 0x36,
-		0x86, 0x20, 0x41, 0x0c, 0xe1, 0x54, 0xae, 0x0d, 0x93, 0x4b, 0x03, 0x9e, 0x70, 0x78, 0xe0, 0xbc,
-		0xae, 0x47, 0x0e, 0x78, 0xc2, 0xd3, 0x97, 0x8d, 0x8b, 0xd2, 0x4c, 0x87, 0x58, 0x43, 0x55, 0x23,
-		0x8a, 0x37, 0x5e, 0x06, 0x0d, 0x5d, 0x6c, 0x5e, 0x8e, 0x58, 0x59, 0x1f, 0x7e, 0x48, 0x45, 0xd5,
-		0x87, 0x85, 0x89, 0x94, 0x19, 0xb9, 0x91, 0xf9, 0x38, 0x91, 0x8b, 0x4a, 0x16, 0xae, 0x0f, 0x11,
-		0x2a, 0x73, 0x8a, 0xfb, 0x76, 0x22, 0x65, 0x66, 0xaa, 0xf0, 0xd0, 0x08, 0x8b, 0xe0, 0x54, 0x9c,
-		0x75, 0x05, 0x5e, 0x45, 0x66, 0xe5, 0x11, 0xa5, 0x44, 0xc2, 0x95, 0x49, 0xb8, 0x52, 0x89, 0x54,
-		0x2e, 0xce, 0x98, 0x13, 0xac, 0x8a, 0xcb, 0x3e, 0x65, 0x75, 0xba, 0x0c, 0xdd, 0x50, 0xa1, 0xed,
-		0xd5, 0x2f, 0x82, 0xbf, 0xa7, 0x31, 0x63, 0x9e, 0x29, 0x17, 0x27, 0x8f, 0x02, 0xed, 0xdb, 0x52,
-		0x6f, 0x30, 0x71, 0x30, 0x71, 0x30, 0x71, 0x25, 0x36, 0x71, 0xbd, 0xb9, 0x89, 0xfb, 0x9f, 0x36,
-		0xb1, 0x2c, 0x62, 0x38, 0xfb, 0x95, 0xea, 0xe1, 0x61, 0x35, 0xbc, 0xa2, 0x1f, 0x34, 0x59, 0xb4,
-		0x0b, 0x76, 0xcc, 0x77, 0x61, 0xcf, 0xdb, 0x24, 0xa8, 0x2d, 0x01, 0xb5, 0xc1, 0x42, 0x52, 0x73,
-		0x29, 0x55, 0xc0, 0xce, 0x97, 0x4e, 0x97, 0xea, 0xbc, 0x9c, 0xdd, 0xf4, 0x96, 0x0c, 0x99, 0x98,
-		0xd1, 0xb3, 0xa9, 0x6b, 0x60, 0xe3, 0x11, 0xe6, 0xe2, 0x0f, 0xe6, 0x0e, 0x5f, 0x1b, 0x08, 0x5f,
-		0x11, 0xbe, 0x22, 0x7c, 0x85, 0x6f, 0x07, 0xdf, 0x0e, 0xbe, 0x1d, 0xc2, 0x57, 0x84, 0xaf, 0x30,
-		0x71, 0x30, 0x71, 0x30, 0x71, 0x08, 0x5f, 0x3f, 0x62, 0xf8, 0xca, 0x4a, 0x75, 0xc9, 0x11, 0xbd,
-		0x32, 0x90, 0x5a, 0x96, 0x7e, 0xa3, 0x14, 0xcb, 0xf6, 0x03, 0xbe, 0x65, 0x00, 0xf1, 0x1e, 0x88,
-		0xf7, 0x32, 0x80, 0xeb, 0x22, 0xd7, 0x2d, 0x10, 0x43, 0x53, 0xc7, 0xf6, 0x64, 0xa4, 0x3a, 0x44,
-		0x79, 0x26, 0xea, 0x80, 0x70, 0x10, 0x66, 0xc5, 0xf4, 0x85, 0x8a, 0x86, 0x8f, 0x9c, 0xe7, 0x2a,
-		0x65, 0x45, 0xc3, 0x5c, 0xca, 0x75, 0xd3, 0x08, 0xe4, 0x5c, 0x71, 0xbc, 0x6e, 0x39, 0x48, 0xf8,
-		0x9a, 0x0c, 0x6d, 0xcf, 0x8d, 0xc9, 0x8b, 0x37, 0x14, 0x37, 0x0f, 0x5c, 0x3f, 0x28, 0x7f, 0x82,
-		0xb1, 0x80, 0xb1, 0x88, 0xac, 0x37, 0xca, 0x9f, 0xb6, 0x9c, 0xe2, 0x0a, 0xbb, 0x41, 0xf9, 0x53,
-		0xe6, 0x53, 0x8b, 0xf2, 0x27, 0x29, 0x2f, 0x54, 0x7b, 0x63, 0x45, 0x1d, 0x0c, 0x2c, 0x62, 0xdb,
-		0x1c, 0x18, 0x3c, 0xef, 0x03, 0x40, 0x0c, 0x20, 0x2e, 0x19, 0x10, 0x33, 0x4b, 0xf7, 0x92, 0x9b,
-		0x7e, 0xc2, 0xd0, 0x36, 0x78, 0xf6, 0xad, 0x83, 0xf1, 0x7c, 0xe4, 0x3f, 0x9b, 0x1c, 0x63, 0x8f,
-		0xcc, 0xc1, 0x31, 0x5f, 0xf6, 0xdc, 0x21, 0x96, 0xc1, 0x7d, 0x44, 0x9c, 0xfc, 0xdf, 0xfe, 0x7e,
-		0xaf, 0xa6, 0x9c, 0xf4, 0xdf, 0x7b, 0x75, 0xe5, 0xa4, 0xef, 0x7f, 0xac, 0x4f, 0xff, 0xe7, 0x7f,
-		0x6e, 0xf4, 0x6a, 0x4a, 0x73, 0xf6, 0xb9, 0xd5, 0xab, 0x29, 0xad, 0x7e, 0xe5, 0xfb, 0xf7, 0xc3,
-		0xca, 0xdb, 0x91, 0x4b, 0xdf, 0xf0, 0x0f, 0xf6, 0xb7, 0x2d, 0xfd, 0x6d, 0xbe, 0x6d, 0x11, 0x23,
-		0x2c, 0xed, 0xb2, 0x0a, 0x8b, 0xaa, 0x0c, 0x4f, 0x95, 0x2f, 0xfd, 0xb7, 0xfa, 0x41, 0xd3, 0xed,
-		0x56, 0xde, 0x3a, 0xee, 0xea, 0x97, 0xef, 0x71, 0x97, 0xd5, 0x0f, 0x3a, 0x6e, 0x37, 0xe1, 0x97,
-		0xb6, 0xdb, 0x4d, 0xd9, 0x47, 0xcb, 0xdd, 0x8f, 0x5c, 0xea, 0x7d, 0xdf, 0x48, 0x6a, 0xd0, 0x4c,
-		0x68, 0x70, 0x94, 0xd4, 0xe0, 0x28, 0xa1, 0x41, 0xe2, 0x23, 0x35, 0x12, 0x1a, 0xb4, 0xdc, 0xf7,
-		0xc8, 0xf5, 0xfb, 0xf1, 0x97, 0xb6, 0xdd, 0xca, 0x7b, 0xd2, 0x6f, 0x1d, 0xf7, 0xbd, 0x5b, 0xd9,
-		0x81, 0xea, 0x14, 0xd2, 0x7f, 0x7b, 0x51, 0x35, 0x7e, 0x07, 0x6e, 0xb1, 0x13, 0x78, 0x70, 0xf0,
-		0xe0, 0x4a, 0xe6, 0xc1, 0xb1, 0x8b, 0x37, 0x2f, 0x22, 0x71, 0x23, 0x91, 0xfc, 0xdf, 0xa2, 0x85,
-		0x5c, 0x35, 0xbc, 0x0d, 0xb7, 0xf2, 0xd6, 0x72, 0x19, 0x2c, 0x65, 0x1e, 0x2c, 0x97, 0x69, 0xe9,
-		0x4f, 0xba, 0xa1, 0x8c, 0x2d, 0xd3, 0x31, 0x35, 0x73, 0xc4, 0x6e, 0xbd, 0x56, 0x3b, 0x82, 0x05,
-		0x83, 0x05, 0x2b, 0x5b, 0x0c, 0x3a, 0x20, 0x86, 0xa3, 0x3b, 0xaf, 0x9c, 0x07, 0x36, 0xb1, 0x1c,
-		0xbc, 0x79, 0x19, 0xdc, 0xfa, 0x93, 0x6a, 0x0b, 0xd8, 0xc9, 0x78, 0xf9, 0xed, 0xee, 0xfe, 0xf4,
-		0xea, 0xea, 0xe1, 0xe6, 0xf6, 0xfa, 0xfe, 0xfa, 0xec, 0xfa, 0xea, 0xe1, 0xfe, 0xdf, 0x9b, 0x73,
-		0x56, 0x11, 0x9a, 0x66, 0x13, 0x6d, 0x2e, 0x2f, 0x9f, 0x33, 0x2d, 0x1a, 0x0e, 0xeb, 0xee, 0xf2,
-		0x4e, 0xde, 0x45, 0x76, 0x57, 0xd0, 0xf3, 0x5f, 0xdf, 0xdd, 0x7c, 0x29, 0xf2, 0xf3, 0x7f, 0xba,
-		0xb8, 0x29, 0xf2, 0xe3, 0xdf, 0xdd, 0x9f, 0xde, 0x5f, 0x9e, 0x15, 0x5d, 0x80, 0x8e, 0x8a, 0x3c,
-		0x80, 0xab, 0xeb, 0xb3, 0xd3, 0xab, 0x87, 0xd3, 0x8b, 0x8b, 0xdb, 0xf3, 0x8b, 0xd3, 0xfb, 0xf3,
-		0x22, 0x0f, 0xe5, 0xf3, 0xe5, 0xed, 0xf9, 0xd9, 0xfd, 0xd5, 0xbf, 0x0f, 0x67, 0xd7, 0xdf, 0xbe,
-		0x9d, 0x9f, 0xdd, 0x9f, 0x7f, 0xde, 0xf6, 0x9e, 0xdf, 0x7e, 0xd6, 0x00, 0x9c, 0x89, 0x43, 0x3a,
-		0x9e, 0xd8, 0xcf, 0x64, 0xa0, 0xbc, 0x8c, 0x47, 0xb6, 0x32, 0x52, 0x1f, 0xc9, 0x48, 0xb1, 0x1d,
-		0x55, 0xfb, 0xc1, 0xee, 0x98, 0x26, 0x75, 0x08, 0x07, 0x15, 0x0e, 0x6a, 0xd9, 0x42, 0xec, 0x50,
-		0xc6, 0x3f, 0xda, 0x4b, 0x92, 0x89, 0x6e, 0x38, 0x47, 0x0d, 0x01, 0x19, 0x6f, 0x9e, 0xda, 0x02,
-		0xbe, 0x7d, 0x1b, 0x62, 0xf0, 0x47, 0x12, 0xb5, 0x8f, 0x83, 0xd3, 0xf0, 0xad, 0x0f, 0x17, 0x3c,
-		0x31, 0x6b, 0x0b, 0xea, 0x50, 0xe0, 0x96, 0x03, 0x01, 0xde, 0xc3, 0x7c, 0x0d, 0x04, 0x6c, 0xf8,
-		0xc8, 0x7c, 0x0d, 0x6a, 0xcd, 0xe3, 0x56, 0xa7, 0x95, 0xe3, 0x85, 0xd8, 0xdb, 0x4d, 0xeb, 0xa2,
-		0xbd, 0xf6, 0x23, 0xc6, 0xe4, 0x85, 0x58, 0x7e, 0xd1, 0x87, 0x80, 0xb7, 0x7e, 0x4d, 0x8e, 0x3e,
-		0xd8, 0x76, 0xb5, 0xb2, 0x2f, 0x59, 0x3f, 0x53, 0x4c, 0xa6, 0x3a, 0xd7, 0x29, 0xce, 0x0e, 0xd3,
-		0x9d, 0xf3, 0x14, 0x67, 0x45, 0xb8, 0xcf, 0x7d, 0x8a, 0x74, 0xba, 0x78, 0x0e, 0x14, 0x67, 0x26,
-		0x69, 0x62, 0x53, 0x17, 0x09, 0x88, 0xf2, 0x31, 0x57, 0xfd, 0x4c, 0xd3, 0x1f, 0x95, 0xf2, 0xf8,
-		0xca, 0xa3, 0x02, 0x22, 0x4b, 0x3f, 0x97, 0x7c, 0xce, 0xe9, 0x4c, 0xe5, 0xb3, 0xfa, 0xaf, 0xec,
-		0x85, 0x6a, 0x59, 0x1c, 0x5c, 0x37, 0x2f, 0x50, 0xcb, 0xe1, 0x71, 0x75, 0x29, 0x76, 0xe3, 0xe3,
-		0xc4, 0x3a, 0xe1, 0x72, 0x26, 0xe8, 0x94, 0xba, 0xf0, 0x43, 0x11, 0xcf, 0xa6, 0xe3, 0x3d, 0x95,
-		0x8e, 0xeb, 0x40, 0xba, 0xb1, 0x39, 0xd2, 0xb5, 0x57, 0x65, 0x68, 0x5a, 0xbf, 0x54, 0x6b, 0xa0,
-		0x1b, 0x4f, 0x9b, 0x0f, 0xa6, 0x8b, 0x36, 0xc1, 0x01, 0x75, 0x45, 0x39, 0xa0, 0x2e, 0xb2, 0x76,
-		0x0a, 0x31, 0x1c, 0xeb, 0x35, 0xfd, 0x79, 0x75, 0x49, 0x1d, 0xe0, 0xf8, 0x3a, 0x1c, 0x5f, 0xe7,
-		0x5f, 0x88, 0xe3, 0xeb, 0x50, 0x06, 0xbe, 0x0b, 0xd7, 0x18, 0xc7, 0xd7, 0x89, 0x11, 0x63, 0x7e,
-		0x71, 0x16, 0x15, 0xad, 0xe2, 0x8d, 0x08, 0xea, 0x37, 0x33, 0x4f, 0x07, 0xa2, 0x7e, 0x33, 0x8b,
-		0xfc, 0xac, 0x84, 0xfa, 0xcd, 0xed, 0x65, 0xdf, 0x0b, 0x5b, 0xbf, 0x39, 0xb0, 0xb5, 0x31, 0x57,
-		0xf1, 0xe6, 0xb4, 0x03, 0x40, 0x30, 0x20, 0xb8, 0x64, 0x10, 0xcc, 0x20, 0xd7, 0x8b, 0xb2, 0xdd,
-		0x02, 0x00, 0x03, 0x80, 0x73, 0x0a, 0xc0, 0xed, 0x23, 0xc0, 0xed, 0x8e, 0xe0, 0x76, 0xcc, 0x86,
-		0x44, 0x8b, 0x80, 0xcb, 0x96, 0x65, 0x00, 0xe4, 0x02, 0x72, 0x0b, 0x40, 0x96, 0xc0, 0x3c, 0xdb,
-		0xc5, 0xe7, 0x4a, 0xe0, 0xe6, 0x80, 0xfe, 0xc0, 0x54, 0x09, 0xd5, 0xe0, 0x66, 0x95, 0xf7, 0xfd,
-		0x5e, 0x5d, 0x69, 0xf4, 0x67, 0x7f, 0x1c, 0xf5, 0x6a, 0x4a, 0xa3, 0x5f, 0xf9, 0x70, 0x54, 0x0a,
-		0xe5, 0x94, 0xa5, 0xad, 0x30, 0x29, 0x80, 0x48, 0x61, 0x91, 0x48, 0xa1, 0xba, 0x5f, 0xf7, 0xf4,
-		0xed, 0xd8, 0x57, 0xc1, 0x7a, 0x3f, 0xa2, 0x99, 0xbe, 0xa6, 0x81, 0x6f, 0x21, 0xbd, 0x03, 0xc8,
-		0x5b, 0xb1, 0xbc, 0xd8, 0x09, 0x9c, 0x40, 0x38, 0x81, 0x65, 0x74, 0x02, 0x7d, 0xf1, 0xe6, 0xa6,
-		0xb7, 0x2d, 0x6a, 0x49, 0xc8, 0xb1, 0x00, 0xe4, 0x6e, 0xa1, 0x22, 0x24, 0x93, 0x2c, 0x8a, 0xe8,
-		0x44, 0x55, 0x16, 0x49, 0x15, 0x01, 0x89, 0x2b, 0xa1, 0x09, 0xac, 0xac, 0x97, 0xa0, 0xd1, 0x6a,
-		0xa2, 0x18, 0xa4, 0xf0, 0x81, 0x0b, 0x17, 0x4d, 0x45, 0xc4, 0xf6, 0xf3, 0xd8, 0x3f, 0x21, 0xb4,
-		0x15, 0x91, 0x01, 0x5e, 0xde, 0x84, 0xcc, 0x15, 0xb2, 0x88, 0x4c, 0xae, 0xcd, 0x6d, 0xa1, 0xc5,
-		0x58, 0xe9, 0xd5, 0x41, 0x5e, 0x35, 0xee, 0x39, 0x08, 0x15, 0x04, 0xda, 0x2e, 0xf1, 0x43, 0xbb,
-		0xbd, 0xfb, 0xa7, 0xac, 0x43, 0xfb, 0xfb, 0x73, 0x59, 0x47, 0x76, 0x79, 0xf6, 0xb5, 0xac, 0x43,
-		0xbb, 0xb8, 0x3d, 0x2f, 0xe9, 0xc8, 0x4e, 0xff, 0xbe, 0xff, 0xb3, 0xa4, 0x43, 0xbb, 0xb9, 0xfc,
-		0x5a, 0x56, 0x4d, 0xbb, 0x28, 0xad, 0xa6, 0xdd, 0x9f, 0x89, 0x18, 0x19, 0x57, 0x0f, 0x7d, 0xbc,
-		0x64, 0x4d, 0xb1, 0x66, 0xa3, 0xa6, 0x32, 0xb0, 0x1d, 0x65, 0x6c, 0x5a, 0x0e, 0x7b, 0x8e, 0x6d,
-		0xb1, 0x13, 0xe4, 0xd8, 0x90, 0x63, 0x2b, 0x59, 0x8e, 0xcd, 0x93, 0x6b, 0xc5, 0x98, 0xbc, 0x3c,
-		0x32, 0x55, 0x41, 0xcf, 0x44, 0xbc, 0x8d, 0x2d, 0x4e, 0x3b, 0xcd, 0x1c, 0x61, 0x8b, 0x53, 0xf2,
-		0xd4, 0xb6, 0x5b, 0xad, 0x23, 0x6c, 0x2a, 0xde, 0x15, 0x00, 0xdb, 0x96, 0xc6, 0x0f, 0xc0, 0x61,
-		0x27, 0x00, 0x60, 0x00, 0x30, 0x00, 0x18, 0x00, 0x0c, 0x00, 0x06, 0x00, 0x03, 0x80, 0x37, 0x4f,
-		0x1b, 0x4e, 0xf5, 0x00, 0x00, 0x03, 0x80, 0xb3, 0x12, 0x6f, 0x09, 0xa7, 0x7a, 0x64, 0x67, 0xb9,
-		0xe6, 0x44, 0xb0, 0xec, 0x86, 0x8b, 0x95, 0x4c, 0x16, 0x76, 0x0b, 0x76, 0x0b, 0x54, 0xc9, 0x9b,
-		0x9e, 0x1d, 0x54, 0xc9, 0xd8, 0x18, 0x97, 0x32, 0x04, 0x00, 0x55, 0x72, 0x0e, 0xd6, 0x00, 0x54,
-		0xc9, 0x22, 0xdc, 0x1d, 0x4e, 0xb1, 0x01, 0x55, 0x72, 0xe1, 0x63, 0x6a, 0x0f, 0x77, 0x1d, 0x8d,
-		0xd3, 0x2d, 0x75, 0x34, 0xf8, 0xa4, 0xf0, 0x49, 0x4b, 0xe9, 0x93, 0x52, 0x8b, 0xb6, 0x04, 0xb2,
-		0x0c, 0x24, 0xb2, 0x33, 0xf0, 0xa8, 0x44, 0x4f, 0x6d, 0x07, 0x49, 0x6c, 0x61, 0x80, 0x5b, 0x00,
-		0x1e, 0xf6, 0x08, 0xb9, 0x6e, 0x35, 0x81, 0x6e, 0xb7, 0x4a, 0x45, 0x96, 0x2a, 0x6d, 0x22, 0x92,
-		0xbe, 0x99, 0xde, 0xe5, 0x4b, 0x78, 0x93, 0xc8, 0x17, 0xe7, 0xde, 0x4d, 0x1f, 0x02, 0x60, 0x17,
-		0x45, 0xdb, 0x9e, 0x82, 0x88, 0x97, 0x8e, 0xa2, 0x93, 0x89, 0x9a, 0x93, 0x52, 0x65, 0xc1, 0x24,
-		0x9b, 0x91, 0xd7, 0x92, 0x23, 0x26, 0x59, 0x6a, 0xaf, 0x64, 0xbe, 0x73, 0x84, 0xa8, 0x43, 0xba,
-		0x12, 0xa2, 0x30, 0x28, 0xa2, 0x30, 0xf5, 0xf2, 0x4d, 0x60, 0x3f, 0x0e, 0x0f, 0x03, 0x43, 0x50,
-		0xf5, 0x25, 0x7e, 0x8b, 0x9a, 0xe9, 0x9f, 0x0f, 0x41, 0xad, 0x99, 0x34, 0xc7, 0x4a, 0x30, 0x73,
-		0x3c, 0x37, 0xa0, 0x99, 0x25, 0xd5, 0x4c, 0x70, 0x3c, 0x23, 0x6c, 0x46, 0xd8, 0x0c, 0x8e, 0x67,
-		0x44, 0xcd, 0x88, 0x9a, 0x93, 0xa7, 0x16, 0x1c, 0xcf, 0x12, 0x38, 0x9e, 0x01, 0xc1, 0x80, 0xe0,
-		0x5c, 0x43, 0x30, 0x38, 0x9e, 0x01, 0xc0, 0x25, 0x05, 0x60, 0x70, 0x3c, 0xef, 0x0c, 0x6e, 0xc1,
-		0xf1, 0x0c, 0xc8, 0x05, 0xe4, 0x0a, 0x16, 0x6e, 0x09, 0x1c, 0xcf, 0x12, 0x38, 0x9e, 0xc1, 0xf1,
-		0x0c, 0x8e, 0x67, 0x70, 0x3c, 0x83, 0xe3, 0x39, 0xef, 0x0e, 0x20, 0x38, 0x9e, 0xe1, 0x04, 0xc2,
-		0x09, 0x4c, 0x23, 0xde, 0xe0, 0x78, 0xe6, 0x40, 0x6e, 0x70, 0x3c, 0x67, 0x93, 0x45, 0x11, 0x9d,
-		0xa8, 0xca, 0x22, 0xa9, 0x22, 0x20, 0x71, 0x25, 0x34, 0x81, 0x95, 0xf5, 0x12, 0x80, 0xe3, 0xb9,
-		0x0c, 0x81, 0x0b, 0x38, 0x9e, 0xe9, 0x04, 0x1f, 0x1c, 0xcf, 0x5b, 0x1f, 0x1a, 0x38, 0x9e, 0x0b,
-		0x38, 0x32, 0x70, 0x3c, 0x17, 0x70, 0x64, 0xe0, 0x78, 0x2e, 0xa2, 0xa6, 0x81, 0xe3, 0x39, 0x43,
-		0x57, 0x10, 0x1c, 0xcf, 0x69, 0xd6, 0x0c, 0x1c, 0xcf, 0xc8, 0xb1, 0x21, 0xc7, 0xb6, 0x7e, 0xbd,
-		0x41, 0x31, 0xb9, 0xcb, 0xf4, 0x05, 0xb6, 0x38, 0x65, 0x3f, 0xb5, 0xa0, 0x98, 0xdc, 0x25, 0x00,
-		0x83, 0xe3, 0x19, 0x00, 0x0c, 0x00, 0x06, 0x00, 0x03, 0x80, 0x01, 0xc0, 0x00, 0xe0, 0x6d, 0x03,
-		0x30, 0x38, 0x9e, 0x01, 0xc0, 0x00, 0xe0, 0xac, 0xc4, 0x5b, 0x02, 0xc7, 0x33, 0x38, 0x9e, 0x61,
-		0xb7, 0x60, 0xb7, 0xc0, 0xf1, 0xbc, 0x95, 0xb8, 0x01, 0x1c, 0xcf, 0x59, 0x45, 0x53, 0x82, 0x5d,
-		0xff, 0x48, 0x08, 0x00, 0x8e, 0xe7, 0x1c, 0xac, 0x01, 0x38, 0x9e, 0x45, 0xb8, 0x3b, 0x9c, 0x62,
-		0x03, 0x8e, 0xe7, 0xc2, 0xc7, 0xd4, 0xe0, 0x78, 0x86, 0x4f, 0x0a, 0x9f, 0x54, 0xa0, 0x68, 0x4b,
-		0x20, 0xcb, 0x40, 0x22, 0x3b, 0x03, 0x8f, 0x0a, 0x1c, 0xcf, 0xa5, 0x00, 0x5c, 0x83, 0xfc, 0x76,
-		0x94, 0x67, 0x73, 0xac, 0x3c, 0x59, 0xe6, 0x84, 0x83, 0xa1, 0x6a, 0xa5, 0x1f, 0xc0, 0x2f, 0xe0,
-		0xb7, 0x64, 0xf0, 0x4b, 0x4f, 0x6a, 0x1c, 0x89, 0x06, 0x3a, 0x6c, 0x69, 0xec, 0x19, 0xc9, 0x71,
-		0xf8, 0x6f, 0x59, 0xd9, 0xec, 0x95, 0xbf, 0xab, 0x53, 0x76, 0xe1, 0xaa, 0x3e, 0x90, 0x73, 0x60,
-		0x5f, 0x4c, 0xcd, 0x21, 0x8e, 0x3d, 0x63, 0x6e, 0x27, 0x03, 0x76, 0x0b, 0x13, 0xe9, 0x09, 0x36,
-		0x06, 0x36, 0xa6, 0x64, 0x36, 0x46, 0x33, 0x27, 0x86, 0x43, 0x2c, 0x50, 0xd2, 0xc2, 0xc9, 0x2f,
-		0xa5, 0x93, 0x0f, 0x4a, 0xda, 0xbc, 0xf8, 0xfd, 0x63, 0x55, 0xfb, 0x21, 0x08, 0x98, 0xa3, 0x5d,
-		0x01, 0x99, 0x81, 0xcc, 0x40, 0x66, 0x20, 0x33, 0x90, 0x19, 0xc8, 0x0c, 0x64, 0x2e, 0xdd, 0xa9,
-		0x6b, 0x34, 0xa7, 0x17, 0x49, 0x82, 0x0e, 0x5d, 0xbb, 0x9b, 0xde, 0x53, 0xd4, 0xc9, 0x4e, 0x7b,
-		0x1c, 0xcb, 0xe0, 0x01, 0x70, 0xda, 0x43, 0x71, 0xe4, 0x2b, 0xdd, 0x76, 0x4e, 0x1d, 0x27, 0xdd,
-		0x71, 0x3d, 0x9e, 0xcd, 0x3d, 0x1f, 0x11, 0x0f, 0x4a, 0xed, 0x74, 0xaa, 0xed, 0x99, 0x92, 0x85,
-		0x16, 0x6c, 0x4a, 0x2c, 0x5f, 0x5b, 0x03, 0x62, 0x91, 0xc1, 0x27, 0x6f, 0x58, 0xc6, 0x64, 0x34,
-		0xe2, 0x9a, 0x1d, 0x4a, 0xe1, 0x14, 0x25, 0x94, 0x72, 0xaa, 0xc3, 0xba, 0x78, 0xc5, 0x70, 0xbd,
-		0x00, 0x26, 0x8b, 0x55, 0xfc, 0x2f, 0x09, 0x53, 0x99, 0x76, 0x0a, 0x69, 0xa7, 0x6e, 0xcd, 0x14,
-		0x51, 0x4d, 0x4d, 0xfc, 0x24, 0x44, 0x87, 0xb8, 0xfc, 0xcd, 0xca, 0x60, 0x37, 0x0d, 0x72, 0xfd,
-		0xe0, 0x62, 0x86, 0xb2, 0x6e, 0x08, 0xcb, 0x4f, 0x3c, 0x7f, 0x2e, 0xff, 0x53, 0xf0, 0x64, 0x49,
-		0x4f, 0x24, 0xeb, 0xf6, 0x17, 0xf5, 0x07, 0xb9, 0x35, 0xcd, 0xa8, 0x9b, 0xbc, 0xfa, 0x94, 0xf2,
-		0xe2, 0x4f, 0x4b, 0xcf, 0xf3, 0x99, 0xfc, 0xd4, 0xb5, 0xc0, 0x80, 0xb9, 0x7b, 0xee, 0xff, 0x01,
-		0x00, 0x00, 0xff, 0xff, 0x01, 0x00, 0x00, 0xff, 0xff, 0x5f, 0xc7, 0xfe, 0xb9, 0xd2, 0x7c, 0x02,
-		0x00,
+		0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5d, 0x6b, 0x6f, 0x9b, 0x48,
+		0x17, 0xfe, 0x9e, 0x5f, 0x61, 0xa1, 0xfd, 0x10, 0x4b, 0xa1, 0xbe, 0xc4, 0x97, 0xd4, 0xd2, 0xfb,
+		0x21, 0xdb, 0xdb, 0x46, 0xdb, 0x6e, 0xa3, 0xb6, 0xbb, 0x5a, 0xc9, 0xf5, 0x56, 0x04, 0x8f, 0x13,
+		0x54, 0x07, 0x10, 0x8c, 0xdb, 0x46, 0x09, 0xff, 0xfd, 0x95, 0x2f, 0xf8, 0x06, 0xd8, 0xcc, 0xcc,
+		0xc1, 0x06, 0xf2, 0x54, 0x91, 0x6a, 0x63, 0xe6, 0xc0, 0xcc, 0x9c, 0xdb, 0x9c, 0x79, 0xce, 0x99,
+		0xc7, 0x93, 0x4a, 0xa5, 0x52, 0xd1, 0xfe, 0x32, 0xee, 0x99, 0xd6, 0xab, 0x68, 0x43, 0xf6, 0xc3,
+		0x32, 0x99, 0x76, 0x36, 0xbf, 0xfa, 0xa7, 0x65, 0x0f, 0xb5, 0x5e, 0xa5, 0xb1, 0xf8, 0xfa, 0xca,
+		0xb1, 0x47, 0xd6, 0xad, 0xd6, 0xab, 0xd4, 0x17, 0x17, 0x5e, 0x5b, 0x9e, 0xd6, 0xab, 0xcc, 0x49,
+		0xcc, 0x2e, 0x18, 0x23, 0xee, 0x6f, 0x5c, 0xd9, 0x20, 0x3e, 0xfb, 0xf5, 0x6c, 0xf3, 0xb7, 0xcd,
+		0x47, 0x2c, 0x2f, 0x2f, 0x1f, 0xd5, 0xdc, 0xfa, 0xe1, 0xda, 0x63, 0x23, 0xeb, 0x57, 0xe4, 0x19,
+		0x1b, 0xcf, 0x71, 0x4c, 0xdd, 0x18, 0xf1, 0xad, 0x27, 0xcd, 0xee, 0xf8, 0xec, 0x4c, 0x3c, 0x93,
+		0xc5, 0xb6, 0x9e, 0xbf, 0x0d, 0x7b, 0xf8, 0xe9, 0x78, 0xd3, 0x17, 0xd2, 0xdc, 0xf9, 0x83, 0xce,
+		0xe2, 0x6f, 0xfc, 0xc3, 0xf0, 0x2f, 0xbd, 0xdb, 0xc9, 0x3d, 0xb3, 0xb9, 0xd6, 0xab, 0x70, 0x6f,
+		0xc2, 0x12, 0x6e, 0x5c, 0xbb, 0x2b, 0x7c, 0xaf, 0xc8, 0x8d, 0xc1, 0xc6, 0x95, 0x60, 0xab, 0xc7,
+		0xdb, 0x83, 0xbc, 0xfc, 0x81, 0xf1, 0x3b, 0xe6, 0xd9, 0x8c, 0x27, 0x77, 0x27, 0x1c, 0x90, 0xe5,
+		0x9d, 0x09, 0x2f, 0x19, 0x3f, 0x09, 0xd1, 0xc9, 0xa8, 0x27, 0xdc, 0xb0, 0x63, 0x52, 0xd2, 0x4f,
+		0x4e, 0xda, 0x49, 0x12, 0x9e, 0x2c, 0xe1, 0x49, 0x13, 0x9a, 0xbc, 0xf8, 0x49, 0x4c, 0x98, 0xcc,
+		0xbd, 0x93, 0xba, 0xbc, 0xe1, 0xde, 0x30, 0x75, 0x66, 0x73, 0xef, 0x61, 0xff, 0x38, 0x84, 0x23,
+		0xbb, 0x6a, 0xb2, 0xa7, 0x5b, 0xbb, 0xa7, 0x3b, 0xf5, 0xb4, 0x8b, 0x4c, 0xbf, 0x38, 0x1b, 0x88,
+		0xb2, 0x83, 0x34, 0x5b, 0x48, 0xb3, 0x87, 0x14, 0x9b, 0xec, 0x66, 0x97, 0x3d, 0x6c, 0x93, 0x9a,
+		0x7d, 0x36, 0xd8, 0xc8, 0x18, 0x0e, 0x3d, 0xe6, 0xfb, 0xe9, 0x47, 0x70, 0x9d, 0xa1, 0xc2, 0xc6,
+		0x29, 0x87, 0x62, 0xc1, 0x5a, 0xf5, 0x94, 0xb7, 0xa7, 0x65, 0x31, 0x19, 0x56, 0x93, 0x67, 0x39,
+		0x59, 0xd6, 0x53, 0x66, 0x41, 0x65, 0x56, 0x54, 0x62, 0xc9, 0x74, 0xac, 0x99, 0x92, 0x45, 0x97,
+		0x6f, 0xf2, 0xe5, 0xc1, 0x65, 0x72, 0xf3, 0x35, 0x66, 0xc6, 0xc8, 0x63, 0x23, 0x91, 0x09, 0x0b,
+		0x35, 0x5b, 0x57, 0xa0, 0xcd, 0xb5, 0xc1, 0xef, 0xa6, 0x8f, 0x7b, 0xf1, 0xa2, 0xe6, 0x73, 0x83,
+		0xb3, 0xda, 0x3a, 0xdb, 0x9f, 0xd0, 0x0c, 0x58, 0x8a, 0xc1, 0xd2, 0x66, 0x0f, 0x17, 0x17, 0xd2,
+		0x79, 0x33, 0x31, 0xf1, 0x6c, 0x88, 0x8a, 0x67, 0x13, 0xe2, 0x59, 0x52, 0xf1, 0x4c, 0x6b, 0x49,
+		0x94, 0x2c, 0x0a, 0x81, 0x65, 0x91, 0xb4, 0x30, 0xd2, 0x96, 0x46, 0x85, 0xa5, 0xd5, 0x59, 0x5b,
+		0x95, 0xc5, 0xc9, 0x58, 0x9d, 0x8c, 0xe5, 0x49, 0x58, 0x5f, 0x4c, 0x04, 0x04, 0x45, 0x41, 0xde,
+		0x62, 0x11, 0xb2, 0xf7, 0x86, 0x96, 0xbe, 0x90, 0x68, 0x7b, 0x6d, 0x70, 0xce, 0x3c, 0x5b, 0xeb,
+		0x55, 0xfa, 0x72, 0xf3, 0xf3, 0x5f, 0xbf, 0xae, 0xbf, 0x34, 0xf4, 0xd1, 0xa5, 0xfe, 0x76, 0xf0,
+		0xd8, 0x0c, 0x4e, 0x7b, 0x9b, 0xdf, 0xab, 0x8f, 0xed, 0xe0, 0x37, 0xf1, 0x19, 0x1b, 0xc8, 0x74,
+		0xe5, 0xe3, 0xe7, 0xab, 0x7f, 0xf3, 0xda, 0x9f, 0x93, 0x6c, 0xf8, 0x55, 0x80, 0x57, 0x35, 0x9b,
+		0xfd, 0xe2, 0xfa, 0x9d, 0xe3, 0xea, 0xb7, 0x9e, 0x33, 0x71, 0xe5, 0x95, 0xf1, 0x16, 0x1d, 0xe8,
+		0x63, 0xe8, 0xe3, 0x92, 0xe9, 0x63, 0xf1, 0x95, 0x84, 0xca, 0x8a, 0x22, 0x6e, 0x65, 0xb1, 0xfc,
+		0xdb, 0x14, 0x36, 0x7f, 0xeb, 0xfb, 0x62, 0x05, 0x62, 0x0d, 0xb5, 0x1c, 0xe8, 0x17, 0xc7, 0xe4,
+		0x8c, 0xfb, 0xfa, 0xc8, 0xf1, 0x7e, 0x1a, 0xde, 0x90, 0x0d, 0xe5, 0x35, 0x4c, 0x84, 0x12, 0x74,
+		0x0c, 0x74, 0x4c, 0xc9, 0x74, 0x8c, 0xe9, 0x4c, 0x6c, 0xce, 0xbc, 0x4e, 0x4b, 0x41, 0xcb, 0xc8,
+		0x38, 0x7c, 0x9f, 0x0c, 0xfb, 0x96, 0x49, 0xbb, 0x47, 0x72, 0x2c, 0x36, 0x7b, 0xf0, 0x07, 0xcb,
+		0x96, 0xe6, 0x51, 0x45, 0xc9, 0x8e, 0x90, 0xf9, 0xc7, 0x18, 0x4f, 0x18, 0x01, 0x9d, 0xb7, 0x9e,
+		0x61, 0x72, 0xcb, 0xb1, 0x5f, 0x5b, 0xb7, 0xd6, 0x6c, 0x27, 0xab, 0x2e, 0x4d, 0x2f, 0x38, 0x53,
+		0x18, 0x5a, 0xe3, 0x57, 0xee, 0x86, 0xb6, 0x71, 0xd1, 0x6a, 0x75, 0xba, 0xad, 0x56, 0xbd, 0x7b,
+		0xde, 0xad, 0xbf, 0x6c, 0xb7, 0x1b, 0x9d, 0x46, 0x3b, 0x47, 0xa3, 0x7d, 0x72, 0x98, 0x56, 0x79,
+		0xf0, 0xfb, 0x5d, 0xc3, 0xfc, 0x4e, 0x64, 0x98, 0xa3, 0xa4, 0x60, 0x99, 0x61, 0x99, 0x61, 0x99,
+		0x61, 0x99, 0x61, 0x99, 0x61, 0x99, 0x61, 0x99, 0xc9, 0xb7, 0x5b, 0x2e, 0x6d, 0xdb, 0xe1, 0xc6,
+		0x74, 0x68, 0xc5, 0x76, 0x5d, 0x7c, 0xf3, 0x8e, 0xdd, 0x1b, 0xee, 0x22, 0xa0, 0x50, 0xbb, 0xf5,
+		0xac, 0x1b, 0x6b, 0xaa, 0xad, 0x6b, 0xc6, 0x88, 0xfb, 0xb5, 0x10, 0xdf, 0x53, 0x5b, 0x42, 0x40,
+		0x6a, 0x22, 0xdb, 0x82, 0xf3, 0x27, 0x70, 0x6f, 0x62, 0x72, 0x7b, 0xa1, 0x33, 0xdf, 0x4d, 0x1f,
+		0x70, 0x39, 0xe2, 0xdf, 0x2e, 0x47, 0xdc, 0xff, 0xf6, 0x66, 0x41, 0xff, 0xdb, 0x07, 0xc3, 0x7c,
+		0x33, 0x25, 0xff, 0xed, 0xf3, 0x8c, 0x3c, 0xd5, 0xee, 0xa8, 0x12, 0x16, 0xe2, 0x4f, 0xf6, 0x20,
+		0x16, 0x73, 0xd7, 0xde, 0x5b, 0x3e, 0xbf, 0xe4, 0x3c, 0x25, 0x84, 0xe2, 0x83, 0x65, 0xbf, 0x19,
+		0xb3, 0xa9, 0x91, 0xf4, 0xd3, 0x09, 0xed, 0x54, 0x49, 0xac, 0xb5, 0x90, 0x13, 0x4f, 0xed, 0xa3,
+		0x37, 0x64, 0x1e, 0x1b, 0xfe, 0x3e, 0xed, 0x9c, 0x3d, 0x19, 0x8f, 0x95, 0xc6, 0x48, 0x90, 0xed,
+		0x84, 0xd9, 0x4d, 0x4b, 0xb5, 0xbf, 0x2d, 0xc0, 0x60, 0xbb, 0x59, 0x2b, 0x20, 0x42, 0x61, 0xa5,
+		0x1c, 0x96, 0x94, 0xc3, 0xb1, 0x0b, 0xd3, 0x96, 0xa6, 0xf3, 0xf1, 0x7d, 0x8e, 0xf6, 0x28, 0xa6,
+		0x37, 0x9a, 0xe5, 0xfe, 0x68, 0xe9, 0x13, 0xdb, 0x32, 0x0d, 0x3f, 0x05, 0x1e, 0x70, 0xe3, 0x6e,
+		0x60, 0x02, 0x8b, 0x82, 0x09, 0x9c, 0x4d, 0x9b, 0x20, 0x28, 0x70, 0xad, 0x0d, 0x50, 0x81, 0x40,
+		0x05, 0x2e, 0x22, 0x08, 0x62, 0xab, 0xe8, 0x55, 0xb8, 0x40, 0x68, 0xe4, 0x80, 0x05, 0x04, 0xd8,
+		0x48, 0x71, 0x2d, 0x7f, 0x74, 0x2c, 0xe0, 0x62, 0xca, 0x00, 0x03, 0x04, 0x0c, 0xb0, 0xd4, 0x92,
+		0x29, 0x0c, 0x03, 0x1c, 0x32, 0xd3, 0x70, 0xfd, 0xc9, 0xd8, 0xe0, 0x4c, 0xbf, 0x63, 0xc6, 0x90,
+		0x79, 0xf2, 0x51, 0xe8, 0x18, 0x5a, 0x08, 0x43, 0x23, 0x0c, 0x5d, 0xb2, 0x30, 0x34, 0xb3, 0x43,
+		0x2e, 0xb7, 0x1c, 0x7b, 0xc1, 0xe7, 0x3a, 0x9f, 0x92, 0x55, 0x80, 0xa5, 0xb4, 0x24, 0xda, 0xbe,
+		0xb1, 0x27, 0xf7, 0xd3, 0xae, 0x04, 0xc0, 0xb0, 0x41, 0x7d, 0x40, 0x7d, 0x14, 0x44, 0x7d, 0x00,
+		0xc3, 0x26, 0xa3, 0x5f, 0x80, 0x61, 0x83, 0x8e, 0x81, 0x8e, 0x49, 0x3b, 0xdf, 0xd8, 0x29, 0x97,
+		0xe2, 0x55, 0xec, 0x94, 0xc7, 0x0d, 0x2d, 0x76, 0xca, 0x33, 0xd5, 0x0e, 0xf2, 0xad, 0x80, 0x61,
+		0x83, 0x65, 0x86, 0x65, 0x86, 0x65, 0x86, 0x65, 0x86, 0x65, 0x86, 0x65, 0x86, 0x65, 0xde, 0xb2,
+		0xcc, 0x72, 0xd6, 0x49, 0x6e, 0x8f, 0x18, 0x36, 0x18, 0x36, 0xb8, 0x30, 0x36, 0x78, 0x06, 0xa5,
+		0x91, 0x1e, 0xef, 0xe3, 0x66, 0xf5, 0x9f, 0x9e, 0xf6, 0xeb, 0xfa, 0xcb, 0xc1, 0x53, 0xbf, 0xa1,
+		0xbf, 0x1c, 0xcc, 0x3f, 0x36, 0x66, 0xff, 0xcd, 0x3f, 0x37, 0xfb, 0x75, 0xbd, 0x15, 0x7e, 0x6e,
+		0xf7, 0xeb, 0x7a, 0x7b, 0x50, 0xfd, 0xfa, 0xf5, 0x45, 0xf5, 0xf1, 0x3c, 0x10, 0x6f, 0x58, 0x5b,
+		0x3c, 0xac, 0xfa, 0x74, 0xda, 0x6f, 0xe8, 0xcd, 0x41, 0xf8, 0xe5, 0xbc, 0x5f, 0xd7, 0x9b, 0x83,
+		0x6a, 0xb5, 0x50, 0xd5, 0x03, 0xf2, 0x34, 0x70, 0x79, 0xaa, 0x53, 0x50, 0x00, 0x54, 0xf4, 0x3a,
+		0xca, 0xb1, 0xb6, 0xc2, 0xc1, 0xd1, 0x42, 0xa3, 0xaf, 0xdc, 0x1f, 0xad, 0xbf, 0xe7, 0xcf, 0x98,
+		0x7d, 0xce, 0x2b, 0x3c, 0x3a, 0x1d, 0x1a, 0x12, 0xc8, 0xe8, 0x4c, 0x58, 0x4e, 0x15, 0x1e, 0x1d,
+		0xcb, 0x64, 0x45, 0x82, 0x48, 0xa7, 0x00, 0x1c, 0x8b, 0x0c, 0x82, 0x22, 0x52, 0xba, 0x23, 0x84,
+		0x94, 0xee, 0x00, 0x29, 0x5d, 0x29, 0x20, 0x52, 0xba, 0x23, 0x81, 0x94, 0xee, 0x00, 0x29, 0x0d,
+		0xa4, 0xb4, 0xca, 0x6a, 0x18, 0x48, 0x69, 0xe0, 0x31, 0x49, 0x3c, 0x62, 0x20, 0xa5, 0x81, 0x94,
+		0x86, 0x64, 0xe6, 0x51, 0x32, 0x81, 0x94, 0x46, 0xa0, 0x15, 0x81, 0xd6, 0x4c, 0x03, 0xad, 0x40,
+		0x4a, 0xc7, 0xbc, 0x0b, 0x90, 0xd2, 0x50, 0x1f, 0x50, 0x1f, 0xd9, 0x78, 0xc0, 0x2a, 0x9e, 0x70,
+		0x9c, 0x47, 0x0c, 0xa4, 0x34, 0xf0, 0x58, 0xd0, 0x31, 0xc0, 0x63, 0xed, 0x66, 0x70, 0xe0, 0xb1,
+		0x24, 0xc9, 0x00, 0x8f, 0x95, 0xf9, 0xd0, 0x02, 0x8f, 0x55, 0x01, 0x52, 0x1a, 0x96, 0x19, 0x96,
+		0x19, 0x96, 0x19, 0x96, 0x19, 0x96, 0x19, 0x96, 0x19, 0x96, 0x39, 0x6a, 0x99, 0x81, 0x94, 0x86,
+		0x0d, 0x86, 0x0d, 0x8e, 0x99, 0xef, 0x19, 0x94, 0xa6, 0xd0, 0x48, 0xe9, 0xf0, 0x80, 0xb0, 0xc6,
+		0x59, 0x2b, 0xe8, 0x55, 0x1f, 0xbb, 0xc1, 0xf6, 0xc5, 0xa7, 0xb8, 0xdb, 0x1a, 0x67, 0xdd, 0xa0,
+		0x97, 0xf0, 0x4b, 0x27, 0xe8, 0xa5, 0xa4, 0xd1, 0xde, 0x3a, 0xa4, 0x6c, 0xfa, 0xc3, 0xf4, 0x7a,
+		0x33, 0xa9, 0x41, 0x2b, 0xa1, 0xc1, 0x79, 0x52, 0x83, 0xf3, 0x84, 0x06, 0x89, 0xaf, 0xd4, 0x4c,
+		0x68, 0xd0, 0x0e, 0x9e, 0x22, 0xf7, 0x9f, 0xc6, 0xdf, 0xda, 0x09, 0xaa, 0x4f, 0x49, 0xbf, 0x75,
+		0x83, 0xa7, 0x5e, 0xb5, 0x5a, 0x3b, 0x6d, 0x34, 0xfb, 0x75, 0xfd, 0x62, 0x0e, 0x94, 0x6e, 0x0c,
+		0x22, 0xf8, 0xe9, 0x39, 0x1e, 0xba, 0x80, 0xf0, 0x71, 0x70, 0x53, 0x6e, 0xb9, 0x09, 0x98, 0xfa,
+		0xad, 0x76, 0x7b, 0x81, 0xbc, 0x9d, 0x75, 0x80, 0x73, 0x27, 0x23, 0x4c, 0x7d, 0x67, 0x0d, 0xee,
+		0xdc, 0x01, 0xa6, 0x7e, 0xcf, 0x22, 0xa5, 0xec, 0x98, 0xfa, 0x38, 0x96, 0x23, 0xc0, 0xd4, 0x47,
+		0x99, 0xac, 0x60, 0x98, 0xfa, 0x0e, 0x01, 0xa6, 0xbe, 0x43, 0x80, 0xa9, 0xbf, 0x77, 0xc7, 0xfe,
+		0x7e, 0x2c, 0xfd, 0xec, 0x2e, 0x60, 0xe8, 0x8b, 0x82, 0xa1, 0x1f, 0x1b, 0x37, 0x6c, 0x2c, 0x0a,
+		0xa2, 0x5f, 0x6f, 0x04, 0x14, 0x3d, 0x50, 0xf4, 0x6b, 0xac, 0x24, 0x8e, 0xd4, 0x9d, 0x37, 0x03,
+		0x86, 0xfe, 0x80, 0xf1, 0x0e, 0x60, 0xe8, 0x8f, 0x89, 0xa1, 0x9f, 0x33, 0x3c, 0x20, 0xf4, 0x80,
+		0xd0, 0x97, 0x5a, 0x30, 0x85, 0x21, 0xf4, 0x62, 0xf6, 0x43, 0xc9, 0x8e, 0x20, 0xce, 0x8e, 0x38,
+		0x7b, 0x61, 0xe2, 0xec, 0xd3, 0x15, 0x95, 0x2e, 0xc3, 0xdd, 0x1b, 0x8a, 0xf9, 0xa5, 0x44, 0xdb,
+		0xc5, 0xbb, 0x1f, 0x7c, 0xb3, 0x3b, 0xec, 0xf9, 0xc4, 0xb2, 0xf9, 0x79, 0x53, 0x53, 0xd8, 0xdb,
+		0x5d, 0xf4, 0xbe, 0xab, 0x40, 0x42, 0x6d, 0xcb, 0x5f, 0x7d, 0x34, 0xd6, 0x83, 0x46, 0xca, 0xfb,
+		0xd4, 0x8a, 0x8a, 0x2f, 0x91, 0xdc, 0x72, 0xdf, 0xba, 0x43, 0x44, 0x90, 0x70, 0xb7, 0x5a, 0x52,
+		0x72, 0x93, 0xc2, 0x70, 0xf9, 0x9f, 0x83, 0x7a, 0xeb, 0xa2, 0xdd, 0x6d, 0xe7, 0x78, 0x22, 0x4e,
+		0x8e, 0xd3, 0x7a, 0x70, 0x72, 0x40, 0xb6, 0x21, 0x50, 0x7f, 0xcc, 0x9e, 0xdc, 0x33, 0x6f, 0x1e,
+		0x42, 0x54, 0xd7, 0x81, 0x32, 0xb9, 0x51, 0x4b, 0x1a, 0x72, 0x39, 0x52, 0xf2, 0x53, 0x36, 0x40,
+		0x2e, 0x16, 0x3c, 0x54, 0x78, 0xa8, 0x05, 0xf1, 0x50, 0x91, 0x8b, 0x25, 0xa3, 0x5f, 0x90, 0x8b,
+		0x05, 0x1d, 0x03, 0x1d, 0x93, 0x76, 0xbe, 0x81, 0xf8, 0x3e, 0xde, 0x12, 0x03, 0x88, 0xef, 0xec,
+		0x87, 0x16, 0x88, 0xef, 0x0a, 0x72, 0xb1, 0x60, 0x99, 0x61, 0x99, 0x61, 0x99, 0x61, 0x99, 0x61,
+		0x99, 0x61, 0x99, 0x61, 0x99, 0xa3, 0x96, 0xd9, 0x71, 0x5d, 0x36, 0xd4, 0x57, 0x1b, 0x62, 0xba,
+		0xcf, 0x0d, 0xf3, 0xbb, 0x82, 0x7d, 0x4e, 0x20, 0x08, 0x2b, 0x0d, 0x2b, 0x5d, 0x32, 0x2b, 0x8d,
+		0x5d, 0x64, 0xec, 0x22, 0x63, 0x17, 0x19, 0xbb, 0xc8, 0xa9, 0xe7, 0x00, 0xbb, 0xc8, 0x14, 0x8e,
+		0x90, 0x22, 0xdb, 0x60, 0x17, 0xf9, 0x80, 0x3e, 0xab, 0xa0, 0x4d, 0x16, 0x4a, 0xf9, 0x8a, 0xd3,
+		0xc3, 0x62, 0x29, 0x60, 0x71, 0x5a, 0x44, 0x39, 0x25, 0x2c, 0x42, 0x54, 0x28, 0x45, 0x4c, 0xc1,
+		0xeb, 0x2f, 0x40, 0x16, 0xe4, 0xd4, 0x63, 0xaa, 0xad, 0xa5, 0xba, 0xd0, 0xa6, 0x3f, 0x7e, 0x70,
+		0xc7, 0xfe, 0xb7, 0xf7, 0x53, 0xea, 0x79, 0x4d, 0x7c, 0x4c, 0xe3, 0x2c, 0x22, 0xef, 0x91, 0x98,
+		0xc9, 0x54, 0x13, 0x1e, 0xb7, 0xd8, 0xaa, 0x48, 0xa9, 0x8e, 0x3b, 0x32, 0x07, 0x53, 0x75, 0x5b,
+		0x25, 0xb7, 0x71, 0x0b, 0x36, 0xb0, 0x3f, 0xcd, 0x71, 0xbb, 0x01, 0x32, 0x1e, 0x8b, 0x92, 0xf1,
+		0x28, 0x08, 0xeb, 0x92, 0x83, 0x71, 0x21, 0xef, 0x91, 0x36, 0x64, 0x93, 0xe7, 0xbc, 0x47, 0x6b,
+		0x28, 0x9e, 0x5b, 0x65, 0x0d, 0x91, 0xf1, 0x78, 0xc8, 0x98, 0x21, 0x32, 0x1e, 0x8f, 0x99, 0xf1,
+		0x98, 0x16, 0x6f, 0x47, 0x93, 0xee, 0x18, 0x2a, 0x6a, 0x5f, 0x5c, 0x2c, 0x57, 0x4d, 0x33, 0x4e,
+		0x7b, 0x84, 0x74, 0x96, 0x55, 0x3a, 0x85, 0xd3, 0x1e, 0x43, 0x9e, 0x53, 0x07, 0x98, 0x4b, 0x6e,
+		0x5b, 0x35, 0xb0, 0x6d, 0x75, 0x08, 0x26, 0x27, 0x63, 0x76, 0x12, 0xa6, 0x97, 0x0b, 0xaa, 0x89,
+		0x86, 0xc8, 0x44, 0x85, 0x61, 0xe5, 0x53, 0xd9, 0x43, 0x26, 0x1f, 0x23, 0x5f, 0xb9, 0x59, 0x33,
+		0x32, 0x92, 0xc3, 0xab, 0x16, 0x58, 0x97, 0x16, 0x13, 0x0a, 0x71, 0xa1, 0x13, 0x1b, 0x2a, 0xf1,
+		0x21, 0x17, 0x23, 0x72, 0x71, 0x22, 0x15, 0x2b, 0xf9, 0x98, 0x75, 0x45, 0x7e, 0xb3, 0x40, 0x7e,
+		0x97, 0x98, 0xc0, 0x53, 0xa4, 0xf0, 0x1c, 0x53, 0x78, 0x92, 0x33, 0x81, 0x3e, 0xd0, 0xf6, 0x81,
+		0xc4, 0x34, 0x08, 0xd6, 0xda, 0x48, 0x1c, 0x7f, 0xd1, 0x50, 0x33, 0x81, 0x5d, 0x8f, 0x2a, 0xae,
+		0x26, 0x14, 0x17, 0x14, 0xd7, 0x41, 0x14, 0x97, 0xac, 0x9f, 0x40, 0xe4, 0x2f, 0x90, 0xfa, 0x0d,
+		0x44, 0xfe, 0x03, 0x99, 0x1f, 0x41, 0x29, 0x96, 0xf4, 0xe2, 0x49, 0x2d, 0xa6, 0x99, 0x89, 0x6b,
+		0x66, 0x62, 0x9b, 0x89, 0xf8, 0xaa, 0x89, 0xb1, 0xa2, 0x38, 0xd3, 0xf9, 0x23, 0x19, 0xf8, 0x25,
+		0x94, 0xfe, 0x49, 0x9c, 0x9f, 0xb2, 0xf5, 0xb7, 0x8c, 0x28, 0x2d, 0x3f, 0xa9, 0x7b, 0x32, 0xea,
+		0x93, 0xab, 0x02, 0xd1, 0xfe, 0xc9, 0xac, 0xdb, 0x3b, 0x4e, 0xa7, 0x6b, 0x17, 0xf4, 0xa0, 0x6c,
+		0xa1, 0x6c, 0xa1, 0x6c, 0x73, 0xa5, 0x6c, 0x27, 0x96, 0xcd, 0xa5, 0xb2, 0x7a, 0x92, 0xa4, 0xf3,
+		0x82, 0x80, 0x14, 0x0d, 0x90, 0x36, 0xfc, 0x47, 0xc3, 0xff, 0x15, 0x6a, 0x60, 0x2d, 0xb1, 0x5a,
+		0x8b, 0x90, 0x25, 0xca, 0x1a, 0x8a, 0xd0, 0xcd, 0x00, 0xe6, 0x49, 0x24, 0x1e, 0x9b, 0x53, 0x45,
+		0x88, 0xbf, 0x3d, 0xd4, 0x54, 0xd1, 0x67, 0x21, 0x1d, 0x74, 0xf6, 0x4e, 0xf2, 0x41, 0x65, 0x70,
+		0x2c, 0x87, 0xeb, 0xa0, 0xcb, 0x69, 0x49, 0x3c, 0x64, 0x34, 0x98, 0xb5, 0x13, 0xaf, 0xb5, 0xa7,
+		0xd4, 0x4a, 0x92, 0xe7, 0xab, 0x12, 0xcb, 0xd9, 0x05, 0x01, 0xfb, 0x8b, 0xfd, 0xe2, 0x7f, 0x38,
+		0xee, 0xbb, 0xd9, 0xcb, 0x6c, 0x7c, 0x0b, 0xbf, 0x2c, 0xaf, 0x8a, 0x80, 0x2d, 0x09, 0xc2, 0x88,
+		0x99, 0x6e, 0xb1, 0x2c, 0xc0, 0x9a, 0x32, 0x11, 0x0b, 0x20, 0x98, 0x95, 0x47, 0x5f, 0x51, 0xd2,
+		0xa8, 0x25, 0x4c, 0x93, 0x8a, 0x58, 0x93, 0xc8, 0x94, 0xf6, 0x8c, 0x91, 0xe2, 0x69, 0xe7, 0x89,
+		0x0a, 0x3b, 0x9e, 0x62, 0x5a, 0x50, 0x5f, 0x1c, 0xf5, 0xc5, 0x33, 0x58, 0x4f, 0x17, 0x19, 0x68,
+		0x73, 0x63, 0x98, 0xdf, 0x27, 0xae, 0x4e, 0x55, 0xd6, 0x31, 0x9e, 0x1c, 0x32, 0xc7, 0xb3, 0x0b,
+		0x3b, 0x01, 0x82, 0xf3, 0xac, 0xab, 0x3b, 0xe6, 0xb8, 0x94, 0xa3, 0xe9, 0x8c, 0x1d, 0x4f, 0x5e,
+		0x95, 0xcc, 0x9b, 0x43, 0x75, 0x40, 0x75, 0x94, 0x4c, 0x75, 0x48, 0x47, 0x90, 0x51, 0x17, 0x0a,
+		0x75, 0xa1, 0xa8, 0x23, 0xb6, 0xa8, 0x0b, 0x95, 0x45, 0xab, 0x3c, 0xd4, 0x85, 0xb2, 0x14, 0x4a,
+		0x34, 0x5a, 0xa8, 0xc9, 0x08, 0xc3, 0x0b, 0xc3, 0x0b, 0xc3, 0x0b, 0xc3, 0x0b, 0xc3, 0x0b, 0xc3,
+		0x5b, 0x8a, 0x80, 0x3b, 0x69, 0xa1, 0x96, 0x1d, 0xc1, 0xf6, 0xfc, 0xd5, 0x6c, 0xd9, 0xeb, 0xcd,
+		0xa0, 0x60, 0x4b, 0xa6, 0xac, 0xa7, 0x5a, 0xbe, 0x25, 0x99, 0xd9, 0x8a, 0x54, 0xc9, 0x25, 0x5d,
+		0x71, 0x14, 0xb1, 0xc1, 0xa0, 0xa8, 0xee, 0x22, 0x50, 0xd7, 0x05, 0x15, 0x5d, 0x8a, 0x57, 0xd1,
+		0x45, 0xbc, 0x96, 0x0b, 0xaa, 0xb8, 0xa0, 0x8a, 0x4b, 0x18, 0x43, 0x10, 0xca, 0x20, 0x92, 0xca,
+		0x14, 0x42, 0x2d, 0x97, 0x0a, 0x36, 0xb1, 0x15, 0x57, 0xfa, 0xc7, 0xaf, 0xe5, 0x92, 0x3e, 0x6f,
+		0x85, 0x06, 0x5d, 0x62, 0xd9, 0x9c, 0x79, 0x23, 0xc3, 0x64, 0xfa, 0xb4, 0xbb, 0x12, 0x02, 0xba,
+		0xde, 0xbc, 0x1c, 0x65, 0x5d, 0xac, 0xd1, 0xb3, 0x94, 0x53, 0x6b, 0x54, 0x18, 0xac, 0x89, 0x5c,
+		0x1a, 0xb8, 0x52, 0xfa, 0xb7, 0x72, 0x39, 0x97, 0xe6, 0x71, 0xe2, 0xd2, 0xd6, 0x08, 0x61, 0x69,
+		0x45, 0x66, 0x3f, 0x4c, 0x54, 0x5a, 0xa1, 0x98, 0xcb, 0x42, 0x05, 0x53, 0x14, 0x74, 0x09, 0x49,
+		0xa1, 0xa8, 0x8b, 0xb4, 0xf0, 0x50, 0x09, 0x11, 0xb9, 0x30, 0x91, 0x0b, 0x15, 0xa5, 0x70, 0x29,
+		0xc6, 0x77, 0x51, 0xd2, 0x65, 0xd3, 0xa1, 0xac, 0xcd, 0xa6, 0xa1, 0xb7, 0x14, 0x68, 0x7f, 0xfb,
+		0xc2, 0xe2, 0xfb, 0x2c, 0x34, 0x94, 0xe7, 0x82, 0x2f, 0x93, 0x1b, 0x42, 0xfd, 0xb6, 0x41, 0x0d,
+		0x2a, 0x0e, 0x2a, 0x0e, 0x2a, 0xae, 0xc4, 0x2a, 0xae, 0xbf, 0x52, 0x71, 0xff, 0x33, 0x27, 0x9e,
+		0xc7, 0x6c, 0x7e, 0x5a, 0xad, 0xbd, 0x78, 0x51, 0x5b, 0xde, 0x31, 0x58, 0x34, 0x59, 0xd7, 0x0b,
+		0x7e, 0xcc, 0xb5, 0x25, 0xe5, 0x43, 0x96, 0xc7, 0x2a, 0x41, 0x66, 0xd5, 0x5a, 0x72, 0xe2, 0x46,
+		0xa0, 0x40, 0x3a, 0x55, 0x31, 0xcd, 0x86, 0xc6, 0x2a, 0x0f, 0xf1, 0x2a, 0x7c, 0xe6, 0x27, 0x36,
+		0x92, 0x49, 0x4a, 0x2c, 0xe7, 0xae, 0x6e, 0xd2, 0xa4, 0x10, 0xef, 0xe8, 0xc6, 0x4f, 0x03, 0x12,
+		0xa7, 0x90, 0x38, 0x55, 0xee, 0x98, 0xb3, 0x70, 0x30, 0x8b, 0xd9, 0xa6, 0xe1, 0xfa, 0x93, 0xb1,
+		0xc1, 0x99, 0x7e, 0xc7, 0x8c, 0x21, 0x53, 0x48, 0x75, 0x88, 0xa1, 0x05, 0xf8, 0xe5, 0x73, 0x8e,
+		0x73, 0x95, 0x12, 0x7e, 0xb9, 0xe2, 0x72, 0xcb, 0xb1, 0x17, 0x7c, 0xae, 0xf3, 0x29, 0x59, 0x85,
+		0x24, 0x2a, 0x89, 0x93, 0xd7, 0x24, 0x4f, 0x5c, 0xcb, 0x08, 0xa5, 0x2d, 0x55, 0xa3, 0x51, 0xa9,
+		0x26, 0x23, 0x94, 0x05, 0x94, 0x05, 0xb0, 0xda, 0x71, 0x4d, 0x81, 0xd5, 0x06, 0x56, 0xfb, 0x10,
+		0x43, 0x0b, 0xac, 0x76, 0x25, 0x2f, 0x49, 0x52, 0xae, 0x6e, 0x0c, 0x87, 0x1e, 0xf3, 0x7d, 0x05,
+		0x1b, 0xbc, 0xa2, 0x01, 0x43, 0x0c, 0x43, 0x5c, 0x32, 0x43, 0x2c, 0xcd, 0xdd, 0x95, 0xa2, 0x1f,
+		0x91, 0x6f, 0xb9, 0x3f, 0x5a, 0x0a, 0x7d, 0x8f, 0x8c, 0xc1, 0x85, 0x5a, 0xf4, 0x9c, 0x33, 0xcf,
+		0x56, 0x2e, 0xf1, 0xa9, 0x9d, 0x9e, 0xf6, 0xeb, 0xfa, 0xcb, 0xc1, 0x53, 0xbf, 0xa1, 0xbf, 0x1c,
+		0xcc, 0x3f, 0x36, 0x66, 0xff, 0xcd, 0x3f, 0x37, 0xfb, 0x75, 0xbd, 0x15, 0x7e, 0x6e, 0xf7, 0xeb,
+		0x7a, 0x7b, 0x50, 0xfd, 0xfa, 0xf5, 0x45, 0xf5, 0xf1, 0x3c, 0x10, 0x6f, 0x28, 0xbf, 0xd7, 0x32,
+		0x50, 0x19, 0xaa, 0x8f, 0x9f, 0xaf, 0xfe, 0x25, 0x1b, 0xaf, 0xff, 0x0e, 0x39, 0x60, 0xbf, 0x69,
+		0xcf, 0xe6, 0x00, 0x76, 0xcb, 0xfd, 0xd1, 0x29, 0xa9, 0x70, 0x19, 0xfa, 0xe8, 0x52, 0x7f, 0x3b,
+		0x78, 0x6c, 0x9c, 0xb5, 0x82, 0x5e, 0xf5, 0xb1, 0x1b, 0x6c, 0x5f, 0x7c, 0x8a, 0xbb, 0xad, 0x71,
+		0xd6, 0x0d, 0x7a, 0x09, 0xbf, 0x74, 0x82, 0x5e, 0x4a, 0x1a, 0xed, 0xe0, 0x34, 0x72, 0xeb, 0xf4,
+		0x7a, 0x33, 0xa9, 0x41, 0x2b, 0xa1, 0xc1, 0x79, 0x52, 0x83, 0xf3, 0x84, 0x06, 0x89, 0xaf, 0xd4,
+		0x4c, 0x68, 0xd0, 0x0e, 0x9e, 0x22, 0xf7, 0x9f, 0xc6, 0xdf, 0xda, 0x09, 0xaa, 0x4f, 0x49, 0xbf,
+		0x75, 0x83, 0xa7, 0x5e, 0xb5, 0x4c, 0xaa, 0x06, 0xec, 0x73, 0x78, 0xf6, 0x39, 0xbc, 0xe2, 0x2d,
+		0xe4, 0x6a, 0xe9, 0xde, 0x30, 0xd5, 0x97, 0x4b, 0xeb, 0x44, 0xb0, 0x5e, 0xc2, 0x7a, 0xa9, 0x64,
+		0xeb, 0x25, 0x79, 0xf6, 0x56, 0xf5, 0x67, 0x94, 0xfd, 0x18, 0xed, 0xbf, 0x75, 0x0d, 0xb9, 0xad,
+		0x78, 0x9b, 0x41, 0xf5, 0xb1, 0x1d, 0x48, 0x68, 0xca, 0x81, 0x4c, 0x57, 0x28, 0x2c, 0x6b, 0x56,
+		0xfd, 0xc9, 0x81, 0x26, 0x76, 0x27, 0xfe, 0x1d, 0x1b, 0xea, 0xf7, 0xee, 0xd8, 0xd7, 0xc7, 0xc6,
+		0x0d, 0x1b, 0xeb, 0x3e, 0x37, 0xcc, 0xef, 0xf2, 0x5a, 0x39, 0x89, 0x20, 0x34, 0x34, 0x34, 0x74,
+		0xd9, 0x34, 0xf4, 0x92, 0xc7, 0x9f, 0x5b, 0x44, 0x6b, 0x62, 0xd9, 0xfc, 0xbc, 0x49, 0xb0, 0xdc,
+		0x56, 0x01, 0x82, 0xd2, 0x9c, 0x55, 0x43, 0x70, 0xa2, 0x0f, 0xe5, 0xd9, 0x34, 0xc4, 0x07, 0x9d,
+		0xac, 0x76, 0x8a, 0x3a, 0x44, 0x04, 0x33, 0x38, 0xc6, 0x84, 0xe0, 0xf0, 0x19, 0xd2, 0x43, 0x67,
+		0x32, 0x9b, 0x83, 0x7a, 0xeb, 0xa2, 0xdd, 0x6d, 0xe7, 0x78, 0x22, 0x8e, 0x74, 0x7e, 0x4b, 0xd1,
+		0x62, 0x8e, 0xcc, 0x9e, 0xdc, 0x33, 0x6f, 0x8e, 0xd0, 0x25, 0x08, 0x39, 0xb6, 0x14, 0x68, 0xc8,
+		0x41, 0x90, 0x0e, 0x16, 0x3d, 0xc0, 0x91, 0x29, 0x9b, 0xe5, 0x96, 0x14, 0x13, 0x98, 0x26, 0xbe,
+		0x30, 0xa2, 0x93, 0xca, 0xc7, 0xdc, 0xf6, 0x33, 0x9d, 0x79, 0xaf, 0xf4, 0x9b, 0x07, 0x15, 0x11,
+		0xa0, 0xcc, 0xd3, 0xd9, 0xf0, 0x39, 0x67, 0x23, 0x95, 0xcf, 0x54, 0x8d, 0xb2, 0x67, 0x15, 0x64,
+		0x51, 0x1f, 0x4e, 0xea, 0x70, 0xa9, 0x43, 0x55, 0x85, 0x4b, 0x01, 0x9d, 0x44, 0x61, 0x38, 0x72,
+		0x3e, 0x23, 0x2a, 0x06, 0x97, 0xf2, 0x88, 0xa5, 0x7c, 0x96, 0x80, 0x53, 0x2d, 0xfe, 0xa6, 0x54,
+		0xf7, 0xcd, 0x75, 0xc6, 0x96, 0xf9, 0xa0, 0x8f, 0x1c, 0xef, 0xa7, 0xe1, 0x0d, 0x2d, 0xfb, 0x76,
+		0x7f, 0xfd, 0xb7, 0x68, 0x13, 0xd4, 0x81, 0x2b, 0x4a, 0x1d, 0xb8, 0xc8, 0xdc, 0xe9, 0xcc, 0xe6,
+		0xde, 0x43, 0xfa, 0xb2, 0x70, 0x49, 0x04, 0x50, 0x25, 0x0e, 0x55, 0xe2, 0xe6, 0x37, 0xa2, 0x4a,
+		0x1c, 0x32, 0xf6, 0x0e, 0xef, 0x18, 0xa3, 0x4a, 0x5c, 0x0a, 0x3f, 0x0a, 0xa9, 0xb4, 0x10, 0xcc,
+		0x43, 0x0b, 0xa6, 0x70, 0x2a, 0x2d, 0x72, 0xe0, 0x32, 0x62, 0x67, 0xaa, 0x20, 0x12, 0x36, 0x2a,
+		0x91, 0x03, 0x97, 0x79, 0x94, 0x1e, 0x39, 0x70, 0x94, 0xec, 0xb7, 0x1d, 0x65, 0x42, 0x0e, 0x5c,
+		0xc6, 0xd1, 0xe4, 0x4a, 0x91, 0x73, 0xe0, 0x86, 0xbe, 0xe9, 0x2a, 0x25, 0xc0, 0xcd, 0x08, 0xc0,
+		0x04, 0xc3, 0x04, 0x97, 0xcc, 0x04, 0x4b, 0xf0, 0xf5, 0x3a, 0x6f, 0xb7, 0x61, 0x80, 0x61, 0x80,
+		0x73, 0x6a, 0x80, 0x3b, 0xe7, 0x30, 0xb7, 0x47, 0x32, 0xb7, 0xae, 0x9c, 0x25, 0x5a, 0x37, 0xb8,
+		0x72, 0x51, 0x06, 0x98, 0x5c, 0x98, 0xdc, 0x02, 0x24, 0x9c, 0x4b, 0x8f, 0x76, 0xf1, 0xf3, 0xcd,
+		0x95, 0xeb, 0xe8, 0x3e, 0xdf, 0x74, 0xf3, 0xda, 0xe2, 0x61, 0xd5, 0xa7, 0xd3, 0x7e, 0x43, 0x6f,
+		0x0e, 0xc2, 0x2f, 0xe7, 0xfd, 0xba, 0xde, 0x1c, 0x54, 0x91, 0x8e, 0x4e, 0x3d, 0xa0, 0xcf, 0x2d,
+		0x5d, 0xbd, 0x94, 0xb2, 0x89, 0x74, 0xe3, 0xc3, 0xa7, 0x1b, 0xd7, 0x4e, 0x1b, 0x53, 0x79, 0xbb,
+		0x98, 0x8b, 0x60, 0x63, 0x10, 0x91, 0xcc, 0xb9, 0xa4, 0x21, 0xa9, 0x1d, 0x5c, 0x96, 0x3d, 0x97,
+		0x21, 0xf7, 0x3d, 0xfd, 0xb2, 0xcd, 0xe1, 0x8e, 0xe9, 0x8c, 0x15, 0x17, 0x6e, 0x0b, 0x22, 0x58,
+		0xba, 0x61, 0xe9, 0x56, 0xc6, 0xa5, 0xdb, 0x9c, 0xbd, 0x95, 0x0b, 0xfb, 0x16, 0x35, 0xbf, 0xf2,
+		0x82, 0xc0, 0x3f, 0x6c, 0x23, 0xbd, 0x32, 0x93, 0xd8, 0x27, 0x75, 0x78, 0x39, 0x8b, 0x50, 0x28,
+		0x41, 0xb8, 0x99, 0x34, 0xec, 0x9c, 0xf5, 0x14, 0x34, 0xdb, 0x2d, 0x64, 0x56, 0x16, 0x7e, 0x79,
+		0x3c, 0x64, 0x36, 0xb7, 0xf8, 0x03, 0xd1, 0x39, 0x43, 0x2a, 0xfa, 0xef, 0x6a, 0xf1, 0x2a, 0xbf,
+		0x1b, 0x3e, 0xc1, 0x09, 0x57, 0x61, 0x07, 0xaf, 0xae, 0xbf, 0x5d, 0x7f, 0xfa, 0xf8, 0xe5, 0xe3,
+		0xab, 0x8f, 0xef, 0x35, 0x8a, 0xfd, 0x17, 0x5f, 0x59, 0x43, 0xd3, 0x68, 0xe9, 0xed, 0x4e, 0x7e,
+		0x79, 0x75, 0xad, 0xe5, 0x41, 0x75, 0xd1, 0xf7, 0xec, 0xd3, 0xe7, 0x7f, 0xca, 0xda, 0xb5, 0xf7,
+		0xcd, 0x2f, 0x65, 0xed, 0xda, 0xbb, 0x4f, 0x6f, 0x4a, 0xda, 0xb3, 0xab, 0x77, 0x1f, 0xca, 0x3a,
+		0x69, 0x97, 0x7f, 0x7f, 0xf9, 0xa3, 0xa4, 0x5d, 0xfb, 0xfb, 0x75, 0x59, 0x27, 0xed, 0xea, 0x55,
+		0x69, 0xf9, 0xf1, 0xfa, 0xea, 0x83, 0x76, 0x64, 0x57, 0x70, 0x00, 0x68, 0x44, 0x8a, 0x39, 0x1b,
+		0xb7, 0xf4, 0xa1, 0xcf, 0x75, 0xd7, 0xf1, 0xb8, 0x7c, 0x8c, 0x6d, 0x9d, 0x08, 0x62, 0x6c, 0x88,
+		0xb1, 0x95, 0x2c, 0xc6, 0x36, 0xe5, 0x6b, 0xdd, 0x9e, 0xdc, 0xdf, 0x48, 0x95, 0x14, 0x09, 0x59,
+		0xbc, 0x03, 0x60, 0xe2, 0x51, 0x23, 0x47, 0x00, 0x26, 0x26, 0x0f, 0x6d, 0xa7, 0xdd, 0x3e, 0x47,
+		0x2a, 0xc0, 0xb1, 0x0c, 0xb0, 0xef, 0x99, 0xea, 0x06, 0x78, 0x49, 0x04, 0x06, 0x18, 0x06, 0x18,
+		0x06, 0x18, 0x06, 0x18, 0x06, 0x18, 0x06, 0x18, 0x06, 0x78, 0xff, 0xb0, 0xe1, 0x84, 0x05, 0x18,
+		0x60, 0x18, 0xe0, 0xac, 0xd8, 0xbb, 0x82, 0x13, 0x16, 0x56, 0x5d, 0xc1, 0x09, 0x0b, 0xbb, 0x35,
+		0xf1, 0xaa, 0x4a, 0xbc, 0xbc, 0x22, 0x96, 0xad, 0x34, 0x0f, 0x3d, 0x0c, 0x3d, 0x8c, 0x73, 0x14,
+		0xf6, 0xbd, 0x3b, 0xce, 0x51, 0x00, 0xd0, 0x2f, 0xe5, 0x92, 0x06, 0xe7, 0x28, 0xe4, 0x60, 0x0e,
+		0x70, 0x8e, 0x02, 0x85, 0xbb, 0xa3, 0xc8, 0x36, 0x38, 0x47, 0xa1, 0xf0, 0x31, 0x82, 0xa9, 0xdd,
+		0xe5, 0xa6, 0xa2, 0x5b, 0xca, 0x4d, 0xf8, 0xa4, 0xf0, 0x49, 0x4b, 0xe9, 0x93, 0x0a, 0xb3, 0x76,
+		0x05, 0x25, 0x7b, 0x10, 0x98, 0xcf, 0xc0, 0xa3, 0xa2, 0x1e, 0xda, 0x2e, 0x82, 0xf2, 0xc7, 0x30,
+		0xb8, 0xe1, 0xb1, 0x0d, 0xfa, 0xad, 0xe7, 0x4c, 0x14, 0xea, 0xe4, 0x6d, 0xd1, 0x81, 0xf9, 0x85,
+		0xf9, 0x2d, 0x99, 0xf9, 0x15, 0xaf, 0xac, 0x1e, 0x59, 0x0d, 0x74, 0xe5, 0xc2, 0xf2, 0x61, 0xa5,
+		0xf5, 0xe5, 0xdf, 0xa6, 0xb0, 0xf9, 0x5b, 0xdf, 0xc3, 0x8a, 0xec, 0x43, 0x2d, 0x07, 0xfa, 0xc5,
+		0x31, 0x39, 0xe3, 0x7e, 0x78, 0xc2, 0x06, 0x1b, 0xca, 0x6b, 0x98, 0x08, 0x25, 0xe8, 0x18, 0xe8,
+		0x98, 0x92, 0xe9, 0x18, 0xd3, 0x99, 0xd8, 0x9c, 0x79, 0x28, 0x8c, 0x0d, 0x27, 0xbf, 0x94, 0x4e,
+		0x3e, 0x0a, 0x63, 0xe7, 0xc5, 0xef, 0x77, 0x0d, 0xf3, 0x3b, 0x91, 0x61, 0x8e, 0x92, 0x82, 0x65,
+		0x86, 0x65, 0x86, 0x65, 0x86, 0x65, 0x86, 0x65, 0x86, 0x65, 0x86, 0x65, 0x2e, 0xc8, 0xb1, 0xc9,
+		0x91, 0xb3, 0x30, 0x6b, 0x09, 0xa7, 0x63, 0xd2, 0x9e, 0xa6, 0x7c, 0x3d, 0x7b, 0xc8, 0xdb, 0xe5,
+		0x33, 0x22, 0x17, 0xde, 0x4c, 0x9f, 0x89, 0x33, 0x96, 0x13, 0x55, 0x49, 0xa9, 0xcf, 0x58, 0x4e,
+		0xcd, 0x94, 0xaa, 0x47, 0x2f, 0xa7, 0x63, 0xc3, 0x22, 0x1d, 0xc8, 0x9c, 0xf6, 0x60, 0x63, 0xe1,
+		0xa1, 0x49, 0x7d, 0x40, 0xf3, 0xc9, 0x8e, 0xce, 0xee, 0xeb, 0xe4, 0xee, 0xce, 0xc5, 0x74, 0x65,
+		0x57, 0x17, 0x36, 0xdf, 0x78, 0xf5, 0x5e, 0xf3, 0x4f, 0x8b, 0x37, 0x4b, 0x7a, 0x23, 0xcd, 0xf2,
+		0xdf, 0x1a, 0xdf, 0xd9, 0x27, 0xc7, 0x89, 0xba, 0xc9, 0xdb, 0x6f, 0xa9, 0xad, 0xff, 0xb4, 0xf1,
+		0x3e, 0xaf, 0xd9, 0x0f, 0xcb, 0x5c, 0x28, 0xb0, 0xe0, 0x24, 0xf8, 0x3f, 0x00, 0x00, 0x00, 0xff,
+		0xff, 0x01, 0x00, 0x00, 0xff, 0xff, 0xd1, 0x2d, 0x3a, 0x34, 0xa0, 0xcd, 0x01, 0x00,
 	}
 )
 
@@ -2311,42 +2882,30 @@ var (
 // of the map ensures that there are no clashes with valid YANG identifiers.
 var ΛEnumTypes = map[string][]reflect.Type{
 	"/afts/ipv4-unicast/ipv4-entry/state/decapsulate-header": []reflect.Type{
-		reflect.TypeOf((E_OpenconfigAft_EncapsulationHeaderType)(0)),
+		reflect.TypeOf((E_OpenconfigAftTypes_EncapsulationHeaderType)(0)),
 	},
 	"/afts/ipv6-unicast/ipv6-entry/state/decapsulate-header": []reflect.Type{
-		reflect.TypeOf((E_OpenconfigAft_EncapsulationHeaderType)(0)),
-	},
-	"/afts/mpls/label-entry/config/label": []reflect.Type{
-		reflect.TypeOf((E_GribiAft_Afts_Mpls_LabelEntry_Config_Label)(0)),
+		reflect.TypeOf((E_OpenconfigAftTypes_EncapsulationHeaderType)(0)),
 	},
 	"/afts/mpls/label-entry/label": []reflect.Type{
-		reflect.TypeOf((E_GribiAft_Afts_Mpls_LabelEntry_Config_Label)(0)),
+		reflect.TypeOf((E_OpenconfigMplsTypes_MplsLabel_Enum)(0)),
 	},
 	"/afts/mpls/label-entry/state/label": []reflect.Type{
-		reflect.TypeOf((E_GribiAft_Afts_Mpls_LabelEntry_Config_Label)(0)),
+		reflect.TypeOf((E_OpenconfigMplsTypes_MplsLabel_Enum)(0)),
 	},
 	"/afts/mpls/label-entry/state/popped-mpls-label-stack": []reflect.Type{
-		reflect.TypeOf((E_GribiAft_Afts_Mpls_LabelEntry_State_PoppedMplsLabelStack)(0)),
+		reflect.TypeOf((E_OpenconfigMplsTypes_MplsLabel_Enum)(0)),
 	},
 	"/afts/next-hops/next-hop/state/encapsulate-header": []reflect.Type{
-		reflect.TypeOf((E_OpenconfigAft_EncapsulationHeaderType)(0)),
-	},
-	"/afts/next-hops/next-hop/state/origin-protocol": []reflect.Type{
-		reflect.TypeOf((E_OpenconfigPolicyTypes_INSTALL_PROTOCOL_TYPE)(0)),
+		reflect.TypeOf((E_OpenconfigAftTypes_EncapsulationHeaderType)(0)),
 	},
 	"/afts/next-hops/next-hop/state/pushed-mpls-label-stack": []reflect.Type{
-		reflect.TypeOf((E_GribiAft_Afts_NextHops_NextHop_State_PushedMplsLabelStack)(0)),
-	},
-	"/afts/policy-forwarding/policy-forwarding-entry/config/ip-protocol": []reflect.Type{
-		reflect.TypeOf((E_OpenconfigPacketMatchTypes_IP_PROTOCOL)(0)),
-	},
-	"/afts/policy-forwarding/policy-forwarding-entry/config/mpls-label": []reflect.Type{
-		reflect.TypeOf((E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel)(0)),
+		reflect.TypeOf((E_OpenconfigMplsTypes_MplsLabel_Enum)(0)),
 	},
 	"/afts/policy-forwarding/policy-forwarding-entry/state/ip-protocol": []reflect.Type{
 		reflect.TypeOf((E_OpenconfigPacketMatchTypes_IP_PROTOCOL)(0)),
 	},
 	"/afts/policy-forwarding/policy-forwarding-entry/state/mpls-label": []reflect.Type{
-		reflect.TypeOf((E_GribiAft_Afts_PolicyForwarding_PolicyForwardingEntry_Config_MplsLabel)(0)),
+		reflect.TypeOf((E_OpenconfigMplsTypes_MplsLabel_Enum)(0)),
 	},
 }

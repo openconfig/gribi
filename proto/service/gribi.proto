@@ -14,9 +14,9 @@
 
 syntax = "proto3";
 
-import "proto/gribi_aft/gribi_aft.proto";
-
 package gribi;
+
+import "proto/gribi_aft/gribi_aft.proto";
 
 option go_package="github.com/openconfig/gribi/proto/service;gribi";
 
@@ -40,54 +40,54 @@ message ModifyRequest {
 
 // A single request to add/modify/remove a single AFT entry
 message AFTOperation {
-        // Associate an ID with this specific request since this allows the client
-        // to determine exactly which modifications have been completed in the
-        // case that are multiple operations within the AFT.
-        uint64 id = 1;
+  // Associate an ID with this specific request since this allows the client
+  // to determine exactly which modifications have been completed in the
+  // case that are multiple operations within the AFT.
+  uint64 id = 1;
 
-        // Network Instance (aka vrf aka routing-instance) to apply to
-        string network_instance = 2;
+  // Network Instance (aka vrf aka routing-instance) to apply to
+  string network_instance = 2;
 
-        // The operation that this request is - either add, replace, or delete
-        // any entry from the specific AFT.
-        enum Operation {
-          // INVALID indicates that the sender did not set the operation, and
-          // should be considered an error.
-          INVALID = 0;
-          // ADD creates an entry within the table, it should fail if the entry
-          // already exists.
-          ADD = 1;
-          // REPLACE replaces an existing entry within a table, it should fail if
-          // the entry does not exist. A replace operation should contain all of
-          // the relevant fields, such that existing entry is completely replaced
-          // with the specified entry.
-          REPLACE = 2;
-          // DELETE removes an entry from the table, it should fail if the entry
-          // does not exist.
-          DELETE = 3;
-        }
-        Operation op = 3;
+  // The operation that this request is - either add, replace, or delete
+  // any entry from the specific AFT.
+  enum Operation {
+    // INVALID indicates that the sender did not set the operation, and
+    // should be considered an error.
+    INVALID = 0;
+    // ADD creates an entry within the table, it should fail if the entry
+    // already exists.
+    ADD = 1;
+    // REPLACE replaces an existing entry within a table, it should fail if
+    // the entry does not exist. A replace operation should contain all of
+    // the relevant fields, such that existing entry is completely replaced
+    // with the specified entry.
+    REPLACE = 2;
+    // DELETE removes an entry from the table, it should fail if the entry
+    // does not exist.
+    DELETE = 3;
+  }
+  Operation op = 3;
 
-        oneof entry {
-          // Each openconfig.AFT.* message is a protobuf transformed
-          // message corresponding to the OpenConfig AFT for that
-          // schema.
-          // Schema for IPv4UnicastEntry is generated from
-          // /network-instances/network-instance/afts/ipv4-unicast/ipv4-entry
-          gribi_aft.Afts.Ipv4EntryKey ipv4 = 4;
-          // Schema for IPv6UnicastEntry is generated from
-          // /network-instances/network-instance/afts/ipv6-unicast/ipv6-entry
-          gribi_aft.Afts.Ipv6EntryKey ipv6 = 5;
-          // Schema for MPLSLabelEntry is generated from
-          // /network-instances/network-instance/afts/mpls/label-entry
-          gribi_aft.Afts.LabelEntryKey mpls = 6;
-          // Schema for NextHopGroup is generated from
-          // /network-instances/network-instance/afts/next-hop-groups/next-hop-group
-          gribi_aft.Afts.NextHopGroupKey next_hop_group = 7;
-          // Schema for NextHop is generated from
-          // /network-instances/network-instance/afts/next-hops/next-hop.
-          gribi_aft.Afts.NextHopKey next_hop = 8;
-        }
+  oneof entry {
+    // Each openconfig.AFT.* message is a protobuf transformed
+    // message corresponding to the OpenConfig AFT for that
+    // schema.
+    // Schema for IPv4UnicastEntry is generated from
+    // /network-instances/network-instance/afts/ipv4-unicast/ipv4-entry
+    gribi_aft.Afts.Ipv4EntryKey ipv4 = 4;
+    // Schema for IPv6UnicastEntry is generated from
+    // /network-instances/network-instance/afts/ipv6-unicast/ipv6-entry
+    gribi_aft.Afts.Ipv6EntryKey ipv6 = 5;
+    // Schema for MPLSLabelEntry is generated from
+    // /network-instances/network-instance/afts/mpls/label-entry
+    gribi_aft.Afts.LabelEntryKey mpls = 6;
+    // Schema for NextHopGroup is generated from
+    // /network-instances/network-instance/afts/next-hop-groups/next-hop-group
+    gribi_aft.Afts.NextHopGroupKey next_hop_group = 7;
+    // Schema for NextHop is generated from
+    // /network-instances/network-instance/afts/next-hops/next-hop.
+    gribi_aft.Afts.NextHopKey next_hop = 8;
+  }
 }
 
 // A set of AFT responses.

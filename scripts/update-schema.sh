@@ -44,11 +44,20 @@ proto_generator \
 	-package_name=gribi_aft -exclude_modules=ietf-interfaces,openconfig-interfaces \
 	-base_import_path="proto" \
 	-go_package_base="github.com/openconfig/gribi/proto" \
+	-consistent_union_enum_names -typedef_enum_with_defmod \
 	${SRC_DIR}/yang/gribi-aft.yang
 generator \
 	-path=${SRC_DIR}/yang,${SRC_DIR}/yang/deps \
 	-output_file=${SRC_DIR}/oc/oc.go -package_name=oc -generate_fakeroot -fakeroot_name=device \
 	-exclude_modules=ietf-interfaces,openconfig-interfaces \
+	-shorten_enum_leaf_names \
+	-typedef_enum_with_defmod \
+	-enum_suffix_for_simple_union_enums \
+	-generate_simple_unions \
+	-generate_rename \
+	-generate_append \
+	-generate_leaf_getters \
+	-annotations \
 	${SRC_DIR}/yang/gribi-aft.yang
 
 # Add licensing to the generated Go code.

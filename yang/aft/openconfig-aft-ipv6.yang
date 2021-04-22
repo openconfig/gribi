@@ -20,7 +20,50 @@ submodule openconfig-aft-ipv6 {
     "Submodule containing definitions of groupings for the abstract
     forwarding tables for IPv6.";
 
-  oc-ext:openconfig-version "0.3.1";
+  oc-ext:openconfig-version "0.6.0";
+
+  revision "2020-11-06" {
+    description
+      "Make AFT model read-only.";
+    reference "0.6.0";
+  }
+
+  revision "2020-09-09" {
+    description
+      "Remove leafs that are not used as keys from config containers as
+      AFT model is ready-only.
+      * next-hop/interface-ref/config.
+      * all leafs under policy-forwarding-entry/config except index.";
+    reference "0.5.0";
+  }
+
+  revision "2019-11-07" {
+    description
+      "Move lsp-name leaf out of aft-common-entry-nexthop-state group.";
+    reference "0.4.1";
+  }
+
+  revision "2019-08-02" {
+    description
+      "Add installing protocol for IPv[46] unicast entries.
+      Add the ability to describe conditional next-hop groups
+      outside of the policy forwarding module to allow for efficient
+      handling of CBTS, where many prefixes may share the same next-hop
+      criteria.";
+    reference "0.4.0";
+  }
+
+  revision "2019-08-01" {
+    description
+      "Add lsp-name leaf to AFT next-hop.";
+    reference "0.3.3";
+  }
+
+  revision "2018-11-21" {
+    description
+      "Add OpenConfig module metadata extensions.";
+    reference "0.3.2";
+  }
 
   revision 2017-08-24 {
     description
@@ -49,17 +92,11 @@ submodule openconfig-aft-ipv6 {
 
       leaf prefix {
         type leafref {
-          path "../config/prefix";
+          path "../state/prefix";
         }
         description
           "Reference to the IPv6 unicast destination prefix which
           must be matched to utilise the AFT entry.";
-      }
-
-      container config {
-        description
-          "Configuration parameters for the IPv6 unicast AFT entry.";
-        uses aft-ipv6-unicast-entry-config;
       }
 
       container state {
@@ -67,27 +104,20 @@ submodule openconfig-aft-ipv6 {
         description
           "Operational state parameters for the IPv6 unicast AFT
           entry.";
-        uses aft-ipv6-unicast-entry-config;
         uses aft-ipv6-unicast-entry-state;
       }
-    }
-  }
-
-  grouping aft-ipv6-unicast-entry-config {
-    description
-      "Configuration parameters for the IPv6 unicast entry.";
-
-    leaf prefix {
-        type oc-inet:ipv6-prefix;
-        description
-          "The IPv6 destination prefix that should be matched to
-          utilise the AFT entry.";
     }
   }
 
   grouping aft-ipv6-unicast-entry-state {
     description
       "Operational state parameters for the IPv6 unicast entry.";
+    leaf prefix {
+        type oc-inet:ipv6-prefix;
+        description
+          "The IPv6 destination prefix that should be matched to
+          utilise the AFT entry.";
+    }
     uses aft-common-entry-state;
     uses aft-common-ip-state;
   }

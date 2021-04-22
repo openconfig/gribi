@@ -1,0 +1,12 @@
+lint:
+  files:
+    exclude:
+      - proto/gribi_aft/gribi_aft.proto
+      - proto/gribi_aft/enums/enums.proto
+
+  rules:
+    remove:
+      - ENUM_FIELD_NAMES_PREFIX
+      - ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
+      - REPEATED_FIELD_NAMES_PLURALIZED
+      - SERVICE_NAMES_UPPER_CAMEL_CASE

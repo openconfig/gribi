@@ -19,20 +19,56 @@ module gribi-aft {
   import openconfig-aft { prefix "oc-aft"; }
 
   organization
-      "Google, Inc.";
+    "Google, Inc.";
 
   contact
-      "robjs@google.com";
+    "robjs@google.com";
 
   description
-      "This module defines the gRIBI API. It is used to generate
-      the protobuf definition of the schema that is used in the
-      protocol.
+    "This module defines the gRIBI API. It is used to generate
+    the protobuf definition of the schema that is used in the
+    protocol.
 
-      TODO(robjs): This module needs to self-augment to add the
-      relevant config containers to the AFT schema. At the moment
-      this is achieved through path compression, which means directly
-      using the YANG schema is not actually possible.";
+    TODO(robjs): This module needs to self-augment to add the
+    relevant config containers to the AFT schema. At the moment
+    this is achieved through path compression, which means directly
+    using the YANG schema is not actually possible.";
 
   uses oc-aft:aft-top;
+
+  deviation "/afts/next-hops/next-hop/state/origin-protocol" {
+    description
+      "Next-hop origin protocol is not a field that can be programmed
+      via gRIBI.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/ipv4-unicast/ipv4-entry/state/origin-protocol" {
+    description
+      "IPv4 origin protocol is not a field that can be programmed
+      via gRIBI.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/ipv6-unicast/ipv6-entry/state/origin-protocol" {
+    description
+      "IPv6 origin protocol is not a field that can be programmed
+      via gRIBI.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/next-hops/next-hop/state/lsp-name" {
+    description
+      "RSVP-TE LSP name is not a field that can be programmed
+      via gRIBI.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/next-hop-groups/next-hop-group/conditional" {
+    description
+      "Conditional next-hop groups (used to represent CBTS or PBTS)
+      are not currently supported by gRIBI.";
+    deviate not-supported;
+  }
+
 }
