@@ -16,7 +16,7 @@ syntax = "proto3";
 
 package gribi;
 
-import "proto/v1/gribi_aft/gribi_aft.proto";
+import "v1/proto/gribi_aft/gribi_aft.proto";
 
 option go_package="github.com/openconfig/gribi/proto/service;gribi";
 

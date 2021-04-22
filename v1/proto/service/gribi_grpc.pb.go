@@ -24,6 +24,16 @@ type GRIBIClient interface {
 	// for each ModifyRequest indicating what action was taken, once each
 	// Operation within the request has been completed.
 	Modify(ctx context.Context, opts ...grpc.CallOption) (GRIBI_ModifyClient, error)
+	// Get provides a client a means to retrieve the contents of the installed
+	// AFTs from the gRIBI daemon. The client requests a Get, and the server
+	// responds with the set of currently installed entries (that have been ACK'd
+	// according to the underlying resource to be programmed to) via the
+	// GetResponse stream. Once all entries have been sent, the server closes the
+	// RPC.
+	//
+	// The Get RPC is typically used to allow reconcilation between a client and
+	// a server or for periodical consistency checking.
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (GRIBI_GetClient, error)
 }
 
 type gRIBIClient struct {
@@ -35,7 +45,7 @@ func NewGRIBIClient(cc grpc.ClientConnInterface) GRIBIClient {
 }
 
 func (c *gRIBIClient) Modify(ctx context.Context, opts ...grpc.CallOption) (GRIBI_ModifyClient, error) {
-	stream, err := c.cc.NewStream(ctx, &GRIBI_ServiceDesc.Streams[0], "/gribi.v1.gRIBI/Modify", opts...)
+	stream, err := c.cc.NewStream(ctx, &GRIBI_ServiceDesc.Streams[0], "/gribi.gRIBI/Modify", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,6 +75,38 @@ func (x *gRIBIModifyClient) Recv() (*ModifyResponse, error) {
 	return m, nil
 }
 
+func (c *gRIBIClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (GRIBI_GetClient, error) {
+	stream, err := c.cc.NewStream(ctx, &GRIBI_ServiceDesc.Streams[1], "/gribi.gRIBI/Get", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &gRIBIGetClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type GRIBI_GetClient interface {
+	Recv() (*GetResponse, error)
+	grpc.ClientStream
+}
+
+type gRIBIGetClient struct {
+	grpc.ClientStream
+}
+
+func (x *gRIBIGetClient) Recv() (*GetResponse, error) {
+	m := new(GetResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // GRIBIServer is the server API for GRIBI service.
 // All implementations must embed UnimplementedGRIBIServer
 // for forward compatibility
@@ -75,6 +117,16 @@ type GRIBIServer interface {
 	// for each ModifyRequest indicating what action was taken, once each
 	// Operation within the request has been completed.
 	Modify(GRIBI_ModifyServer) error
+	// Get provides a client a means to retrieve the contents of the installed
+	// AFTs from the gRIBI daemon. The client requests a Get, and the server
+	// responds with the set of currently installed entries (that have been ACK'd
+	// according to the underlying resource to be programmed to) via the
+	// GetResponse stream. Once all entries have been sent, the server closes the
+	// RPC.
+	//
+	// The Get RPC is typically used to allow reconcilation between a client and
+	// a server or for periodical consistency checking.
+	Get(*GetRequest, GRIBI_GetServer) error
 	mustEmbedUnimplementedGRIBIServer()
 }
 
@@ -84,6 +136,9 @@ type UnimplementedGRIBIServer struct {
 
 func (UnimplementedGRIBIServer) Modify(GRIBI_ModifyServer) error {
 	return status.Errorf(codes.Unimplemented, "method Modify not implemented")
+}
+func (UnimplementedGRIBIServer) Get(*GetRequest, GRIBI_GetServer) error {
+	return status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
 func (UnimplementedGRIBIServer) mustEmbedUnimplementedGRIBIServer() {}
 
@@ -124,11 +179,32 @@ func (x *gRIBIModifyServer) Recv() (*ModifyRequest, error) {
 	return m, nil
 }
 
+func _GRIBI_Get_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(GRIBIServer).Get(m, &gRIBIGetServer{stream})
+}
+
+type GRIBI_GetServer interface {
+	Send(*GetResponse) error
+	grpc.ServerStream
+}
+
+type gRIBIGetServer struct {
+	grpc.ServerStream
+}
+
+func (x *gRIBIGetServer) Send(m *GetResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // GRIBI_ServiceDesc is the grpc.ServiceDesc for GRIBI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var GRIBI_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "gribi.v1.gRIBI",
+	ServiceName: "gribi.gRIBI",
 	HandlerType: (*GRIBIServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
@@ -137,6 +213,11 @@ var GRIBI_ServiceDesc = grpc.ServiceDesc{
 			Handler:       _GRIBI_Modify_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
+		},
+		{
+			StreamName:    "Get",
+			Handler:       _GRIBI_Get_Handler,
+			ServerStreams: true,
 		},
 	},
 	Metadata: "v1/proto/service/gribi.proto",
