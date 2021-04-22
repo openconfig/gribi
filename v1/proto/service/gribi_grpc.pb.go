@@ -35,7 +35,7 @@ func NewGRIBIClient(cc grpc.ClientConnInterface) GRIBIClient {
 }
 
 func (c *gRIBIClient) Modify(ctx context.Context, opts ...grpc.CallOption) (GRIBI_ModifyClient, error) {
-	stream, err := c.cc.NewStream(ctx, &GRIBI_ServiceDesc.Streams[0], "/gribi.gRIBI/Modify", opts...)
+	stream, err := c.cc.NewStream(ctx, &GRIBI_ServiceDesc.Streams[0], "/gribi.v1.gRIBI/Modify", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func (x *gRIBIModifyServer) Recv() (*ModifyRequest, error) {
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var GRIBI_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "gribi.gRIBI",
+	ServiceName: "gribi.v1.gRIBI",
 	HandlerType: (*GRIBIServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
@@ -139,5 +139,5 @@ var GRIBI_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 	},
-	Metadata: "proto/service/gribi.proto",
+	Metadata: "v1/proto/service/gribi.proto",
 }

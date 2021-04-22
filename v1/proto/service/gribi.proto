@@ -1,0 +1,413 @@
+// Copyright 2020 The OpenConfig Contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package gribi;
+
+import "proto/v1/gribi_aft/gribi_aft.proto";
+
+option go_package="github.com/openconfig/gribi/proto/service;gribi";
+
+// gRIBI is a gRPC service which provides an external entity a mechanism through
+// which to programmatically inject and remove entries from the system's RIB.
+service gRIBI {
+  // Modify provides a bidirectional streaming RPC that can be used to issue
+  // modifications to the AFT in the form of ModifyRequest(s).
+  // The network element responds (asynchronously) with a ModifyResponse
+  // for each ModifyRequest indicating what action was taken, once each
+  // Operation within the request has been completed.
+  rpc Modify(stream ModifyRequest) returns (stream ModifyResponse);
+  // Get provides a client a means to retrieve the contents of the installed
+  // AFTs from the gRIBI daemon. The client requests a Get, and the server
+  // responds with the set of currently installed entries (that have been ACK'd
+  // according to the underlying resource to be programmed to) via the
+  // GetResponse stream. Once all entries have been sent, the server closes the
+  // RPC.
+  //
+  // The Get RPC is typically used to allow reconcilation between a client and
+  // a server or for periodical consistency checking.
+  rpc Get(GetRequest) returns (stream GetResponse);
+}
+
+// ModifyRequest is a message used by the client to manipulate the state of
+// the RIB on the target device.
+message ModifyRequest {
+  // A group of requests to add/modify/remove a single AFT entry
+  repeated AFTOperation operation = 1;
+
+  // Meta information that the external entity sends to the network
+  // element. If a non default set of parameters is required, then
+  // `params` MUST be sent by the external entity before
+  // it sends the network element any AFTOperations.
+  // It's possible that the default set of parameters isn't supported
+  // by a network element. In such a case, if the client hasn't sent
+  // any session parameters, then the network element closes the Modify RPC
+  // stream when the first AFTOperation is received in a ModifyRequest and
+  // sets status.code
+  // (http://tinyurl.com/grpc-status-proto)
+  // to `UNIMPLEMENTED` and reason to `UNSUPPORTED_PARAMS`
+  // in ModifyRPCErrorDetails. ModifyRPCErrorDetails is filled in
+  // status.details.
+  //
+  // `params` MUST be sent only once during the lifetime of the session.
+  // All clients programming a network element's RIB,
+  // MUST send the same values of all the attributes of `params`
+  //
+  // The network element responds with session_params_result.status = OK in
+  // ModifyResponse if it processed `params` without any error.
+  //
+  // The network element does not respond with session_params_result if
+  // there's an error while processing `params`, instead it disconnects
+  // the session and sets the RPC error code based on status.proto
+  // (http://tinyurl.com/grpc-status-proto)
+  // status.code is set to
+  //  - UNIMPLEMENTED when it encounters an unsupported `persistence`
+  //    or `ack_type`
+  //  - FAILED_PRECONDITION for the other cases
+  // status.details is filled with the ModifyRPCErrorDetails message with
+  // an appropriate `reason`.
+  //
+  // If the client does not send session_parameters, then the network element
+  // assumes the following defaults:
+  //   - ALL_PRIMARY for client redundancy
+  //   - A client disconnect is treated as if the client issued DELETE
+  //     AFTOperation for all the AFT entries that client ADDed.
+  //   - Each AFTOperation is acknowledged with OK or FAILED in
+  //     in the AFTResult of the ModifyResponse.
+  SessionParameters params = 2;
+
+  // election_id is used by the network element to
+  // select a primary client when the client redundancy mode
+  // is SINGLE_PRIMARY.
+  // A client sends a ModifyRequest with only the election_id
+  // field populated after it connects to the network element,
+  // and everytime its election_id is updated(usually as a
+  // result of an election amongst clients). The network element
+  // responds with a ModifyResponse that has only the election_id
+  // field populated. The election_id in the ModifyResponse is the
+  // highest election_id that the network element has learnt
+  // from any client.
+  // The network element selects the client with the highest
+  // election_id as the primary.
+  // Only AFT operations from the primary client are acted upon by
+  // the network element. AFT operations from non-primary clients
+  // are discarded.
+  // If the client redundancy mode is ALL_PRIMARY, but a client
+  // sends election_id, the network element closes the connection
+  // to the client and responds with FAILED_PRECONDITION in
+  // status.proto's `code` and sets ModifyRPCErrorDetails.reason
+  // to ELECTION_ID_IN_ALL_PRIMARY
+  Uint128 election_id = 3; 
+}
+
+// A single request to add/modify/remove a single AFT entry
+message AFTOperation {
+  // Associate an ID with this specific request since this allows the client
+  // to determine exactly which modifications have been completed in the
+  // case that are multiple operations within the AFT.
+  uint64 id = 1;
+
+  // Network Instance (aka vrf aka routing-instance) to apply to
+  string network_instance = 2;
+
+  // The operation that this request is - either add, replace, or delete
+  // any entry from the specific AFT.
+  enum Operation {
+    // INVALID indicates that the sender did not set the operation, and
+    // should be considered an error.
+    INVALID = 0;
+    // ADD creates an entry within the table. If the entry already exists
+    // within the specified table, the ADD should be treated as replacing
+    // the existing entry with the entry specified in the operation.
+    ADD = 1;
+    // REPLACE replaces an existing entry within a table, it should fail if
+    // the entry does not exist. A replace operation should contain all of
+    // the relevant fields, such that existing entry is completely replaced
+    // with the specified entry.
+    REPLACE = 2;
+    // DELETE removes an entry from the table, it should fail if the entry
+    // does not exist.
+    DELETE = 3;
+  }
+  Operation op = 3;
+
+  oneof entry {
+    // Each openconfig.AFT.* message is a protobuf transformed
+    // message corresponding to the OpenConfig AFT for that
+    // schema.
+    // Schema for IPv4UnicastEntry is generated from
+    // /network-instances/network-instance/afts/ipv4-unicast/ipv4-entry
+    gribi_aft.Afts.Ipv4EntryKey ipv4 = 4;
+    // Schema for IPv6UnicastEntry is generated from
+    // /network-instances/network-instance/afts/ipv6-unicast/ipv6-entry
+    gribi_aft.Afts.Ipv6EntryKey ipv6 = 5;
+    // Schema for MPLSLabelEntry is generated from
+    // /network-instances/network-instance/afts/mpls/label-entry
+    gribi_aft.Afts.LabelEntryKey mpls = 6;
+    // Schema for NextHopGroup is generated from
+    // /network-instances/network-instance/afts/next-hop-groups/next-hop-group
+    gribi_aft.Afts.NextHopGroupKey next_hop_group = 7;
+    // Schema for NextHop is generated from
+    // /network-instances/network-instance/afts/next-hops/next-hop.
+    gribi_aft.Afts.NextHopKey next_hop = 8;
+    // Schema for MacEntry is generated from
+    // /network-instances/network-instance/afts/ethernet/mac-entry
+    gribi_aft.Afts.MacEntryKey mac_entry = 9;
+    // Schema for PolicyForwardingGroup is generated from
+    // /network-instances/network-instance/afts/policy-forwarding/
+    // policy-forwarding-entry
+    gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
+  }
+
+  // Election ID of the client.
+  // In SINGLE_PRIMARY redundancy model, used by the server to determine
+  // whether to process the AFTOperation.
+  // The server processes the AFTOperation if
+  // 1. the election_id in the AFTOperation is equal to the election_id last
+  //    advertised in a ModifyRequest by the client
+  //    AND
+  // 2. the election_id in the AFTOperation is the highest election_id
+  //    amongst all the election IDs that the server knows about, ie.
+  //    the client is the primary client
+  // If the election_id in the AFTOperation does not meet these criteria
+  // the server discards the AFTOperation and returns FAILED in AFTResult
+  Uint128 election_id = 11;
+}
+
+// A set of AFT responses.
+message ModifyResponse {
+  // One or more responses to requests. Clients should expect that
+  // the ModifyResponse *does not* correlate to the ModifyRequest’s
+  // contents.
+  repeated AFTResult result = 1;
+
+  // Response to the session_parameters in a ModifyRequest
+  // when there are no errors.
+  // If there's an error then ModifyRPCErrorDetails is filled
+  // in status.proto's `details` attribute.
+  SessionParametersResult session_params_result = 2;
+
+  // Response to a ModifyRequest that contains only the election_id field.
+  // The network element sends a ModifyResponse with only the election_id
+  // populated. The value populated is the highest election_id that the
+  // network element has learnt from any client.
+  Uint128 election_id = 3;
+}
+
+// A response to add/modify/remove a single AFT entry
+message AFTResult {
+  // The ID corresponds to the operation ID that was
+  // specified in the AFTOperation.
+  uint64 id = 1;
+
+  // Status of the operation. Since this is within a
+  // stream we do not use status.proto to respond since
+  // this would fail the entire RPC connection, and hence
+  // have in-band errors.
+  enum Status {
+    UNSET = 0;
+    // Deprecate the OK status for a modify operation since
+    // there are likely to be more different cases that we
+    // want to use here - e.g., RIB_PROGRAMMED and FIB_PROGRAMMED.
+    OK = 1 [deprecated = true];
+    FAILED = 2;
+    // RIB programmed indicates that the received operation was
+    // syntactically valid, and was programmed successfully into
+    // the RIB.
+    RIB_PROGRAMMED = 3;
+    // FIB_PROGRAMMED indicates that the received operation was
+    // successfully programmed into the FIB. "Programmed into the FIB" is
+    // defined as the forwarding entry being operational in the underlying
+    // forwarding resources across the system that it is relevant to (e.g.,
+    // all linecards that host a particular VRF etc). This notification may
+    // not always be sent for a particular operation since:
+    //
+    //  a) the entry may be duplicate for another gRIBI client.
+    //  b) the entry may not be the preferred system route (e.g., there
+    //     may be a higher-preference RIB client that has a matching
+    //     entry, and hence the FIB is unchanged).
+    //
+    // In cases where the FIB was meant to be programmed, but an error
+    // code was received from the underlying hardware abstraction layer
+    // the FAILED error code is returned.
+    FIB_PROGRAMMED = 4;
+  }
+  Status status = 2;
+}
+
+// Populated in `details` in status.proto when an error that causes the network
+// element to close the stream.
+message ModifyRPCErrorDetails {
+  enum Reason {
+    // Error with an unknown cause.
+    UNKNOWN = 0;
+    // The network element cannot support the
+    // aft_persistence or aft_result_status_type
+    // requested in session parameters in ModifyRequest
+    // If the client didn't send any session parameters, then
+    // the network element doesn't support the default values.
+    UNSUPPORTED_PARAMS = 1;
+    // A session_parameters message in a ModifyRequest was received with
+    // aft_persistence or aft_result_status_type more
+    // than once; or was received after one or more AFTOperations
+    // was issued.
+    MODIFY_NOT_ALLOWED = 2;
+    // The attribute values of atleast one session parameter
+    // received in the ModifyRequest differs from the values received
+    // from existing clients
+    PARAMS_DIFFER_FROM_OTHER_CLIENTS = 3;
+    // election_id in a ModifyRequest is not supported in ALL_PRIMARY
+    // redundancy mode.
+    ELECTION_ID_IN_ALL_PRIMARY = 4;
+  }
+  Reason reason = 1;
+}
+
+// Response when ModifyRequest.params is syntactically valid and all
+// requested parameters are supported by the network element.
+message SessionParametersResult {
+  enum Status {
+    // No errors, network element supports requested
+    // parameters
+    OK = 0;
+  }
+  Status status = 1;
+}
+
+message Uint128 {
+  uint64 high = 1;
+  uint64 low = 2;
+}
+
+message SessionParameters {
+  // The type of redundancy amongst the external entities
+  enum ClientRedundancy {
+    // Accept AFTOperations from all clients. The network element assumes
+    // that all clients convey the same AFT state. The network element
+    // uses "add on first ADD operation and delete on last DELETE operation
+    // semantics, ie., it Adds an AFT entry to its gRIBI state when the
+    // network element receives the first ADD AFTOperation from any client;
+    // and the AFT entry is deleted from the network element's gRIBI state
+    // when the network element has processed DELETE for the AFT entry
+    // from all clients that issued an ADD for that AFT entry.
+    // In other words, the AFT entries are reference counted, where
+    // the reference count is the number of clients that have issued
+    // ADD AFTOperation for that AFT entry.
+    // REPLACE AFTOperations from all clients are processed for any
+    // AFT entries.
+    ALL_PRIMARY = 0;
+    // Clients take part in an election process that leads to
+    // a single client becoming the primary client. The
+    // primary client has the highest election ID. The network element
+    // accepts AFTOperations from the primary client only.
+    SINGLE_PRIMARY = 1;
+  }
+  ClientRedundancy redundancy = 1;
+
+  // The desired behavior when a client disconnects from
+  // the network element.
+  enum AFTPersistence {
+    // When a client disconnects, the network element deletes
+    // all AFT entries received from that client.
+    DELETE = 0;
+    // When the primary client disconects, the network element
+    // preserves the gRIBI process' RIB, system RIB and system
+    // FIB.
+    // When a non primary client disconnects, there's no action
+    // required as all network element state is conveyed by the
+    // primary client
+    PRESERVE = 1;
+  }
+  AFTPersistence persistence = 2;
+
+  // The type of response that the client expects from the
+  // network element in AFTResult.status
+  enum AFTResultStatusType {
+    // network element must respond with RIB_PROGRAMMED
+    // on a successful update to the gRIBI process' RIB.
+    RIB_ACK = 0;
+    // network element must respond with RIB_PROGRAMMED
+    // on a successful update to the gRIBI process' RIB.
+    // If the AFT entry is also programmed in the network
+    // element's FIB, a FIB_PROGRAMMED response must be sent
+    // A FIB_PROGRAMMED response is a combined 
+    // acknowledgement that the AFT entry is programmed in
+    // the gRIBI process' RIB and the FIB, so there's no need
+    // to send both RIB_PROGRAMMED and FIB_PROGRAMMED when
+    // the AFT entry is programmed in the FIB.
+    RIB_AND_FIB_ACK = 1;
+  }
+  AFTResultStatusType ack_type = 3;
+}
+
+// AFT describes the set of AFTs that are supported in the
+// gRIBI protocol.
+enum AFTType {
+  INVALID = 0;
+  ALL = 1;
+  IPV4 = 2;
+  IPV6 = 3;
+  MPLS = 4;
+  NEXTHOP = 5;
+  NEXTHOP_GROUP = 6;
+  MAC = 7;
+  POLICY_FORWARDING = 8;
+}
+
+// Empty is a specific message that is used as a marker where
+// presence of a non-nil value indicates a particular function.
+message Empty {
+}
+
+message GetRequest {
+  oneof network_instance {
+    // The network instance from which the entries should be retrieved.
+    // If name is specified the empty string "" is considered invalid.
+    string name = 1;
+    // all indicates that entries for all network instances for the
+    // specified network instance should be returned.
+    Empty all = 2;
+  }
+  // The AFT for which entries should be retrieved. If the AFT is
+  // invalid, the server should respond with the INVALID_ARGUMENT
+  // error code. If the AFT is unsupported, it should respond with
+  // UNSUPPORTED in the status.proto carried along with the RPC
+  // response.
+  AFTType aft = 3;
+}
+
+// An individual AFTEntry that is installed on the device.
+message AFTEntry {
+  // The network_instance for which the response is being returned.
+  string network_instance = 1;
+  oneof entry {
+    // Each openconfig.AFT.* message is a protobuf transformed
+    // message corresponding to the OpenConfig AFT for that
+    // schema. The auto-generated paths can be found in the definition
+    // of the AFTOperation.
+    gribi_aft.Afts.Ipv4EntryKey ipv4 = 4;
+    gribi_aft.Afts.Ipv6EntryKey ipv6 = 5;
+    gribi_aft.Afts.LabelEntryKey mpls = 6;
+    gribi_aft.Afts.NextHopGroupKey next_hop_group = 7;
+    gribi_aft.Afts.NextHopKey next_hop = 8;
+    gribi_aft.Afts.MacEntryKey mac_entry = 9;
+    gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
+  }
+}
+
+message GetResponse {
+  // A set of entries that are installed on the device.
+  repeated AFTEntry entry = 1;
+}

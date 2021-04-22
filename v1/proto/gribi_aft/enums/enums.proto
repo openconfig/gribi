@@ -2,10 +2,10 @@
 // representation of a YANG schema.
 //
 // Input schema modules:
-//  - github.com/openconfig/gribi/yang/gribi-aft.yang
+//  - github.com/openconfig/gribi/v1/yang/gribi-aft.yang
 // Include paths:
-//   - github.com/openconfig/gribi/yang/...
-//   - github.com/openconfig/gribi/yang/deps/...
+//   - github.com/openconfig/gribi/v1/yang/...
+//   - github.com/openconfig/gribi/v1/yang/deps/...
 syntax = "proto3";
 
 package gribi_aft.enums;
@@ -13,7 +13,7 @@ package gribi_aft.enums;
 import "github.com/openconfig/ygot/proto/ywrapper/ywrapper.proto";
 import "github.com/openconfig/ygot/proto/yext/yext.proto";
 
-option go_package = "github.com/openconfig/gribi/proto/gribi_aft/enums";
+option go_package = "github.com/openconfig/gribi/v1/proto/gribi_aft/enums";
 
 // OpenconfigAftTypesEncapsulationHeaderType represents an enumerated type generated for the YANG enumerated type encapsulation-header-type.
 enum OpenconfigAftTypesEncapsulationHeaderType {

@@ -22,13 +22,13 @@ if [ -z $SRCDIR ]; then
 	SRC_DIR=${THIS_DIR}/..
 fi
 
-mkdir -p ${SRC_DIR}/build_deps/github.com/openconfig/ygot/proto/{ywrapper,yext} 
-curl -o ${SRC_DIR}/build_deps/github.com/openconfig/ygot/proto/yext/yext.proto https://raw.githubusercontent.com/openconfig/ygot/master/proto/yext/yext.proto
-curl -o ${SRC_DIR}/build_deps/github.com/openconfig/ygot/proto/ywrapper/ywrapper.proto https://raw.githubusercontent.com/openconfig/ygot/master/proto/ywrapper/ywrapper.proto
+mkdir -p ${SRC_DIR}/v1/build_deps/github.com/openconfig/ygot/proto/{ywrapper,yext} 
+curl -o ${SRC_DIR}/v1/build_deps/github.com/openconfig/ygot/proto/yext/yext.proto https://raw.githubusercontent.com/openconfig/ygot/master/proto/yext/yext.proto
+curl -o ${SRC_DIR}/v1/build_deps/github.com/openconfig/ygot/proto/ywrapper/ywrapper.proto https://raw.githubusercontent.com/openconfig/ygot/master/proto/ywrapper/ywrapper.proto
 
 cd ${SRC_DIR}
-protoc -I${SRC_DIR} -I ${SRC_DIR}/build_deps --go-grpc_out=. --go-grpc_opt=paths=source_relative --go_out=. --go_opt=paths=source_relative ${SRC_DIR}/proto/service/gribi.proto
-protoc -I${SRC_DIR} -I ${SRC_DIR}/build_deps --go_out=. --go_opt=paths=source_relative ${SRC_DIR}/proto/gribi_aft/gribi_aft.proto
-protoc -I${SRC_DIR} -I ${SRC_DIR}/build_deps --go_out=. --go_opt=paths=source_relative ${SRC_DIR}/proto/gribi_aft/enums/enums.proto
+protoc -I${SRC_DIR} -I ${SRC_DIR}/v1/build_deps --go-grpc_out=. --go-grpc_opt=paths=source_relative --go_out=. --go_opt=paths=source_relative ${SRC_DIR}/v1/proto/service/gribi.proto
+protoc -I${SRC_DIR} -I ${SRC_DIR}/v1/build_deps --go_out=. --go_opt=paths=source_relative ${SRC_DIR}/v1/proto/gribi_aft/gribi_aft.proto
+protoc -I${SRC_DIR} -I ${SRC_DIR}/v1/build_deps --go_out=. --go_opt=paths=source_relative ${SRC_DIR}/v1/proto/gribi_aft/enums/enums.proto
 
-rm -rf ${SRC_DIR}/build_deps
+rm -rf ${SRC_DIR}/v1/build_deps
