@@ -1,5 +1,5 @@
 module gribi-aft {
-  // Copyright 2017 Google Inc.
+  // Copyright 2021 The OpenConfig Authors 
   //
   // Licensed under the Apache License, Version 2.0 (the "License");
   // you may not use this file except in compliance with the License.
@@ -13,26 +13,21 @@ module gribi-aft {
   // See the License for the specific language governing permissions and
   // limitations under the License.
 
-  namespace "http://google.com/yang/gribi/aft";
+  namespace "http://github.com/openconfig/gribi/v1/yang/gribi/aft";
   prefix "gaft";
 
   import openconfig-aft { prefix "oc-aft"; }
 
   organization
-    "Google, Inc.";
+    "OpenConfig working group";
 
   contact
-    "robjs@google.com";
+    "www.openconfig.net";
 
   description
     "This module defines the gRIBI API. It is used to generate
     the protobuf definition of the schema that is used in the
-    protocol.
-
-    TODO(robjs): This module needs to self-augment to add the
-    relevant config containers to the AFT schema. At the moment
-    this is achieved through path compression, which means directly
-    using the YANG schema is not actually possible.";
+    protocol.";
 
   uses oc-aft:aft-top;
 

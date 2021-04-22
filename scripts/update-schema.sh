@@ -45,7 +45,8 @@ proto_generator \
 	-base_import_path="v1/proto" \
 	-go_package_base="github.com/openconfig/gribi/v1/proto" \
 	-consistent_union_enum_names -typedef_enum_with_defmod \
-	${SRC_DIR}/v1/yang/gribi-aft.yang
+	${SRC_DIR}/v1/yang/gribi-aft.yang \
+  ${SRC_DIR}/v1/yang/gribi-augments.yang
 
 # Add licensing to the generated Go code.
 RP=`echo ${SRC_DIR} | sed 's/\./\\./g'`
