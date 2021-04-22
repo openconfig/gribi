@@ -24,7 +24,7 @@ index a4840e0..a1209f6 100644
      }
    }
  
-+  grouping-aft-common-entry-nexthop-ipip-state {
++  grouping aft-common-entry-nexthop-ipip-state {
 +    description
 +      "IP-in-IP encapsulation applied on a next-hop";
 +
