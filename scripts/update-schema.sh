@@ -19,11 +19,6 @@ go run $GOPATH/src/github.com/openconfig/ygot/proto_generator/protogenerator.go 
 	-output_dir=proto -compress_paths -generate_fakeroot -fakeroot_name=device \
 	-package_name=gribi_aft -exclude_modules=ietf-interfaces,openconfig-interfaces \
 	-base_import_path="github.com/openconfig/gribi/proto" yang/gribi-aft.yang
-go run $GOPATH/src/github.com/openconfig/ygot/generator/generator.go \
-	-path=yang,yang/deps \
-	-output_file=oc/oc.go -package_name=oc -generate_fakeroot -fakeroot_name=device \
-	-exclude_modules=ietf-interfaces,openconfig-interfaces \
-	yang/gribi-aft.yang
 
 echo -e "$(cat scripts/data/apache-short)\n\n$(cat oc/oc.go)" > oc/oc.go
 
