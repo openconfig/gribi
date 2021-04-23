@@ -3,7 +3,6 @@
 //
 // Input schema modules:
 //  - github.com/openconfig/gribi/v1/yang/gribi-aft.yang
-//  - github.com/openconfig/gribi/v1/yang/gribi-augments.yang
 // Include paths:
 //   - github.com/openconfig/gribi/v1/yang/...
 //   - github.com/openconfig/gribi/v1/yang/deps/...

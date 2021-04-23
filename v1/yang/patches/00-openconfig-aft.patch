@@ -49,14 +49,14 @@ index a4840e0..a1209f6 100644
          within the next-hop group according to the weight.";
      }
 +
-+    leaf network-instance {
-+      // TODO(robjs): When upstreamed, similarly to the the NHG NI, this should
-+      // likely be a leafref with the same deviation applied.
++    leaf next-hop-group-network-instance {
 +      type string;
 +      description
-+        "Network instance for the next-hop. If the value of this field is not
-+        specified, the next-hop is looked up in the same network-instance as
-+        the entry is populated within.";
++        "The network instance to look up the next-hop-group in.  If 
++         unspecified, the next hop group is in the local network 
++         instance.  The referenced network-instance must be an existing
++         network instance on the device and have corresponding entries 
++         in the /network-instances/network-instance list.";
 +    }
 +
 +    leaf metadata {
