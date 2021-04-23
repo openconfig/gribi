@@ -1,8 +1,8 @@
 lint:
   files:
     exclude:
-      - proto/gribi_aft/gribi_aft.proto
-      - proto/gribi_aft/enums/enums.proto
+      - v1/proto/gribi_aft/gribi_aft.proto
+      - v1/proto/gribi_aft/enums/enums.proto
 
   rules:
     remove:
