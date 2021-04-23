@@ -2,19 +2,19 @@
 // representation of a YANG schema.
 //
 // Input schema modules:
-//  - github.com/openconfig/gribi/yang/gribi-aft.yang
+//  - github.com/openconfig/gribi/v1/yang/gribi-aft.yang
 // Include paths:
-//   - github.com/openconfig/gribi/yang/...
-//   - github.com/openconfig/gribi/yang/deps/...
+//   - github.com/openconfig/gribi/v1/yang/...
+//   - github.com/openconfig/gribi/v1/yang/deps/...
 syntax = "proto3";
 
 package gribi_aft;
 
 import "github.com/openconfig/ygot/proto/ywrapper/ywrapper.proto";
 import "github.com/openconfig/ygot/proto/yext/yext.proto";
-import "proto/gribi_aft/enums/enums.proto";
+import "v1/proto/gribi_aft/enums/enums.proto";
 
-option go_package = "github.com/openconfig/gribi/proto/gribi_aft";
+option go_package = "github.com/openconfig/gribi/v1/proto/gribi_aft";
 
 message Device {
   Afts afts = 35982132 [(yext.schemapath) = "/afts"];
@@ -23,7 +23,9 @@ message Device {
 message Afts {
   message Ipv4Entry {
     gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType decapsulate_header = 383809427 [(yext.schemapath) = "/afts/ipv4-unicast/ipv4-entry/state/decapsulate-header"];
+    ywrapper.BytesValue metadata = 276918747 [(yext.schemapath) = "/afts/ipv4-unicast/ipv4-entry/state/metadata"];
     ywrapper.UintValue next_hop_group = 497198611 [(yext.schemapath) = "/afts/ipv4-unicast/ipv4-entry/state/next-hop-group"];
+    ywrapper.StringValue next_hop_group_network_instance = 32856574 [(yext.schemapath) = "/afts/ipv4-unicast/ipv4-entry/state/next-hop-group-network-instance"];
     ywrapper.UintValue octets_forwarded = 299759987 [(yext.schemapath) = "/afts/ipv4-unicast/ipv4-entry/state/octets-forwarded"];
     ywrapper.UintValue packets_forwarded = 298329756 [(yext.schemapath) = "/afts/ipv4-unicast/ipv4-entry/state/packets-forwarded"];
   }
@@ -33,7 +35,9 @@ message Afts {
   }
   message Ipv6Entry {
     gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType decapsulate_header = 328774623 [(yext.schemapath) = "/afts/ipv6-unicast/ipv6-entry/state/decapsulate-header"];
+    ywrapper.BytesValue metadata = 75892543 [(yext.schemapath) = "/afts/ipv6-unicast/ipv6-entry/state/metadata"];
     ywrapper.UintValue next_hop_group = 442121607 [(yext.schemapath) = "/afts/ipv6-unicast/ipv6-entry/state/next-hop-group"];
+    ywrapper.StringValue next_hop_group_network_instance = 492017618 [(yext.schemapath) = "/afts/ipv6-unicast/ipv6-entry/state/next-hop-group-network-instance"];
     ywrapper.UintValue octets_forwarded = 219660135 [(yext.schemapath) = "/afts/ipv6-unicast/ipv6-entry/state/octets-forwarded"];
     ywrapper.UintValue packets_forwarded = 204384952 [(yext.schemapath) = "/afts/ipv6-unicast/ipv6-entry/state/packets-forwarded"];
   }
@@ -46,7 +50,9 @@ message Afts {
       gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum popped_mpls_label_stack_openconfigmplstypesmplslabelenum = 524692292;
       uint64 popped_mpls_label_stack_uint64 = 510588408;
     }
+    ywrapper.BytesValue metadata = 465896727 [(yext.schemapath) = "/afts/mpls/label-entry/state/metadata"];
     ywrapper.UintValue next_hop_group = 307713279 [(yext.schemapath) = "/afts/mpls/label-entry/state/next-hop-group"];
+    ywrapper.StringValue next_hop_group_network_instance = 303628026 [(yext.schemapath) = "/afts/mpls/label-entry/state/next-hop-group-network-instance"];
     ywrapper.UintValue octets_forwarded = 508405375 [(yext.schemapath) = "/afts/mpls/label-entry/state/octets-forwarded"];
     ywrapper.UintValue packets_forwarded = 399797536 [(yext.schemapath) = "/afts/mpls/label-entry/state/packets-forwarded"];
     repeated PoppedMplsLabelStackUnion popped_mpls_label_stack = 62799927 [(yext.schemapath) = "/afts/mpls/label-entry/state/popped-mpls-label-stack"];
@@ -59,7 +65,9 @@ message Afts {
     LabelEntry label_entry = 2;
   }
   message MacEntry {
+    ywrapper.BytesValue metadata = 388747741 [(yext.schemapath) = "/afts/ethernet/mac-entry/state/metadata"];
     ywrapper.UintValue next_hop_group = 320343041 [(yext.schemapath) = "/afts/ethernet/mac-entry/state/next-hop-group"];
+    ywrapper.StringValue next_hop_group_network_instance = 264313412 [(yext.schemapath) = "/afts/ethernet/mac-entry/state/next-hop-group-network-instance"];
     ywrapper.UintValue octets_forwarded = 113345869 [(yext.schemapath) = "/afts/ethernet/mac-entry/state/octets-forwarded"];
     ywrapper.UintValue packets_forwarded = 348841578 [(yext.schemapath) = "/afts/ethernet/mac-entry/state/packets-forwarded"];
   }
@@ -72,6 +80,10 @@ message Afts {
       ywrapper.StringValue interface = 366751031 [(yext.schemapath) = "/afts/next-hops/next-hop/interface-ref/state/interface"];
       ywrapper.UintValue subinterface = 488145333 [(yext.schemapath) = "/afts/next-hops/next-hop/interface-ref/state/subinterface"];
     }
+    message IpInIp {
+      ywrapper.StringValue dst_ip = 184775743 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip/state/dst-ip"];
+      ywrapper.StringValue src_ip = 220560118 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip/state/src-ip"];
+    }
     message PushedMplsLabelStackUnion {
       gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum pushed_mpls_label_stack_openconfigmplstypesmplslabelenum = 307755077;
       uint64 pushed_mpls_label_stack_uint64 = 47493573;
@@ -79,7 +91,9 @@ message Afts {
     gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType encapsulate_header = 69966061 [(yext.schemapath) = "/afts/next-hops/next-hop/state/encapsulate-header"];
     InterfaceRef interface_ref = 293682821 [(yext.schemapath) = "/afts/next-hops/next-hop/interface-ref"];
     ywrapper.StringValue ip_address = 242108262 [(yext.schemapath) = "/afts/next-hops/next-hop/state/ip-address"];
+    IpInIp ip_in_ip = 157296597 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip"];
     ywrapper.StringValue mac_address = 404609192 [(yext.schemapath) = "/afts/next-hops/next-hop/state/mac-address"];
+    ywrapper.StringValue network_instance = 232391308 [(yext.schemapath) = "/afts/next-hops/next-hop/state/network-instance"];
     repeated PushedMplsLabelStackUnion pushed_mpls_label_stack = 489592660 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
   }
   message NextHopGroup {
@@ -112,12 +126,14 @@ message Afts {
     ywrapper.UintValue l4_dst_port = 447405406 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/l4-dst-port"];
     ywrapper.UintValue l4_src_port = 502173263 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/l4-src-port"];
     ywrapper.StringValue mac_address = 422272134 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/mac-address"];
+    ywrapper.BytesValue metadata = 436111175 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/metadata"];
     oneof mpls_label {
       gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum mpls_label_openconfigmplstypesmplslabelenum = 47620234;
       uint64 mpls_label_uint64 = 306275022;
     }
     ywrapper.UintValue mpls_tc = 281754514 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/mpls-tc"];
     ywrapper.UintValue next_hop_group = 188303215 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/next-hop-group"];
+    ywrapper.StringValue next_hop_group_network_instance = 466188650 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/next-hop-group-network-instance"];
     ywrapper.UintValue octets_forwarded = 175461231 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/octets-forwarded"];
     ywrapper.UintValue packets_forwarded = 367761904 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/packets-forwarded"];
   }
