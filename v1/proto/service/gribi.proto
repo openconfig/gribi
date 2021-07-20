@@ -245,6 +245,13 @@ message AFTResult {
     FIB_PROGRAMMED = 4;
   }
   Status status = 2;
+
+  // Timestamp corresponding to the success or failure case being reported.
+  // The timestamp reflects the time at which the gRIBI daemon received and
+  // processed the acknowledgement that the entry was programmed. The typical
+  // use for this timestamp is to provide tracking of programming SLIs at the
+  // device.
+  int64 timestamp = 3;
 }
 
 // Populated in `details` in status.proto when an error that causes the network
