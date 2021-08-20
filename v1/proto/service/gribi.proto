@@ -74,7 +74,7 @@ message ModifyRequest {
   // (http://tinyurl.com/grpc-status-proto)
   // status.code is set to
   //  - UNIMPLEMENTED when it encounters an unsupported `persistence`
-  //    or `ack_type`
+  //    or `ack_type` or `redundancy`
   //  - FAILED_PRECONDITION for the other cases
   // status.details is filled with the ModifyRPCErrorDetails message with
   // an appropriate `reason`.
