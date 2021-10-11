@@ -437,19 +437,19 @@ message FlushRequest {
     // id indicates that the Flush ID supplied should be compared to the
     // existing election ID on the server from the current master.
     Uint128 id = 1;
-    // override indicates that the client explicitly requests that the election ID
-    // should not be compared, regardless of whether there are SINGLE_PRIMARY clients
-    // on the server.
+    // override indicates that the client explicitly requests that the election
+    // ID should not be compared, regardless of whether there are SINGLE_PRIMARY
+    // clients on the server.
     bool override = 2;
   }
   // network_instance specifies the Network Instance that should be flushed.
   oneof network_instance {
     // The network instance from which the entries should be retrieved.
     // If name is specified the empty string "" is considered invalid.
-    string name = 1;
+    string name = 3;
     // all indicates that entries for all network instances for the
     // specified network instance should be returned.
-    Empty all = 2;
+    Empty all = 4;
   }
 }
 
@@ -460,8 +460,8 @@ message FlushResponse {
   uint64 timestamp = 1;
 }
 
-// FlushResponseError is used in the details of the gRPC status in the case that the
-// Flush RPC encounters an error.
+// FlushResponseError is used in the details of the gRPC status in the case that
+// the Flush RPC encounters an error.
 message FlushResponseError {
   enum Reason {
     // An unknown failure occurred.
