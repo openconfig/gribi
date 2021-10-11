@@ -29,6 +29,7 @@ service gRIBI {
   // for each ModifyRequest indicating what action was taken, once each
   // Operation within the request has been completed.
   rpc Modify(stream ModifyRequest) returns (stream ModifyResponse);
+  
   // Get provides a client a means to retrieve the contents of the installed
   // AFTs from the gRIBI daemon. The client requests a Get, and the server
   // responds with the set of currently installed entries (that have been ACK'd
@@ -39,6 +40,11 @@ service gRIBI {
   // The Get RPC is typically used to allow reconcilation between a client and
   // a server or for periodical consistency checking.
   rpc Get(GetRequest) returns (stream GetResponse);
+
+  // Flush allows a client to remove all entries currently installed on the
+  // server via gRIBI. The client requests a Flush, and the server removes all
+  // entries that match the context described by the FlushRequest.
+  rpc Flush(FlushRequest) returns FlushResponse;
 }
 
 // ModifyRequest is a message used by the client to manipulate the state of
@@ -410,4 +416,50 @@ message AFTEntry {
 message GetResponse {
   // A set of entries that are installed on the device.
   repeated AFTEntry entry = 1;
+}
+
+// FlushRequest is the request sent from the client to the server when a Flush
+// RPC is called.
+message FlushRequest {
+  // election specifies the election ID from a client. It is valid only
+  // when the server has clients that are operating in the SINGLE_PRIMARY mode.
+  oneof election {
+    // id indicates that the Flush ID supplied should be compared to the
+    // existing election ID on the server from the current master.
+    Uint128 id = 1;
+    // override indicates that the client explicitly requests that the election ID
+    // should not be compared, regardless of whether there are SINGLE_PRIMARY clients
+    // on the server.
+    bool override = 2;
+  }
+  // network_instance specifies the Network Instance that should be flushed.
+  oneof network_instance {
+    // The network instance from which the entries should be retrieved.
+    // If name is specified the empty string "" is considered invalid.
+    string name = 1;
+    // all indicates that entries for all network instances for the
+    // specified network instance should be returned.
+    Empty all = 2;
+  }
+}
+
+// FlushResponse is the response from the server to the client to the Flush RPC.
+message FlushResponse {
+  // The timestamp at which the Flush operation succeeded and was returned to
+  // the client. It is specified in nanoseconds since the Unix epoch.
+  uint64 timestamp = 1;
+}
+
+// FlushResponseError is used in the details of the gRPC status in the case that the
+// Flush RPC encounters an error.
+message FlushResponseError {
+  enum Reason {
+    // An unknown failure occurred.
+    UNKNOWN = 0;
+    // The network instance specified was unknown.
+    NO_SUCH_NETINST = 1;
+    // The election ID that was specified was not the current master.
+    NOT_MASTER = 2;
+  }
+  Reason status = 1;
 }
