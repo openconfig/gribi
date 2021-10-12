@@ -254,6 +254,8 @@ message AFTResult {
   // processed the acknowledgement that the entry was programmed. The typical
   // use for this timestamp is to provide tracking of programming SLIs at the
   // device.
+  //
+  // The timestamp is expressed as nanoseconds since the Unix Epoch in UTC.
   int64 timestamp = 3;
 }
 
