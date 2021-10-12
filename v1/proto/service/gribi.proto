@@ -435,7 +435,19 @@ message FlushRequest {
   // when the server has clients that are operating in the SINGLE_PRIMARY mode.
   oneof election {
     // id indicates that the Flush ID supplied should be compared to the
-    // existing election ID on the server from the current master.
+    // existing election ID on the server. The logic
+    // for whether the Flush RPC is accepted is the same as that which is
+    // implemented for Modify. In summary:
+    //
+    //   - if the election ID is equal to the previous highest known ID, the Flush
+    //     is accepted.
+    //   - if the election ID is greater than the previous highest known ID, the
+    //     Flush is accepted.
+    //   - if the election ID is less than the previous highest known ID, the
+    //     Flush is rejected and an error with reason NOT_PRIMARY is returned.
+    //
+    // If the server is currently operating in ALL_PRIMARY mode the server should
+    // return an error specifying ELECTION_ID_IN_ALL_PRIMARY reason.
     Uint128 id = 1;
     // override indicates that the client explicitly requests that the election
     // ID should not be compared, regardless of whether there are SINGLE_PRIMARY
@@ -444,11 +456,11 @@ message FlushRequest {
   }
   // network_instance specifies the Network Instance that should be flushed.
   oneof network_instance {
-    // The network instance from which the entries should be retrieved.
+    // The network instance from which the entries should be flushed.
     // If name is specified the empty string "" is considered invalid.
     string name = 3;
     // all indicates that entries for all network instances for the
-    // specified network instance should be returned.
+    // specified network instance should be flushed.
     Empty all = 4;
   }
 }
@@ -469,7 +481,10 @@ message FlushResponseError {
     // The network instance specified was unknown.
     NO_SUCH_NETINST = 1;
     // The election ID that was specified was not the current master.
-    NOT_MASTER = 2;
+    NOT_PRIMARY = 2;
+    // An election ID was supplied when the server is operating in ALL_PRIMARY
+    // mode.
+    ELECTION_ID_IN_ALL_PRIMARY = 3;
   }
   Reason status = 1;
 }
