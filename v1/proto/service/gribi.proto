@@ -439,10 +439,10 @@ message FlushRequest {
     // for whether the Flush RPC is accepted is the same as that which is
     // implemented for Modify. In summary:
     //
-    //   - if the election ID is equal to the previous highest known ID, the Flush
-    //     is accepted.
-    //   - if the election ID is greater than the previous highest known ID, the
+    //   - if the election ID is equal to the previous highest known ID, the
     //     Flush is accepted.
+    //   - if the election ID is greater than the previous highest known ID,
+    //     the Flush is accepted.
     //   - if the election ID is less than the previous highest known ID, the
     //     Flush is rejected and an error with reason NOT_PRIMARY is returned.
     //
@@ -487,4 +487,4 @@ message FlushResponseError {
     ELECTION_ID_IN_ALL_PRIMARY = 3;
   }
   Reason status = 1;
-}
+}442
