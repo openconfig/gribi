@@ -446,8 +446,8 @@ message FlushRequest {
     //   - if the election ID is less than the previous highest known ID, the
     //     Flush is rejected and an error with reason NOT_PRIMARY is returned.
     //
-    // If the server is currently operating in ALL_PRIMARY mode the server should
-    // return an error specifying ELECTION_ID_IN_ALL_PRIMARY reason.
+    // If the server is currently operating in ALL_PRIMARY mode the server
+    // should return an error specifying ELECTION_ID_IN_ALL_PRIMARY reason.
     Uint128 id = 1;
     // override indicates that the client explicitly requests that the election
     // ID should not be compared, regardless of whether there are SINGLE_PRIMARY
