@@ -258,8 +258,14 @@ message AFTResult {
   // The timestamp is expressed as nanoseconds since the Unix Epoch in UTC.
   int64 timestamp = 3;
 
+  // Contains error details if status is FAILED.
+  AFTErrorDetails error_details = 4;
+}
+
+// Populated in 'error_details' in AFTResult for failed operations.
+message AFTErrorDetails {
   // Human-readable error message in the case that status is FAILED.
-  string error_message = 4;
+  string error_message = 1;
 }
 
 // Populated in `details` in status.proto when an error that causes the network
