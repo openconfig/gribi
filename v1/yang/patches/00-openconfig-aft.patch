@@ -1,0 +1,32 @@
+diff --git a/v1/yang/aft/openconfig-aft-common.yang b/v1/yang/aft/openconfig-aft-common.yang
+index 65faad7..dd360a9 100644
+--- a/v1/yang/aft/openconfig-aft-common.yang
++++ b/v1/yang/aft/openconfig-aft-common.yang
+@@ -179,10 +179,9 @@ submodule openconfig-aft-common {
+     // be used outside of the network instance model without changes being
+     // made to it.
+     leaf next-hop-group {
+-      type leafref {
+-        path "/network-instances/network-instance/afts/" +
+-              "next-hop-groups/next-hop-group/state/id";
+-      }
++      // For gRIBI AFT we do not include the network-instance model, so
++      // simply use uint64.
++      type uint64;
+       description
+         "A reference to the next-hop-group that is in use for the entry
+         within the AFT. Traffic is distributed across the set of next-hops
+@@ -190,9 +189,9 @@ submodule openconfig-aft-common {
+     }
+ 
+     leaf next-hop-group-network-instance {
+-      type leafref {
+-        path "/network-instances/network-instance/config/name";
+-      }
++      // For gRIBI AFT we do not include the network-instance model, so
++      // simply use the string.
++      type string;
+       description
+         "The network instance to look up the next-hop-group in.  If
+          unspecified, the next hop group is in the local network
+
