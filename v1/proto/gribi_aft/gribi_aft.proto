@@ -86,6 +86,7 @@ message Afts {
     ywrapper.StringValue ip_address = 242108262 [(yext.schemapath) = "/afts/next-hops/next-hop/state/ip-address"];
     IpInIp ip_in_ip = 157296597 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip"];
     ywrapper.StringValue mac_address = 404609192 [(yext.schemapath) = "/afts/next-hops/next-hop/state/mac-address"];
+    ywrapper.StringValue network_instance = 232391308 [(yext.schemapath) = "/afts/next-hops/next-hop/state/network-instance"];
     ywrapper.UintValue programmed_index = 467879803 [(yext.schemapath) = "/afts/next-hops/next-hop/state/programmed-index"];
     repeated PushedMplsLabelStackUnion pushed_mpls_label_stack = 489592660 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
   }
