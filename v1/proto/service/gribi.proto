@@ -390,6 +390,7 @@ enum AFTType {
 // Empty is a specific message that is used as a marker where
 // presence of a non-nil value indicates a particular function.
 message Empty {
+  string delete = 1;
 }
 
 message GetRequest {
