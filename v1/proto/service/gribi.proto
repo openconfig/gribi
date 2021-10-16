@@ -393,7 +393,7 @@ message GetRequest {
     // If name is specified the empty string "" is considered invalid.
     string name = 1;
     // all indicates that entries for all network instances for the
-    // specified network instance should be returned.
+    // should be returned.
     Empty all = 2;
   }
   // The AFT for which entries should be retrieved. If the AFT is
@@ -459,8 +459,8 @@ message FlushRequest {
     // The network instance from which the entries should be flushed.
     // If name is specified the empty string "" is considered invalid.
     string name = 3;
-    // all indicates that entries for all network instances for the
-    // specified network instance should be flushed.
+    // all indicates that entries for all network instances should be
+    // flushed.
     Empty all = 4;
   }
 }
