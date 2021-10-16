@@ -395,7 +395,11 @@ message Empty {
 message GetRequest {
   oneof network_instance {
     // The network instance from which the entries should be retrieved.
-    // If name is specified the empty string "" is considered invalid.
+    // If `network_instance` is nil (`name` and `all` not specified),
+    // or if `name` is specified and it is the empty string "",
+    // then the request is considered invalid and the server should
+    // respond with the INVALID_ARGUMENT error code in the status.proto
+    // carried along with the RPC response.
     string name = 1;
     // all indicates that entries for all network instances for the
     // specified network instance should be returned.
@@ -404,7 +408,7 @@ message GetRequest {
   // The AFT for which entries should be retrieved. If the AFT is
   // invalid, the server should respond with the INVALID_ARGUMENT
   // error code. If the AFT is unsupported, it should respond with
-  // UNSUPPORTED in the status.proto carried along with the RPC
+  // UNIMPLEMENTED in the status.proto carried along with the RPC
   // response.
   AFTType aft = 3;
 }
