@@ -1,88 +1,32 @@
 diff --git a/v1/yang/aft/openconfig-aft-common.yang b/v1/yang/aft/openconfig-aft-common.yang
-index a4840e0..a1209f6 100644
+index 65faad7..dd360a9 100644
 --- a/v1/yang/aft/openconfig-aft-common.yang
 +++ b/v1/yang/aft/openconfig-aft-common.yang
-@@ -124,11 +124,41 @@ submodule openconfig-aft-common {
-           uses aft-labeled-entry-state;
-         }
- 
-+        container ip-in-ip {
-+          description
-+            "When specified, the packet has an IP-in-IP header applied to it before
-+            forwarding to the specified next-hop.";
-+
-+          container state {
-+            config false;
-+            description
-+              "State parameters relating to IP-in-IP encapsulation.";
-+            uses aft-common-entry-nexthop-ipip-state;
-+          }
-+        }
-+
-         uses oc-if:interface-ref-state;
-       }
-     }
-   }
- 
-+  grouping aft-common-entry-nexthop-ipip-state {
-+    description
-+      "IP-in-IP encapsulation applied on a next-hop";
-+
-+    leaf src-ip {
-+      type oc-inet:ip-address;
-+      description
-+        "Source IP address to use for the encapsulated packet.";
-+    }
-+
-+    leaf dst-ip {
-+      type oc-inet:ip-address;
-+      description
-+        "Destination IP address to use for the encapsulated packet.";
-+    }
-+  }
-+
-   grouping aft-common-entry-state {
-     description
-       "Operational state parameters relating to a forwarding entry";
-@@ -157,6 +187,24 @@ submodule openconfig-aft-common {
+@@ -179,10 +179,9 @@ submodule openconfig-aft-common {
+     // be used outside of the network instance model without changes being
+     // made to it.
+     leaf next-hop-group {
+-      type leafref {
+-        path "/network-instances/network-instance/afts/" +
+-              "next-hop-groups/next-hop-group/state/id";
+-      }
++      // For gRIBI AFT we do not include the network-instance model, so
++      // simply use uint64.
++      type uint64;
+       description
+         "A reference to the next-hop-group that is in use for the entry
          within the AFT. Traffic is distributed across the set of next-hops
-         within the next-hop group according to the weight.";
-     }
-+
-+    leaf next-hop-group-network-instance {
-+      type string;
-+      description
-+        "The network instance to look up the next-hop-group in.  If 
-+         unspecified, the next hop group is in the local network 
-+         instance.  The referenced network-instance must be an existing
-+         network instance on the device and have corresponding entries 
-+         in the /network-instances/network-instance list.";
-+    }
-+
-+    leaf metadata {
-+      type binary {
-+        length 8; // 8 bytes
-+      }
-+      description
-+        "Metadata persistently stored with the entry.";
-+    }
-   }
- 
-   grouping aft-labeled-entry-state {
-@@ -226,6 +274,16 @@ submodule openconfig-aft-common {
-         specified header type.";
+@@ -190,9 +189,9 @@ submodule openconfig-aft-common {
      }
  
-+    leaf network-instance {
-+      // TODO(robjs): When upstreamed, similarly to the the NHG NI, this should
-+      // likely be a leafref with the same deviation applied.
+     leaf next-hop-group-network-instance {
+-      type leafref {
+-        path "/network-instances/network-instance/config/name";
+-      }
++      // For gRIBI AFT we do not include the network-instance model, so
++      // simply use the string.
 +      type string;
-+      description
-+        "Network instance for the next-hop. If the value of this field is not
-+        specified, the next-hop is looked up in the same network-instance as
-+        the entry is populated within.";
-+    }
-+
-     uses aft-common-install-protocol;
-   }
- 
+       description
+         "The network instance to look up the next-hop-group in.  If
+          unspecified, the next hop group is in the local network
+

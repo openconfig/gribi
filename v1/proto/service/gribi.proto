@@ -118,7 +118,7 @@ message ModifyRequest {
   // The election_id MUST be non zero. When a network element receives
   // an election_id of 0, it closes the stream with status.code
   // set to INVALID_ARGUMENT
-  Uint128 election_id = 3; 
+  Uint128 election_id = 3;
 }
 
 // A single request to add/modify/remove a single AFT entry
@@ -260,7 +260,18 @@ message AFTResult {
   // processed the acknowledgement that the entry was programmed. The typical
   // use for this timestamp is to provide tracking of programming SLIs at the
   // device.
+  //
+  // The timestamp is expressed as nanoseconds since the Unix Epoch in UTC.
   int64 timestamp = 3;
+
+  // Contains error details if status is FAILED.
+  AFTErrorDetails error_details = 4;
+}
+
+// Populated in 'error_details' in AFTResult for failed operations.
+message AFTErrorDetails {
+  // Human-readable error message in the case that status is FAILED.
+  string error_message = 1;
 }
 
 // Populated in `details` in status.proto when an error that causes the network
@@ -358,7 +369,7 @@ message SessionParameters {
     // on a successful update to the gRIBI process' RIB.
     // If the AFT entry is also programmed in the network
     // element's FIB, a FIB_PROGRAMMED response must be sent
-    // A FIB_PROGRAMMED response is a combined 
+    // A FIB_PROGRAMMED response is a combined
     // acknowledgement that the AFT entry is programmed in
     // the gRIBI process' RIB and the FIB, so there's no need
     // to send both RIB_PROGRAMMED and FIB_PROGRAMMED when
@@ -390,7 +401,11 @@ message Empty {
 message GetRequest {
   oneof network_instance {
     // The network instance from which the entries should be retrieved.
-    // If name is specified the empty string "" is considered invalid.
+    // If `network_instance` is nil (`name` and `all` not specified),
+    // or if `name` is specified and it is the empty string "",
+    // then the request is considered invalid and the server should
+    // respond with the INVALID_ARGUMENT error code in the status.proto
+    // carried along with the RPC response.
     string name = 1;
     // all indicates that entries for all network instances for the
     // should be returned.
@@ -399,7 +414,7 @@ message GetRequest {
   // The AFT for which entries should be retrieved. If the AFT is
   // invalid, the server should respond with the INVALID_ARGUMENT
   // error code. If the AFT is unsupported, it should respond with
-  // UNSUPPORTED in the status.proto carried along with the RPC
+  // UNIMPLEMENTED in the status.proto carried along with the RPC
   // response.
   AFTType aft = 3;
 }

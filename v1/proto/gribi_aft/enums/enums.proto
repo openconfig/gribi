@@ -10,7 +10,6 @@ syntax = "proto3";
 
 package gribi_aft.enums;
 
-import "github.com/openconfig/ygot/proto/ywrapper/ywrapper.proto";
 import "github.com/openconfig/ygot/proto/yext/yext.proto";
 
 option go_package = "github.com/openconfig/gribi/v1/proto/gribi_aft/enums";
