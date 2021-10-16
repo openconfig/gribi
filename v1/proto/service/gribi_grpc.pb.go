@@ -34,6 +34,10 @@ type GRIBIClient interface {
 	// The Get RPC is typically used to allow reconcilation between a client and
 	// a server or for periodical consistency checking.
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (GRIBI_GetClient, error)
+	// Flush allows a client to remove all entries currently installed on the
+	// server via gRIBI. The client requests a Flush, and the server removes all
+	// entries that match the context described by the FlushRequest.
+	Flush(ctx context.Context, in *FlushRequest, opts ...grpc.CallOption) (*FlushResponse, error)
 }
 
 type gRIBIClient struct {
@@ -107,6 +111,15 @@ func (x *gRIBIGetClient) Recv() (*GetResponse, error) {
 	return m, nil
 }
 
+func (c *gRIBIClient) Flush(ctx context.Context, in *FlushRequest, opts ...grpc.CallOption) (*FlushResponse, error) {
+	out := new(FlushResponse)
+	err := c.cc.Invoke(ctx, "/gribi.gRIBI/Flush", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GRIBIServer is the server API for GRIBI service.
 // All implementations must embed UnimplementedGRIBIServer
 // for forward compatibility
@@ -127,6 +140,10 @@ type GRIBIServer interface {
 	// The Get RPC is typically used to allow reconcilation between a client and
 	// a server or for periodical consistency checking.
 	Get(*GetRequest, GRIBI_GetServer) error
+	// Flush allows a client to remove all entries currently installed on the
+	// server via gRIBI. The client requests a Flush, and the server removes all
+	// entries that match the context described by the FlushRequest.
+	Flush(context.Context, *FlushRequest) (*FlushResponse, error)
 	mustEmbedUnimplementedGRIBIServer()
 }
 
@@ -139,6 +156,9 @@ func (UnimplementedGRIBIServer) Modify(GRIBI_ModifyServer) error {
 }
 func (UnimplementedGRIBIServer) Get(*GetRequest, GRIBI_GetServer) error {
 	return status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedGRIBIServer) Flush(context.Context, *FlushRequest) (*FlushResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Flush not implemented")
 }
 func (UnimplementedGRIBIServer) mustEmbedUnimplementedGRIBIServer() {}
 
@@ -200,13 +220,36 @@ func (x *gRIBIGetServer) Send(m *GetResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _GRIBI_Flush_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FlushRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GRIBIServer).Flush(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gribi.gRIBI/Flush",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GRIBIServer).Flush(ctx, req.(*FlushRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GRIBI_ServiceDesc is the grpc.ServiceDesc for GRIBI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var GRIBI_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "gribi.gRIBI",
 	HandlerType: (*GRIBIServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Flush",
+			Handler:    _GRIBI_Flush_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Modify",
