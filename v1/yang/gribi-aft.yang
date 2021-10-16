@@ -66,4 +66,73 @@ module gribi-aft {
     deviate not-supported;
   }
 
+  deviation "/afts/ipv4-unicast/ipv4-entry/state/packets-forwarded" {
+    description
+      "Packet counters are not accessible over gRIBI, and rather
+      over gNMI for the AFT model.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/ipv4-unicast/ipv4-entry/state/octets-forwarded" {
+    description
+      "Packet counters are not accessible over gRIBI, and rather
+      over gNMI for the AFT model.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/ipv6-unicast/ipv6-entry/state/packets-forwarded" {
+    description
+      "Packet counters are not accessible over gRIBI, and rather
+      over gNMI for the AFT model.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/ipv6-unicast/ipv6-entry/state/octets-forwarded" {
+    description
+      "Packet counters are not accessible over gRIBI, and rather
+      over gNMI for the AFT model.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/policy-forwarding/policy-forwarding-entry/state/packets-forwarded" {
+    description
+      "Packet counters are not accessible over gRIBI, and rather
+      over gNMI for the AFT model.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/policy-forwarding/policy-forwarding-entry/state/octets-forwarded" {
+    description
+      "Packet counters are not accessible over gRIBI, and rather
+      over gNMI for the AFT model.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/mpls/label-entry/state/packets-forwarded" {
+    description
+      "Packet counters are not accessible over gRIBI, and rather
+      over gNMI for the AFT model.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/mpls/label-entry/state/octets-forwarded" {
+    description
+      "Packet counters are not accessible over gRIBI, and rather
+      over gNMI for the AFT model.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/ethernet/mac-entry/state/packets-forwarded" {
+    description
+      "Packet counters are not accessible over gRIBI, and rather
+      over gNMI for the AFT model.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/ethernet/mac-entry/state/octets-forwarded" {
+    description
+      "Packet counters are not accessible over gRIBI, and rather
+      over gNMI for the AFT model.";
+    deviate not-supported;
+  }
 }
