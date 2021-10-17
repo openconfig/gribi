@@ -40,7 +40,7 @@ fi
 
 # Apply patches to YANG that are within the version
 for i in `find ${SRC_DIR}/v1/yang/patches -name *.patch | sort`; do
-  patch -b -p1 < $i;
+  patch -p1 < $i;
 done
 
 proto_generator \
@@ -55,12 +55,16 @@ proto_generator \
 # Add licensing to the generated Go code.
 RP=`echo ${SRC_DIR} | sed 's/\./\\./g'`
 
+
 # Replace absolute paths in the protobuf files.
 for i in `find ${SRC_DIR} -type f -name "*.proto"`; do
 	runsed -i "s;${RP};github.com/openconfig/gribi;g" $i
 done
 
 # Revert files to original (pre-patched) state.
-for i in `find ${SRC_DIR}/v1/yang -name *.orig`; do
-  mv $i `echo $i | sed 's/\.orig//g'`
+for i in `find ${SRC_DIR}/v1/yang/aft | egrep -v "orig$"`; do
+	git checkout HEAD -- $i
+	if [ -f "$i.orig" ]; then
+		rm $i.orig
+	fi
 done
