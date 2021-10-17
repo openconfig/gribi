@@ -40,7 +40,7 @@ fi
 
 # Apply patches to YANG that are within the version
 for i in `find ${SRC_DIR}/v1/yang/patches -name *.patch | sort`; do
-  patch -b -p1 < $i;
+  patch -B orig -b -p1 < $i;
 done
 
 proto_generator \
