@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LDIFF=`git diff -U0 | ggrep -v -P -e "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)" | wc -l | tr -d "[:space:]"`
+LDIFF=`git diff -U0 | grep -v -P -e "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)" | wc -l | tr -d "[:space:]"`
 DIFF=`git diff -U0`
 
 echo "DEBUG(git-diff):  $DIFF"
