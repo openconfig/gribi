@@ -57,7 +57,8 @@ jobs:
 
       - name: Check up-to-date
         run: |
-          git diff -U0 | grep -v -P "//(\s)+protoc" | egrep -v "^(@@|diff|index|\+\+\+|\-\-\-)" | egrep -v "^$"
-          git diff -U0 | grep -v -P "//(\s)+protoc" | egrep -v "^(@@|diff|index|\+\+\+|\-\-\-)" | egrep -v "^$" | wc -l
+	  git diff -U0 | git diff -U0 | grep -e -v -P "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)" 
+	  git diff -U0 | git diff -U0 | grep -e -v -P "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)"  | wc -l
+	  exit `git diff -U0 | git diff -U0 | grep -e -v -P "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)"  | wc -l`
         working-directory: go/src/github.com/openconfig/gribi
  
