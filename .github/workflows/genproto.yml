@@ -55,6 +55,6 @@ jobs:
         run: |
           git diff -U0 | grep -v -P -e "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)" 
           git diff -U0 | grep -v -P -e "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)"  | wc -l
-          val=`git diff -U0 | ggrep -v -P -e "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)" | wc -l | tr -d "[:space:]"`; if [ $val -neq 0]; then echo "exiting with value $val"; exit 1; fi 
+          val=`git diff -U0 | grep -v -P -e "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)" | wc -l | tr -d "[:space:]"`; if [ $val -ne "0" ]; then echo "exiting with value $val"; exit 1; fi 
         working-directory: go/src/github.com/openconfig/gribi
  
