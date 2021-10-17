@@ -35,7 +35,7 @@ jobs:
 
       - name:  Install proto_generator
         run: |
-          go install github.com/openconfig/gribi/proto_generator
+          go get -u github.com/openconfig/ygot/proto_generator && go install github.com/openconfig/ygot/proto_generator
 
       - name: Install Staticcheck
         run: |
