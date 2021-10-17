@@ -60,7 +60,5 @@ for i in `find ${SRC_DIR} -type f -name "*.proto"`; do
 	runsed -i "s;${RP};github.com/openconfig/gribi;g" $i
 done
 
-# Revert files to original (pre-patched) state.
-for i in `find ${SRC_DIR}/v1/yang -name *.orig`; do
-  mv $i `echo $i | sed 's/\.orig//g'`
-done
+git checkout HEAD -- v1/yang/aft/*.yang
+
