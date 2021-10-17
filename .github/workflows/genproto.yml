@@ -57,7 +57,7 @@ jobs:
 
       - name: Check up-to-date
         run: |
-          git diff 
-          exit `git diff -U0 | grep -v "protoc        v" | wc -l`
+          git diff -U0
+          exit `git diff -U0 | "grep -v "// 	protoc" | wc -l`
         working-directory: go/src/github.com/openconfig/gribi
 
