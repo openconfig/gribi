@@ -26,8 +26,8 @@ jobs:
 
       - name: Install protoc-gen-go
         run: |
-          go get -u google.golang.org/protobuf/cmd/protoc-gen-go
-          go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
       - name: Install goimports
         run: |
@@ -35,7 +35,7 @@ jobs:
 
       - name:  Install proto_generator
         run: |
-          go get -u github.com/openconfig/ygot/proto_generator && go install github.com/openconfig/ygot/proto_generator@latest
+          go install github.com/openconfig/ygot/proto_generator@latest
 
       - name: Install Staticcheck
         run: |
