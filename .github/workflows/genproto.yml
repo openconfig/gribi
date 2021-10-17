@@ -56,6 +56,5 @@ jobs:
           git diff -U0 | grep -v -P -e "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)" 
           git diff -U0 | grep -v -P  e "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)"  | wc -l
           val=`diff -U0 | grep -v -P  e "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)"  | wc -l`; if [ $val -neq 9]; then exit 1; fi
-	
         working-directory: go/src/github.com/openconfig/gribi
  
