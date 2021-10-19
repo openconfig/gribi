@@ -1,4 +1,4 @@
-name: Go
+name: Protobuf generation
 
 on:
   push:
@@ -11,10 +11,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        go: ['1.16']
 
     steps:
       - name: Install protobuf
@@ -25,25 +21,21 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: ${{ matrix.go }}
+          go-version: '1.16'
         id: go
 
       - name: Install protoc-gen-go
         run: |
-          go get -u google.golang.org/protobuf/cmd/protoc-gen-go
-          go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
       - name: Install goimports
         run: |
           go get -u golang.org/x/tools/cmd/goimports
 
-      - name: Install proto_generator
+      - name:  Install proto_generator
         run: |
-          go get -u github.com/openconfig/ygot/proto_generator && go install github.com/openconfig/ygot/proto_generator@latest
-
-      - name: Install Staticcheck
-        run: |
-          go get -u honnef.co/go/tools/cmd/staticcheck
+          go install github.com/openconfig/ygot/proto_generator@latest
 
       - name: Check out code
         uses: actions/checkout@v2
@@ -59,14 +51,8 @@ jobs:
         run: make generate
         working-directory: go/src/github.com/openconfig/gribi
 
-      - name: Build packages
-        run: go build -v ./...
+      - name: Check up-to-date
+        run: |
+          make protoupdate_check
         working-directory: go/src/github.com/openconfig/gribi
-
-      - name: Run Tests
-        run: go test -v ./...
-        working-directory: go/src/github.com/openconfig/gribi
-
-      - name: Run race tests
-        run:  go test -race -v ./...
-        working-directory: go/src/github.com/openconfig/gribi
+ 
