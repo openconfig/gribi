@@ -449,9 +449,9 @@ message FlushRequest {
   // election specifies the election ID from a client. It is valid only
   // when the server has clients that are operating in the SINGLE_PRIMARY mode.
   // If the client does not supply one of the messages within election, the
-  // server should respond with an error with canonical code FAILED_PRECONDITION,
-  // and specifying UNSPECIFIED_ELECTION_BEHAVIOR in the FlushResponseError
-  // in the details returned.
+  // server should respond with an error with canonical code 
+  // FAILED_PRECONDITION, and specifying UNSPECIFIED_ELECTION_BEHAVIOR in the
+  // FlushResponseError in the details returned.
   oneof election {
     // id indicates that the Flush ID supplied should be compared to the
     // existing election ID on the server. The logic
