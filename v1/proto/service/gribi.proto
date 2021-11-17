@@ -448,6 +448,10 @@ message GetResponse {
 message FlushRequest {
   // election specifies the election ID from a client. It is valid only
   // when the server has clients that are operating in the SINGLE_PRIMARY mode.
+  // If the client does not supply one of the messages within election, the
+  // server should respond with an error with canonical code FAILED_PRECONDITION,
+  // and specifying UNSPECIFIED_ELECTION_BEHAVIOR in the FlushResponseError
+  // in the details returned.
   oneof election {
     // id indicates that the Flush ID supplied should be compared to the
     // existing election ID on the server. The logic
@@ -460,9 +464,11 @@ message FlushRequest {
     //     the Flush is accepted.
     //   - if the election ID is less than the previous highest known ID, the
     //     Flush is rejected and an error with reason NOT_PRIMARY is returned.
+    //     The canonical error code used should be FAILED_PRECONDITION.
     //
     // If the server is currently operating in ALL_PRIMARY mode the server
-    // should return an error specifying ELECTION_ID_IN_ALL_PRIMARY reason.
+    // should return an error specifying ELECTION_ID_IN_ALL_PRIMARY reason. The
+    // status (canonical error code) should be FAILED_PRECONDITION.
     Uint128 id = 1;
     // override indicates that the client explicitly requests that the election
     // ID should not be compared, regardless of whether there are SINGLE_PRIMARY
@@ -484,7 +490,7 @@ message FlushRequest {
 message FlushResponse {
   // The timestamp at which the Flush operation succeeded and was returned to
   // the client. It is specified in nanoseconds since the Unix epoch.
-  uint64 timestamp = 1;
+  int64 timestamp = 1;
 }
 
 // FlushResponseError is used in the details of the gRPC status in the case that
@@ -500,6 +506,9 @@ message FlushResponseError {
     // An election ID was supplied when the server is operating in ALL_PRIMARY
     // mode.
     ELECTION_ID_IN_ALL_PRIMARY = 3;
+    // The server is operating in SINGLE_PRIMARY mode and neither an election ID
+    // nor an override was specified.
+    UNSPECIFIED_ELECTION_BEHAVIOR = 4;
   }
   Reason status = 1;
 }
