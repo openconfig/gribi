@@ -475,10 +475,17 @@ message FlushRequest {
     // clients on the server.
     bool override = 2;
   }
-  // network_instance specifies the Network Instance that should be flushed.
+  // network_instance specifies the Network Instance that should be flushed. If
+  // the client specifies neither name nor all the server should respond with
+  // an error specifying the INVALID_ARGUMENT canonical error code, and the
+  // UNSPECIFIED_NETWORK_INSTANCE error code.
   oneof network_instance {
     // The network instance from which the entries should be flushed.
-    // If name is specified the empty string "" is considered invalid.
+    // If name is set to "", this is considered invalid, and an error specifying
+    // the INVALID_ARGUMENT canonical error code, and the INVALID_NETWORK_INSTANCE
+    // reason should be specified. If the network instance specified does not exist
+    // the INVALID_ARGUMENT canonical error code, with the NO_SUCH_NETINST code
+    // should be specified.
     string name = 3;
     // all indicates that entries for all network instances should be
     // flushed.
@@ -509,6 +516,12 @@ message FlushResponseError {
     // The server is operating in SINGLE_PRIMARY mode and neither an election ID
     // nor an override was specified.
     UNSPECIFIED_ELECTION_BEHAVIOR = 4;
+    // The client supplied an election ID value that is invalid (i.e., 0).
+    INVALID_ELECTION_ID = 5;
+    // The client did not specify a network instance to flush.
+    UNSPECIFIED_NETWORK_INSTANCE = 6;
+    // The client specified a network instance that was invalid.
+    INVALID_NETWORK_INSTANCE = 7;
   }
   Reason status = 1;
 }
