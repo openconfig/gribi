@@ -53,7 +53,7 @@ To this end, we propose an interface to the routing table on the device, that:
     with resolution handled by the device itself.
 *   Has transactional semantics, particularly a request/response design, such
     that the success or failure of an operation can be learned by the
-programming entity.
+    programming entity.
 *   Is separate from any existing protocol, such that its entries are alongside
     any other protocol, rather than aiming to inject entries as though they are
     coming from such a protocol.
@@ -257,38 +257,27 @@ which will be resolved elsewhere in the RIB.
   </tr>
 </table>
 
-## Tying Injected Entries to the Liveliness of gRPC Client
+## Liveliness of Entries
 
-We expect that all entries that are installed by a gRPC client are only
-maintained during the time that a (long-lived) RPC remains open. In keeping
-with other control plane approaches, we expect that redundancy of entries can
-be maintained by having >1 source of injected entries. Where there is a
-requirement to persist entries that are to be installed within the gRPC service
-(e.g., static SR-TE LSPs), we expect that this is achieved through the
-management plane of the system.
+There are two different models utilised for maintaining entries on a device:
 
-Since there is a long-lived RPC, we expect that there is a requirement to have
-a keepalive mechanism to ensure that the client is alive, although this could
-be achieved simply by tracking TCP session liveliness, it is possible that the
-gRPC
-[keepalive](https://github.com/grpc/grpc-go/blob/master/keepalive/keepalive.go)
-mechanism could be utilised, requiring little to no additional machinery to
-achieve such functionality. The requirement for such a keepalive is to
-determine a non-responsive client from one that is simply silent, such that in
-the case that >1 source of programming entries exists then stale client
-information can be determined.
+1. That of typical routing protocols, where the liveliness of the entries is
+   tied to the liveliness of the client that announced/injected them to the
+   system. This case
+2. An approach whereby entries are retained when the client disconnects, and
+   clients are expected to reconcile the state on the device when connected.
 
-Since the possibility of having multiple clients introduces the possibility of
-requirements for tiebreaking, we propose that the implementation is kept as
-simple possible, and the client with the lowest client address when expressed
-in the form of an 128-bit number is selected. We expect that the remote systems
-are responsible for ensuring consistency of announcements.
-
+We expect that there are use cases for both of these models within gRIBI. Where
+clients want to emulate the behaviour of typical routing protocols, they can do
+this in a similar manner to existing routing protocols - e.g., using multiple
+sources of injected data. In other cases, clients may wish to be able to install
+entries onto the device that are retained until such time as they are removed by
+the device.
 
 ## Logic for Limited Validation
 
 It should be noted that the validation logic we propose throughout is _as
-minimal as possible whilst allowing invalidation - _that is to say, we do not
+minimal as possible whilst allowing invalidation_ - that is to say, we do not
 expect correctness checks to be performed for particular injected entries, but
 the system is expected to determine each entry's viability before installing it
 (i.e., is the next-hop set resolvable). As such, we are proposing an approach
