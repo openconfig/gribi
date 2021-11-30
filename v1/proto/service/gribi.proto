@@ -482,10 +482,10 @@ message FlushRequest {
   oneof network_instance {
     // The network instance from which the entries should be flushed.
     // If name is set to "", this is considered invalid, and an error specifying
-    // the INVALID_ARGUMENT canonical error code, and the INVALID_NETWORK_INSTANCE
-    // reason should be specified. If the network instance specified does not exist
-    // the INVALID_ARGUMENT canonical error code, with the NO_SUCH_NETINST code
-    // should be specified.
+    // the INVALID_ARGUMENT canonical error code, and the
+    // INVALID_NETWORK_INSTANCE reason should be specified. If the network
+    // instance specified does not exist the INVALID_ARGUMENT canonical error
+    // code, with the NO_SUCH_NETWORK_INSTANCE code should be specified.
     string name = 3;
     // all indicates that entries for all network instances should be
     // flushed.
@@ -507,7 +507,7 @@ message FlushResponseError {
     // An unknown failure occurred.
     UNKNOWN = 0;
     // The network instance specified was unknown.
-    NO_SUCH_NETINST = 1;
+    NO_SUCH_NETWORK_INSTANCE = 1;
     // The election ID that was specified was not the current master.
     NOT_PRIMARY = 2;
     // An election ID was supplied when the server is operating in ALL_PRIMARY
