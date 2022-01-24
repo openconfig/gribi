@@ -231,6 +231,9 @@ message AFTResult {
     // there are likely to be more different cases that we
     // want to use here - e.g., RIB_PROGRAMMED and FIB_PROGRAMMED.
     OK = 1 [deprecated = true];
+    // FAILED is used to indicate that operation that was provided
+    // cannot be programmed, for example, due to invalid message
+    // contents, or missing references.
     FAILED = 2;
     // RIB programmed indicates that the received operation was
     // syntactically valid, and was programmed successfully into
@@ -252,6 +255,10 @@ message AFTResult {
     // code was received from the underlying hardware abstraction layer
     // the FAILED error code is returned.
     FIB_PROGRAMMED = 4;
+    // FIB_FAILED indicates that the received operation failed FIB
+    // programming. It is used when the operation has been accepted by
+    // gRIBI, but FIB programming failed.
+    FIB_FAILED = 5;
   }
   Status status = 2;
 
