@@ -28,7 +28,7 @@ TDIFF=`git diff -U0 | rungrep -v -P -e "(//(\s)+((- )?protoc|(versions|source):)
 LDIFF=`echo $TDIFF| wc -l | tr -d "[:space:]"`
 DIFF=`git diff -U0`
 
-echo "DEBUG(trimmed-diff):  $TDIFF"
+echo "DEBUG(trimmed-diff):  _${TDIFF}_"
 echo "DEBUG(git-diff):      $DIFF"
 echo "DEBUG(size-of-diff):  $LDIFF"
 
