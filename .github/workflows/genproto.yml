@@ -16,7 +16,7 @@ jobs:
       - name: Install protobuf
         uses: arduino/setup-protoc@v1
         with:
-          version: '3.19.x'
+          version: '3.x'
 
       - name: Set up Go
         uses: actions/setup-go@v2
