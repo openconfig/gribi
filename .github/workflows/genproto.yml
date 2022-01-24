@@ -31,7 +31,7 @@ jobs:
 
       - name: Install goimports
         run: |
-          go get -u golang.org/x/tools/cmd/goimports
+          go install golang.org/x/tools/cmd/goimports@latest
 
       - name:  Install proto_generator
         run: |
