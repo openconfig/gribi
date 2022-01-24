@@ -7,4 +7,4 @@ that they represent. In addition, augmentations and deviation modules
 that alter the upstream modules are stored here.
 
 Files in this directory and its children are Apache 2 licensed,
-and copyright the OpenConfig authors. 
+and copyright the OpenConfig authors.
