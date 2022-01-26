@@ -480,7 +480,7 @@ message FlushRequest {
     // override indicates that the client explicitly requests that the election
     // ID should not be compared, regardless of whether there are SINGLE_PRIMARY
     // clients on the server.
-    bool override = 2;
+    Empty override = 2;
   }
   // network_instance specifies the Network Instance that should be flushed. If
   // the client specifies neither name nor all the server should respond with
