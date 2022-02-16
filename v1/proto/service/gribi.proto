@@ -97,24 +97,32 @@ message ModifyRequest {
   // election_id is used by the network element to
   // select a primary client when the client redundancy mode
   // is SINGLE_PRIMARY.
+  //
   // A client sends a ModifyRequest with only the election_id
   // field populated after it connects to the network element,
-  // and everytime its election_id is updated(usually as a
+  // and everytime its election_id is updated (usually as a
   // result of an election amongst clients). The network element
   // responds with a ModifyResponse that has only the election_id
   // field populated. The election_id in the ModifyResponse is the
   // highest election_id that the network element has learnt
   // from any client.
+  //
   // The network element selects the client with the highest
-  // election_id as the primary.
+  // election_id as the primary. If the election_id sent by the
+  // client matches the previous highest value, the newer client is
+  // conidered master, in order to allow for a client to reconnect
+  // without an external election having taken place.
+  //
   // Only AFT operations from the primary client are acted upon by
   // the network element. AFT operations from non-primary clients
-  // are discarded.
+  // are not actioned, and a failure response is sent to the client.
+  //
   // If the client redundancy mode is ALL_PRIMARY, but a client
   // sends election_id, the network element closes the Modify RPC
   // stream, sets FAILED_PRECONDITION in
   // status.proto's `code` and sets ModifyRPCErrorDetails.reason
   // to ELECTION_ID_IN_ALL_PRIMARY.
+  //
   // The election_id MUST be non zero. When a network element receives
   // an election_id of 0, it closes the stream with status.code
   // set to INVALID_ARGUMENT
