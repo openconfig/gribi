@@ -138,7 +138,11 @@ message AFTOperation {
   // case that are multiple operations within the AFT.
   uint64 id = 1;
 
-  // Network Instance (aka vrf aka routing-instance) to apply to
+  // Network Instance (aka vrf aka routing-instance) to apply to. 
+  // If it is not specified, or is the empty string "",
+  // then the request is considered invalid and the server should
+  // respond with the INVALID_ARGUMENT error code in the status.proto
+  // carried along with the RPC response.
   string network_instance = 2;
 
   // The operation that this request is - either add, replace, or delete
