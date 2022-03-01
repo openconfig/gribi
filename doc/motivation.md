@@ -53,7 +53,7 @@ To this end, we propose an interface to the routing table on the device, that:
     with resolution handled by the device itself.
 *   Has transactional semantics, particularly a request/response design, such
     that the success or failure of an operation can be learned by the
-programming entity.
+    programming entity.
 *   Is separate from any existing protocol, such that its entries are alongside
     any other protocol, rather than aiming to inject entries as though they are
     coming from such a protocol.
@@ -169,7 +169,7 @@ are to be used for rerouting traffic. It is expected that such entries are
 pre-installed within the forwarding plane, such that post-detection failover
 times of O(50msec) can be achieved.  Since implementations may have different
 data structures that are used per FIB - which may be platform-dependent - we do
-not proposed that a faithful representation of the FIB data structure is used
+not propose that a faithful representation of the FIB data structure is used
 for these backup paths. Rather, we propose to express the required backup
 policies in terms of an ingress match criteria (in this case MPLS label), and
 an egress set of (potentially unequal weight) MPLS forwarding entries. In the
@@ -257,43 +257,42 @@ which will be resolved elsewhere in the RIB.
   </tr>
 </table>
 
-## Tying Injected Entries to the Liveliness of gRPC Client
+## Liveliness of Injected Entries
 
-We expect that all entries that are installed by a gRPC client are only
-maintained during the time that a (long-lived) RPC remains open. In keeping
-with other control plane approaches, we expect that redundancy of entries can
-be maintained by having >1 source of injected entries. Where there is a
-requirement to persist entries that are to be installed within the gRPC service
-(e.g., static SR-TE LSPs), we expect that this is achieved through the
-management plane of the system.
+There has been much debate about how entries installed by a routing protocol
+should be dealt with when the session, or neighbour, that provides those entries
+"goes away". Tension exists being approaches that prefer removing that routing
+information, and approaches that prefer to 'fail static' based on the last
+available entries. In order to provide for both approaches within gRIBI, two
+modes of operation are proposed.
+ 
+ * a mode of operation where the entries on the server are not tied to session
+   state (as specified by the client at connection time).
+ * a mode of operation whereby the server ties the validity of the injected
+   entries to the liveliness of the session.
 
-Since there is a long-lived RPC, we expect that there is a requirement to have
-a keepalive mechanism to ensure that the client is alive, although this could
-be achieved simply by tracking TCP session liveliness, it is possible that the
-gRPC
-[keepalive](https://github.com/grpc/grpc-go/blob/master/keepalive/keepalive.go)
-mechanism could be utilised, requiring little to no additional machinery to
-achieve such functionality. The requirement for such a keepalive is to
-determine a non-responsive client from one that is simply silent, such that in
-the case that >1 source of programming entries exists then stale client
-information can be determined.
+## Selection between Clients
 
-Since the possibility of having multiple clients introduces the possibility of
-requirements for tiebreaking, we propose that the implementation is kept as
-simple possible, and the client with the lowest client address when expressed
-in the form of an 128-bit number is selected. We expect that the remote systems
-are responsible for ensuring consistency of announcements.
-
+Similarly to the livelines discussion, there are different architectures for
+providing redundant sources of injected entries to the client. In some
+architectures, multiple client processes may inject the same information -
+relying on the server (device) to choose between them. In other approaches,
+external elections occur between clients, such that there is known designated
+'primary' client. In such cases, the server does not choose between entries, but
+rather acts as the final arbiter that the client's entry should be accepted. In
+order to support both of these modes of operation, we propose in include two
+modes within the gRIBI protocol.
 
 ## Logic for Limited Validation
 
-It should be noted that the validation logic we propose throughout is _as
-minimal as possible whilst allowing invalidation - _that is to say, we do not
+It should be noted that the validation logic we propose for gRIBI is _as
+minimal as possible whilst allowing the server to invalide entries as they
+become unusable - _that is to say, we do not
 expect correctness checks to be performed for particular injected entries, but
 the system is expected to determine each entry's viability before installing it
 (i.e., is the next-hop set resolvable). As such, we are proposing an approach
 that is centred around being as liberal as possible such that we minimise
-development changes in the future for use cases that we did not yet forsee.
+development changes in the future for use cases that we did not forsee.
 This relies strictly on the remote systems being conservative in what they
 send. As such, this approach is at odds with other routing protocols, which
 attempt to maintain their correctness -- we consider that it is difficult
@@ -338,11 +337,11 @@ possible.
 
 ## Interface Definition for the RIB Injection Service
 
-We propose a simple RPC service - such as the one defined in this package - is
-used for the RIB injection. As referenced above, retrieval of current state is
-expected to be via gNMI and hence the service only defines an RPC to modify the
-AFT . Bi-directional streaming is used to allow asynchronous application of
-transactions and their ACK from the system.
+We propose a simple RPC service - defined in the `gribi.proto` file within this
+repository - is used for the RIB injection. As referenced above, retrieval of 
+current state is expected to be via gNMI and hence the service only defines an 
+RPC to modify the AFT . Bi-directional streaming is used to allow asynchronous
+application of transactions and their ACK from the system.
 
 <!-- Footnotes themselves at the bottom. -->
 ## Notes
