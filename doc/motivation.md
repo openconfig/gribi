@@ -264,7 +264,7 @@ should be dealt with when the session, or neighbour, that provides those entries
 "goes away". Tension exists being approaches that prefer removing that routing
 information, and approaches that prefer to 'fail static' based on the last
 available entries. In order to provide for both approaches within gRIBI, two
-modes of operation are proposed.
+modes of operation are proposed (specified by the client at connection time).
  
  * a mode of operation where the entries on the server are not tied to session
    state (fail static).
