@@ -267,7 +267,7 @@ available entries. In order to provide for both approaches within gRIBI, two
 modes of operation are proposed.
  
  * a mode of operation where the entries on the server are not tied to session
-   state (as specified by the client at connection time).
+   state (fail static).
  * a mode of operation whereby the server ties the validity of the injected
    entries to the liveliness of the session.
 
