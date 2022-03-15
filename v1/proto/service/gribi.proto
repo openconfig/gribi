@@ -31,7 +31,10 @@ service gRIBI {
   rpc Modify(stream ModifyRequest) returns (stream ModifyResponse);
   
   // Get provides a client a means to retrieve the contents of the installed
-  // AFTs from the gRIBI daemon. The client requests a Get, and the server
+  // AFTs from the gRIBI daemon.
+  // The AFTResultStatusType session parameter of the Modify session determines
+  // whether Get should return FIB or RIB installed AFTs.
+  // The client requests a Get, and the server
   // responds with the set of currently installed entries (that have been ACK'd
   // according to the underlying resource to be programmed to) via the
   // GetResponse stream. Once all entries have been sent, the server closes the
@@ -389,7 +392,7 @@ message SessionParameters {
     // network element must respond with RIB_PROGRAMMED
     // on a successful update to the gRIBI process' RIB.
     // If the AFT entry is also programmed in the network
-    // element's FIB, a FIB_PROGRAMMED response must be sent
+    // element's FIB, a FIB_PROGRAMMED response must be sent.
     // A FIB_PROGRAMMED response is a combined
     // acknowledgement that the AFT entry is programmed in
     // the gRIBI process' RIB and the FIB, so there's no need
