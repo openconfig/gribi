@@ -50,7 +50,10 @@ service gRIBI {
 // ModifyRequest is a message used by the client to manipulate the state of
 // the RIB on the target device.
 message ModifyRequest {
-  // A group of requests to add/modify/remove a single AFT entry
+  // A group of requests to add/modify/remove a single AFT entry.
+  // gRIBI server relies on clients being conservative in what they send.
+  // As such, gRIBI server is expected to process the AFTOperations per the
+  // received order.
   repeated AFTOperation operation = 1;
 
   // Meta information that the external entity sends to the network
