@@ -51,6 +51,7 @@ service gRIBI {
 // the RIB on the target device.
 message ModifyRequest {
   // A group of requests to add/modify/remove a single AFT entry.
+  //
   // gRIBI server relies on clients being conservative in what they send.
   // As such, when processing AFTOperations, a gRIBI server is expected to:
   //  * process AFTOperations per the received order.
@@ -58,6 +59,8 @@ message ModifyRequest {
   //    processing (e.g. invalid network instance, unsupported op, etc), unless
   //    it’s considered fatal to the device (e.g. might crash the whole device
   //    routing daemon).
+  //  * not have to finish processing pending AFTOperations if existing RPC
+  //    session is dropped/closed/cancelled.
   repeated AFTOperation operation = 1;
 
   // Meta information that the external entity sends to the network
