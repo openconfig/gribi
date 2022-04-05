@@ -113,10 +113,11 @@ message ModifyRequest {
   // conidered master, in order to allow for a client to reconnect
   // without an external election having taken place.
   //
-  // After the master role failover between clients, it is ok for
-  // the server to continue sending responses to previous master for
-  // requests sent by previous master before the failover. The new master
-  // is respnosible for its own reconciliation (e.g. via Get() and Modify()).
+  // Clients are expected to make efforts for a smooth master failover.
+  // Hence, after the failover between clients, it is ok for the server to
+  // continue finishing processing AFTOperations sent before the failover,
+  // and continue sending corresponding responses to previous master. The
+  // new master can do its own reconciliation (e.g. via Get() and Modify()).
   //
   // Only AFT operations from the primary client are acted upon by
   // the network element. AFT operations from non-primary clients
