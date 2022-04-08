@@ -52,12 +52,12 @@ service gRIBI {
 message ModifyRequest {
   // A group of requests to add/modify/remove a single AFT entry.
   //
-  // A server is expected to:
-  //  * process AFTOperations per the received order.
-  //  * not close the RPC session due to errors encountered in an AFTOperation.
+  // A gRIBI server :
+  //  * Should process AFTOperations per the received order.
+  //  * Should not close the RPC session due to errors encountered in an AFTOperation.
   //    Invalid AFTOperations should be responded to with failures within
   //    the stream.
-  //  * not have to finish pending AFTOperations if existing RPC session is
+  //  * May finish pending AFTOperations if existing RPC session is
   //    dropped/closed/cancelled.
   repeated AFTOperation operation = 1;
 
