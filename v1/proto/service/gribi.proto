@@ -110,10 +110,10 @@ message ModifyRequest {
   // The network element selects the client with the highest
   // election_id as the primary. If the election_id sent by the
   // client matches the previous highest value, the newer client is
-  // conidered master, in order to allow for a client to reconnect
+  // considered master, in order to allow for a client to reconnect
   // without an external election having taken place.
   //
-  // Unpon discovering a failover, the server should stop processing pending
+  // Upon discovering a failover, the server should stop processing pending
   // AFTOperations that were sent by the previous master. For cases that the
   // processing can not be cancelled, it is also ok for the server to continue
   // finishing the processing and sending the corresponding responses to the
