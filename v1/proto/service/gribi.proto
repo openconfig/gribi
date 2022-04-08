@@ -113,12 +113,11 @@ message ModifyRequest {
   // considered master, in order to allow for a client to reconnect
   // without an external election having taken place.
   //
-  // Upon discovering a failover, the server should stop processing pending
-  // AFTOperations that were sent by the previous master. For cases that the
-  // processing can not be cancelled, it is also ok for the server to continue
-  // finishing the processing and sending the corresponding responses to the
-  // previous master. Clients are expected to make effort for a smooth failover
-  // (e.g. the new master can do reconciliation via Flush(), Get() or Modify()).
+  // Upon discovering a failover, the server:
+  //  * Should stop processing pending AFTOperations that were sent by
+  //    the previous master.
+  //  * Must not send responses for AFTOperations of the previous master
+  //    to the acuiquiring-master.
   //
   // Only AFT operations from the primary client are acted upon by
   // the network element. AFT operations from non-primary clients
