@@ -54,9 +54,9 @@ message ModifyRequest {
   //
   // A gRIBI server :
   //  * Should process AFTOperations per the received order.
-  //  * Should not close the RPC session due to errors encountered in an AFTOperation.
-  //    Invalid AFTOperations should be responded to with failures within
-  //    the stream.
+  //  * Should not close the RPC session due to errors encountered in an
+  //    AFTOperation. Invalid AFTOperations should be responded to with
+  //    failures within the stream.
   //  * May finish pending AFTOperations if existing RPC session is
   //    dropped/closed/cancelled.
   repeated AFTOperation operation = 1;
