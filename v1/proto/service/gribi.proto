@@ -551,6 +551,12 @@ message FlushResponseError {
     UNSPECIFIED_NETWORK_INSTANCE = 6;
     // The client specified a network instance that was invalid.
     INVALID_NETWORK_INSTANCE = 7;
+    // The specificed network instance contains gRIBI objects that are
+    // referenced outside of the network instance. The server should have
+    // succesfully removed all objects other than the non zero referenced
+    // ones in the network instance. The canonical error code ABORTED should
+    // be specified.
+    NON_ZERO_REFERENCE = 8;
   }
   Reason status = 1;
 }
