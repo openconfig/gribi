@@ -576,10 +576,10 @@ const (
 	// The client specified a network instance that was invalid.
 	FlushResponseError_INVALID_NETWORK_INSTANCE FlushResponseError_Reason = 7
 	// The specificed network instance contains gRIBI objects that are
-	// referenced outside of the network instance. The server should have
-	// succesfully removed all objects other than the non zero referenced
-	// ones in the network instance. The canonical error code ABORTED should
-	// be specified.
+	// referenced by other network instances.
+	// The server SHOULD respond with the canonical error code ABORTED.
+	// The server SHOULD proceed to remove all other gRIBI objects except the
+	// non zero referenced ones in the network instance.
 	FlushResponseError_NON_ZERO_REFERENCE FlushResponseError_Reason = 8
 )
 
