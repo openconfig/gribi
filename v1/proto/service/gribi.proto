@@ -465,6 +465,18 @@ message AFTEntry {
     gribi_aft.Afts.MacEntryKey mac_entry = 9;
     gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
   }
+  enum Status {
+    // The programming status is not available. When the session parameter
+    // is set to RIB ack only, the device might not keep track of FIB
+    // programming status.
+    UNAVAILABLE = 0;
+    PROGRAMMED = 1;
+    NOT_PROGRAMMED = 2;
+  }
+  // RIB programming status of the entry.
+  Status rib = 11;
+  // FIB programming status of the entry.
+  Status fib = 12;
 }
 
 message GetResponse {
