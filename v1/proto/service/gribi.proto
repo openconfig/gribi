@@ -114,7 +114,7 @@ message ModifyRequest {
   // without an external election having taken place.
   //
   // Upon discovering a failover, the server:
-  //  * Should stop processing pending AFTOperations that were sent by
+  //  * SHOULD stop processing pending AFTOperations that were sent by
   //    the previous master.
   //  * Must not send responses for AFTOperations of the previous master
   //    to the acuiquiring-master.
