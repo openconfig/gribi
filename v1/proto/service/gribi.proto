@@ -474,9 +474,9 @@ message AFTEntry {
     NOT_PROGRAMMED = 2;
   }
   // RIB programming status of the entry.
-  Status rib = 11;
+  Status rib_status = 11;
   // FIB programming status of the entry.
-  Status fib = 12;
+  Status fib_status = 12;
 }
 
 message GetResponse {
