@@ -118,8 +118,14 @@ message ModifyRequest {
   // The network element selects the client with the highest
   // election_id as the primary. If the election_id sent by the
   // client matches the previous highest value, the newer client is
-  // conidered master, in order to allow for a client to reconnect
+  // considered master, in order to allow for a client to reconnect
   // without an external election having taken place.
+  //
+  // Upon discovering a failover, the server:
+  //  * SHOULD stop processing pending AFTOperations that were sent by
+  //    the previous master.
+  //  * MUST not send responses for AFTOperations of the previous master
+  //    to the acquiring-master.
   //
   // Only AFT operations from the primary client are acted upon by
   // the network element. AFT operations from non-primary clients
