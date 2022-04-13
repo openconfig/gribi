@@ -116,8 +116,8 @@ message ModifyRequest {
   // Upon discovering a failover, the server:
   //  * SHOULD stop processing pending AFTOperations that were sent by
   //    the previous master.
-  //  * Must not send responses for AFTOperations of the previous master
-  //    to the acuiquiring-master.
+  //  * MUST not send responses for AFTOperations of the previous master
+  //    to the acquiring-master.
   //
   // Only AFT operations from the primary client are acted upon by
   // the network element. AFT operations from non-primary clients
