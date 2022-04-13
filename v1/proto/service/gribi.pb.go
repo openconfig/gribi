@@ -557,9 +557,9 @@ func (SessionParameters_AFTResultStatusType) EnumDescriptor() ([]byte, []int) {
 type AFTEntry_Status int32
 
 const (
-	// The programming status is not available. When the session parameter
-	// is set to RIB ack only, the device might not keep track of FIB
-	// programming status.
+	// The programming status is not available.
+	// When the session parameter is set to RIB ack only, the device might
+	// not keep track of FIB programming status.
 	AFTEntry_UNAVAILABLE    AFTEntry_Status = 0
 	AFTEntry_PROGRAMMED     AFTEntry_Status = 1
 	AFTEntry_NOT_PROGRAMMED AFTEntry_Status = 2

@@ -466,9 +466,9 @@ message AFTEntry {
     gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
   }
   enum Status {
-    // The programming status is not available. When the session parameter
-    // is set to RIB ack only, the device might not keep track of FIB
-    // programming status.
+    // The programming status is not available.
+    // When the session parameter is set to RIB ack only, the device might
+    // not keep track of FIB programming status.
     UNAVAILABLE = 0;
     PROGRAMMED = 1;
     NOT_PROGRAMMED = 2;
