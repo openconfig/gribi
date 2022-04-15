@@ -118,14 +118,14 @@ message ModifyRequest {
   // The network element selects the client with the highest
   // election_id as the primary. If the election_id sent by the
   // client matches the previous highest value, the newer client is
-  // considered master, in order to allow for a client to reconnect
+  // considered primary, in order to allow for a client to reconnect
   // without an external election having taken place.
   //
   // Upon discovering a failover, the server:
   //  * SHOULD stop processing pending AFTOperations that were sent by
-  //    the previous master.
-  //  * MUST not send responses for AFTOperations of the previous master
-  //    to the acquiring-master.
+  //    the previous primary.
+  //  * MUST not send responses for AFTOperations of the previous primary
+  //    to the acquiring-primary.
   //
   // Only AFT operations from the primary client are acted upon by
   // the network element. AFT operations from non-primary clients
@@ -543,7 +543,7 @@ message FlushResponseError {
     UNKNOWN = 0;
     // The network instance specified was unknown.
     NO_SUCH_NETWORK_INSTANCE = 1;
-    // The election ID that was specified was not the current master.
+    // The election ID that was specified was not the current primary.
     NOT_PRIMARY = 2;
     // An election ID was supplied when the server is operating in ALL_PRIMARY
     // mode.
