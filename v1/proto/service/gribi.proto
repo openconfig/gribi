@@ -528,14 +528,14 @@ message FlushResponse {
   // the client. It is specified in nanoseconds since the Unix epoch.
   int64 timestamp = 1;
   enum Result {
-    // The devide has removed all gRIBI objects in the specified network
+    // The device has removed all gRIBI objects in the specified network
     // instance.
     OK = 0;
-    // The specified network instance contains gRIBI objects that are referenced
-    // by other network instances.
+    // The specified network instance contains gRIBI NextHops or NextHopGroups
+    // that are referenced by other network instances.
     // The device has removed all gRIBI objects except the non-zero referenced
-    // ones in the network instance.
-    NON_ZERO_REFERENCE_REAMIN = 1;
+    // NextHops and NextHopGroups in the network instance.
+    NON_ZERO_REFERENCE_REMAIN = 1;
   }
   Result result = 2;
 }
