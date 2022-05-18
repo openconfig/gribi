@@ -135,4 +135,16 @@ module gribi-aft {
       over gNMI for the AFT model.";
     deviate not-supported;
   }
+  deviation "/afts/next-hop-groups/next-hop-group/state/programmed-id" {
+    description
+      "Next Hop Group programmed IDs are not accessible over gRIBI,
+       and rather over gNMI for the AFT model.";
+    deviate not-supported;
+  }
+  deviation "/afts/next-hops/next-hop/state/programmed-index" {
+    description
+      "Next Hop programming indices are not accessible over gRIBI,
+       and rather over gNMI for the AFT model.";
+    deviate not-supported;
+  }
 }
