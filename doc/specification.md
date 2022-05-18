@@ -20,7 +20,7 @@ The gRIBI service is defined as a single gRPC service, with three RPCs:
    server responds asynchronously to these operations with an acknowledgement
    mode, based on the operating mode of the RPC.
  * `Get` - a server streaming RPC which can be used by a client to retrieve the
-   current set of entries that have been retrieved by the server.
+   current set of installed gRIBI entries.
  * `Flush` - a unary RPC that is used as a low-complexity means to remove
    entries from a server.
 
@@ -97,6 +97,7 @@ Timestamping operations.
 * Contains ACKed entries installed by any client
 * Performance expectations - repeated and reconciliation
 * Relationship to `openconfig-aft` telemetry
+* If the specified network instances have no installed gRIBI objects, return an empty list instead of an error.
 
 ## The `Flush` RPC
 * Modes of operation - emergency client vs. elected master.
