@@ -60,7 +60,7 @@ Starts when a client creates it, and ends when the device either succeeds or ret
 * `SINGLE_PRIMARY`
   * Expectations on `election_id`
   * Behaviours with invalid election IDs
-  * Failover behaviors. Upon discovering client failover, the device MAY cancel pending AFTOperations from the previous master. Results for AFTOperations from the previous master MUST NOT be sent to the acquiring new master. 
+  * Failover behaviors. Upon discovering client failover, the device SHOULD cancel pending AFTOperations from the previous master. Results for AFTOperations from the previous master MUST NOT be sent to the acquiring new master.
 
 ### `election_id` semantics
 
