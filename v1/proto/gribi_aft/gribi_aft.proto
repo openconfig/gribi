@@ -87,7 +87,6 @@ message Afts {
     IpInIp ip_in_ip = 157296597 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip"];
     ywrapper.StringValue mac_address = 404609192 [(yext.schemapath) = "/afts/next-hops/next-hop/state/mac-address"];
     ywrapper.StringValue network_instance = 232391308 [(yext.schemapath) = "/afts/next-hops/next-hop/state/network-instance"];
-    ywrapper.UintValue programmed_index = 467879803 [(yext.schemapath) = "/afts/next-hops/next-hop/state/programmed-index"];
     repeated PushedMplsLabelStackUnion pushed_mpls_label_stack = 489592660 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
   }
   message NextHopGroup {
@@ -101,7 +100,6 @@ message Afts {
     ywrapper.UintValue backup_next_hop_group = 366506898 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/backup-next-hop-group"];
     ywrapper.UintValue color = 242427279 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/color"];
     repeated NextHopKey next_hop = 211071474 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/next-hops/next-hop"];
-    ywrapper.UintValue programmed_id = 107580506 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/programmed-id"];
   }
   message NextHopGroupKey {
     uint64 id = 1 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/id|/afts/next-hop-groups/next-hop-group/id"];
