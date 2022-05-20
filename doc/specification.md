@@ -38,9 +38,13 @@ High-level description of `Modify` semantics.
   * error handling for missing entries
   * error handling for forward references
 
+### Life cycle of a modify operation
+Starts when a client creates it, and ends when the device either succeeds or returns failure of the operation. 
+
 ### Forward References
 * Ability to NACK forward references
-* Server behaviours for resolving future references.
+* Server ability for resolving forward references is not required.
+* Client's responsibility to send AFTOperations in correct order.
 
 ### Session Negotiation
 
@@ -56,6 +60,7 @@ High-level description of `Modify` semantics.
 * `SINGLE_PRIMARY`
   * Expectations on `election_id`
   * Behaviours with invalid election IDs
+  * Failover behaviors. Upon discovering client failover, the device SHOULD cancel pending AFTOperations from the previous master. Results for AFTOperations from the previous master MUST NOT be sent to the acquiring new master.
 
 ### `election_id` semantics
 
