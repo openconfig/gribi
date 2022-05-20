@@ -545,6 +545,18 @@ message FlushResponse {
   // The timestamp at which the Flush operation succeeded and was returned to
   // the client. It is specified in nanoseconds since the Unix epoch.
   int64 timestamp = 1;
+  enum Result {
+    UNSET = 0;
+    // The device has removed all gRIBI objects in the specified network
+    // instance.
+    OK = 1;
+    // The specified network instance contains gRIBI NextHops or NextHopGroups
+    // that are referenced by other network instances.
+    // The device has removed all gRIBI objects except the non-zero referenced
+    // NextHops and NextHopGroups in the network instance.
+    NON_ZERO_REFERENCE_REMAIN = 2;
+  }
+  Result result = 2;
 }
 
 // FlushResponseError is used in the details of the gRPC status in the case that
