@@ -115,6 +115,10 @@ Timestamping operations.
 * Validation of next-hops
 * resolution outside of gRIBI
 
-
-
-
+## About gRIBI server caching
+gRIBI server implementation is not required to cache all installed objects.
+Implications:
+  * When a VRF is removed (e.g. accidentally by user via cli):
+    * The device is not required to maintain gRIBI objects in the FIB or RIB.
+    * Get() or Flush() should return failed (because the VRF is no longer there)
+    * When the VRF is added back, the server is not required to restore all the gRIBI objects by itself.
