@@ -22,16 +22,6 @@ gRIBI uses the OC (OpenConfig) AFT model as an abstracted view of the device RIB
 
 The YANG model is transformed to Protobuf to be carrried within the payload of gRIBI RPCs. The process of machine translating YANG to Protobuf is implemented in the [ygot](https://github.com/openconfig/ygot) library.
 
-## 2.1 `NextHopGroup`
-
-* `BackupNextHopGroup` operation - when to use backup vs. primary
-* Weights - expectations for quantisation
-
-## 2.2 `NextHop`
-`
-* Validation of next-hops
-* resolution outside of gRIBI
-
 # 3 Encryption, Authentication and Authorization.
 
 TLS
@@ -129,6 +119,15 @@ Implications:
     * Get() or Flush() should return failed (because the VRF is no longer there)
     * When the VRF is added back, the server is not required to restore all the gRIBI objects by itself.
 
+## 4.1.10 `NextHopGroup`
+
+* `BackupNextHopGroup` operation - when to use backup vs. primary
+* Weights - expectations for quantisation
+
+## 4.1.11 `NextHop`
+`
+* Validation of next-hops
+* resolution outside of gRIBI
 
 ## 4.2 The `Get` RPC
 
