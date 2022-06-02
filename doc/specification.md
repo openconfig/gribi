@@ -17,7 +17,10 @@ an SDN controller.
 This document serves as a specification for the gRIBI protocol.
 
 # 2 Data Model
-Uses AFT OC model.
+
+gRIBI uses the OC (OpenConfig) AFT model as an abstracted view of the device RIB. Using the same schema as the OC AFT model simplifies gRIBI injection service as much as possible. It guarantees that injected gRIBI entries are mappable to the existing gNMI `Get` and `Subscribe` RPCs for get and streaming AFT entries.
+
+The YANG model is transformed to Protobuf to be carrried within the payload of gRIBI RPCs. The process of machine translating YANG to Protobuf is implemented in the [ygot](https://github.com/openconfig/ygot) library.
 
 ## 2.1 `NextHopGroup`
 
