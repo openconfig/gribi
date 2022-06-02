@@ -18,7 +18,7 @@ This document serves as a specification for the gRIBI protocol.
 
 # 2 Data Model
 
-gRIBI uses the OC (OpenConfig) AFT model as an abstracted view of the device RIB. Using the same schema as the OC AFT model simplifies gRIBI injection service as much as possible. It guarantees that injected gRIBI entries are mappable to the existing gNMI `Get` and `Subscribe` RPCs for get and streaming AFT entries.
+gRIBI uses the [OC (OpenConfig) AFT model](https://github.com/openconfig/public/tree/master/release/models/aft) as an abstracted view of the device RIB. Using the same schema as the OC AFT model simplifies gRIBI injection service as much as possible. It guarantees that injected gRIBI entries are mappable to the existing gNMI `Get` and `Subscribe` RPCs for retrieving and streaming AFT entries.
 
 The YANG model is transformed to Protobuf to be carrried within the payload of gRIBI RPCs. The process of machine translating YANG to Protobuf is implemented in the [ygot](https://github.com/openconfig/ygot) library.
 
