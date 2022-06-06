@@ -144,7 +144,7 @@ A client sends a `GetRequest` message specifying the target network instance and
 
 A `GetResponse` contains a list of `AFTEntry` messages. A `AFTEntry` message represents an installed gRIBI entry (the data model is defined in x.y.z) and its programming status (`rib_status` and `fib_status`).
 * `rib_status` indicates the programming status of the gRIBI entry in RIB. The value should be either `PROGRAMMED` or `NOT_PROGRAMMED`.
-* `fib_status` indicates the programming status of the gRIBI entry in FIB. 
+* `fib_status` indicates the programming status of the gRIBI entry in FIB.
   * When the session parameter is `ack_type` = `RIB_ACK`, it's optional for the device to keep track of FIB programming status of each gRIBI entry. Therefore, this field MAY be set to `UNAVAILABLE`.
   * When the session parameter is `ack_type` = `RIB_AND_FIB_ACK`, the value should be either `PROGRAMMED` or `NOT_PROGRAMMED`.
 
