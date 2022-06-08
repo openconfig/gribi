@@ -149,7 +149,7 @@ When a client's election ID changed, the client should send a `ModifyRequest` wi
 If the `ModifyRequest.election_id` sent by a client matches the previous highest value, the newer client is considered primary. This allows for a client to reconnect
 without an external election having taken place. It is gRIBI clients' responsibility to avoid more than one `Modify` RPC sessions that are of the same highest Election ID, i.e., "dual-primary" situation in a `SINGLE_PRIMARY` mode.
 
-#### 4.1.4.2 Client Failover In `SINGLE_PRIMARY`
+#### 4.1.4.2 New Leader Election In `SINGLE_PRIMARY`
 Failover happnes when a new client connects with `ModifyRequest.election_id` equals to, or greater than, the previous highest value that learnt by the server from any client.
 
 Upon discovering a failover, the device:
