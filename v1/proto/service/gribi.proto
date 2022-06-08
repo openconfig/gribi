@@ -50,7 +50,15 @@ service gRIBI {
 // ModifyRequest is a message used by the client to manipulate the state of
 // the RIB on the target device.
 message ModifyRequest {
-  // A group of requests to add/modify/remove a single AFT entry
+  // A group of requests to add/modify/remove a single AFT entry.
+  //
+  // A gRIBI server :
+  //  * Should process AFTOperations per the received order.
+  //  * Should not close the RPC session due to errors encountered in an
+  //    AFTOperation. Invalid AFTOperations should be responded to with
+  //    failures within the stream.
+  //  * May finish pending AFTOperations if existing RPC session is
+  //    dropped/closed/cancelled.
   repeated AFTOperation operation = 1;
 
   // Meta information that the external entity sends to the network
@@ -97,27 +105,43 @@ message ModifyRequest {
   // election_id is used by the network element to
   // select a primary client when the client redundancy mode
   // is SINGLE_PRIMARY.
+  //
   // A client sends a ModifyRequest with only the election_id
   // field populated after it connects to the network element,
-  // and everytime its election_id is updated(usually as a
+  // and everytime its election_id is updated (usually as a
   // result of an election amongst clients). The network element
   // responds with a ModifyResponse that has only the election_id
   // field populated. The election_id in the ModifyResponse is the
   // highest election_id that the network element has learnt
   // from any client.
+  //
   // The network element selects the client with the highest
-  // election_id as the primary.
+  // election_id as the primary. If the election_id sent by the
+  // client matches the previous highest value, the newer client is
+  // considered primary, in order to allow for a client to reconnect
+  // without an external election having taken place.
+  //
+  // Upon discovering a failover, the server:
+  //  * SHOULD stop processing pending AFTOperations that were sent by
+  //    the previous primary.
+  //  * MUST not send responses for AFTOperations of the previous primary
+  //    to the acquiring-primary.
+  //
   // Only AFT operations from the primary client are acted upon by
   // the network element. AFT operations from non-primary clients
-  // are discarded.
+  // are not actioned, and a failure response is sent to the client.
+  //
   // If the client redundancy mode is ALL_PRIMARY, but a client
   // sends election_id, the network element closes the Modify RPC
   // stream, sets FAILED_PRECONDITION in
   // status.proto's `code` and sets ModifyRPCErrorDetails.reason
   // to ELECTION_ID_IN_ALL_PRIMARY.
+  //
   // The election_id MUST be non zero. When a network element receives
   // an election_id of 0, it closes the stream with status.code
-  // set to INVALID_ARGUMENT
+  // set to INVALID_ARGUMENT.
+  // The election_id can only be increased monotonically by a client 
+  // during a RPC session. This simplifies server implementation.
   Uint128 election_id = 3;
 }
 
@@ -128,7 +152,11 @@ message AFTOperation {
   // case that are multiple operations within the AFT.
   uint64 id = 1;
 
-  // Network Instance (aka vrf aka routing-instance) to apply to
+  // Network Instance (aka vrf aka routing-instance) to apply to. 
+  // If it is not specified, or is the empty string "",
+  // then the request is considered invalid and the server should
+  // respond with the INVALID_ARGUMENT error code in the status.proto
+  // carried along with the RPC response.
   string network_instance = 2;
 
   // The operation that this request is - either add, replace, or delete
@@ -231,6 +259,9 @@ message AFTResult {
     // there are likely to be more different cases that we
     // want to use here - e.g., RIB_PROGRAMMED and FIB_PROGRAMMED.
     OK = 1 [deprecated = true];
+    // FAILED is used to indicate that operation that was provided
+    // cannot be programmed, for example, due to invalid message
+    // contents, or missing references.
     FAILED = 2;
     // RIB programmed indicates that the received operation was
     // syntactically valid, and was programmed successfully into
@@ -252,6 +283,10 @@ message AFTResult {
     // code was received from the underlying hardware abstraction layer
     // the FAILED error code is returned.
     FIB_PROGRAMMED = 4;
+    // FIB_FAILED indicates that the received operation failed FIB
+    // programming. It is used when the operation has been accepted by
+    // gRIBI, but FIB programming failed.
+    FIB_FAILED = 5;
   }
   Status status = 2;
 
@@ -436,6 +471,18 @@ message AFTEntry {
     gribi_aft.Afts.MacEntryKey mac_entry = 9;
     gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
   }
+  enum Status {
+    // The programming status is not available.
+    // When the session parameter is set to RIB ack only, the device might
+    // not keep track of FIB programming status.
+    UNAVAILABLE = 0;
+    PROGRAMMED = 1;
+    NOT_PROGRAMMED = 2;
+  }
+  // RIB programming status of the entry.
+  Status rib_status = 11;
+  // FIB programming status of the entry.
+  Status fib_status = 12;
 }
 
 message GetResponse {
@@ -448,6 +495,10 @@ message GetResponse {
 message FlushRequest {
   // election specifies the election ID from a client. It is valid only
   // when the server has clients that are operating in the SINGLE_PRIMARY mode.
+  // If the client does not supply one of the messages within election, the
+  // server should respond with an error with canonical code 
+  // FAILED_PRECONDITION, and specifying UNSPECIFIED_ELECTION_BEHAVIOR in the
+  // FlushResponseError in the details returned.
   oneof election {
     // id indicates that the Flush ID supplied should be compared to the
     // existing election ID on the server. The logic
@@ -460,19 +511,28 @@ message FlushRequest {
     //     the Flush is accepted.
     //   - if the election ID is less than the previous highest known ID, the
     //     Flush is rejected and an error with reason NOT_PRIMARY is returned.
+    //     The canonical error code used should be FAILED_PRECONDITION.
     //
     // If the server is currently operating in ALL_PRIMARY mode the server
-    // should return an error specifying ELECTION_ID_IN_ALL_PRIMARY reason.
+    // should return an error specifying ELECTION_ID_IN_ALL_PRIMARY reason. The
+    // status (canonical error code) should be FAILED_PRECONDITION.
     Uint128 id = 1;
     // override indicates that the client explicitly requests that the election
     // ID should not be compared, regardless of whether there are SINGLE_PRIMARY
     // clients on the server.
-    bool override = 2;
+    Empty override = 2;
   }
-  // network_instance specifies the Network Instance that should be flushed.
+  // network_instance specifies the Network Instance that should be flushed. If
+  // the client specifies neither name nor all the server should respond with
+  // an error specifying the INVALID_ARGUMENT canonical error code, and the
+  // UNSPECIFIED_NETWORK_INSTANCE error code.
   oneof network_instance {
     // The network instance from which the entries should be flushed.
-    // If name is specified the empty string "" is considered invalid.
+    // If name is set to "", this is considered invalid, and an error specifying
+    // the INVALID_ARGUMENT canonical error code, and the
+    // INVALID_NETWORK_INSTANCE reason should be specified. If the network
+    // instance specified does not exist the INVALID_ARGUMENT canonical error
+    // code, with the NO_SUCH_NETWORK_INSTANCE code should be specified.
     string name = 3;
     // all indicates that entries for all network instances should be
     // flushed.
@@ -484,7 +544,19 @@ message FlushRequest {
 message FlushResponse {
   // The timestamp at which the Flush operation succeeded and was returned to
   // the client. It is specified in nanoseconds since the Unix epoch.
-  uint64 timestamp = 1;
+  int64 timestamp = 1;
+  enum Result {
+    UNSET = 0;
+    // The device has removed all gRIBI objects in the specified network
+    // instance.
+    OK = 1;
+    // The specified network instance contains gRIBI NextHops or NextHopGroups
+    // that are referenced by other network instances.
+    // The device has removed all gRIBI objects except the non-zero referenced
+    // NextHops and NextHopGroups in the network instance.
+    NON_ZERO_REFERENCE_REMAIN = 2;
+  }
+  Result result = 2;
 }
 
 // FlushResponseError is used in the details of the gRPC status in the case that
@@ -494,12 +566,21 @@ message FlushResponseError {
     // An unknown failure occurred.
     UNKNOWN = 0;
     // The network instance specified was unknown.
-    NO_SUCH_NETINST = 1;
-    // The election ID that was specified was not the current master.
+    NO_SUCH_NETWORK_INSTANCE = 1;
+    // The election ID that was specified was not the current primary.
     NOT_PRIMARY = 2;
     // An election ID was supplied when the server is operating in ALL_PRIMARY
     // mode.
     ELECTION_ID_IN_ALL_PRIMARY = 3;
+    // The server is operating in SINGLE_PRIMARY mode and neither an election ID
+    // nor an override was specified.
+    UNSPECIFIED_ELECTION_BEHAVIOR = 4;
+    // The client supplied an election ID value that is invalid (i.e., 0).
+    INVALID_ELECTION_ID = 5;
+    // The client did not specify a network instance to flush.
+    UNSPECIFIED_NETWORK_INSTANCE = 6;
+    // The client specified a network instance that was invalid.
+    INVALID_NETWORK_INSTANCE = 7;
   }
   Reason status = 1;
 }

@@ -21,7 +21,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: '1.16'
+          go-version: '1.x'
         id: go
 
       - name: Install protoc-gen-go
@@ -31,7 +31,7 @@ jobs:
 
       - name: Install goimports
         run: |
-          go get -u golang.org/x/tools/cmd/goimports
+          go install golang.org/x/tools/cmd/goimports@latest
 
       - name:  Install proto_generator
         run: |

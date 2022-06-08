@@ -24,13 +24,15 @@ rungrep() {
   fi
 }
 
-LDIFF=`git diff -U0 | rungrep -v -P -e "(//(\s)+protoc|^(@@|diff|index|\+\+\+|\-\-\-)|^$)" | wc -l | tr -d "[:space:]"`
+TDIFF=`git diff -U0 | rungrep -v -P -e "(//(\s)+((- )?protoc|(versions|source):)|^(@@|diff|index|\+\+\+|\-\-\-)|^$)"`
+LDIFF=`echo -n $TDIFF | wc -l | tr -d "[:space:]"`
 DIFF=`git diff -U0`
 
-echo "DEBUG(git-diff):  $DIFF"
+echo "DEBUG(trimmed-diff):  _${TDIFF}_"
+echo "DEBUG(git-diff):      $DIFF"
 echo "DEBUG(size-of-diff):  $LDIFF"
 
 if [ "$LDIFF" != "0" ]; then
-	exit 1
+  exit 1
 fi
 exit 0
