@@ -152,7 +152,7 @@ without an external election having taken place. It is gRIBI clients' responsibi
 #### 4.1.4.2 New Leader Election In `SINGLE_PRIMARY`
 Switching to a new leader client occurs when a new client connects with `ModifyRequest.election_id` equals to, or greater than, the previous highest value that learnt by the server from any client.
 
-Upon discovering a failover, the device:
+Upon discovering a new leader has been elected, the device:
 * SHOULD stop processing pending `AFTOperations` that were sent by the previous primary.
 * MUST not send responses for `AFTOperations` of the previous primary to the acquiring-primary.
 
