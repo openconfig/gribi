@@ -47,7 +47,7 @@ IANA has reserved [TCP port 9340](https://www.iana.org/assignments/service-names
 
 ## 4.1 `Modify`
 
-The `Modify` provides a bidirectional streaming RPC for clients to modify the device's RIB. A client sends `ModifyRequest` messages that contains a set of `AFTOperations` to the device. The device process the received requests and responds them asynchronously.
+The `Modify` provides a bidirectional streaming RPC for clients to modify the device's RIB. A client sends `ModifyRequest` messages that contains a set of `AFTOperation` messages to the device. The device processes the received requests and responds them asynchronously.
 
 ### 4.1.1 Client-Server Session Neogotiation
 
