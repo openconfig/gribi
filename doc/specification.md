@@ -17,17 +17,10 @@ an SDN controller.
 This document serves as a specification for the gRIBI protocol.
 
 # 2 Data Model
-Uses AFT OC model.
 
-## 2.1 `NextHopGroup`
+gRIBI uses the [OC (OpenConfig) AFT model](https://github.com/openconfig/public/tree/master/release/models/aft) as an abstracted view of the device RIB. Using the same schema as the OC AFT model simplifies gRIBI injection service as much as possible. It guarantees that injected gRIBI entries are mappable to the existing gNMI `Get` and `Subscribe` RPCs for retrieving and streaming AFT entries.
 
-* `BackupNextHopGroup` operation - when to use backup vs. primary
-* Weights - expectations for quantisation
-
-## 2.2 `NextHop`
-`
-* Validation of next-hops
-* resolution outside of gRIBI
+The YANG model is transformed to Protobuf to be carrried within the payload of gRIBI RPCs. The process of machine translating YANG to Protobuf is implemented in the [ygot](https://github.com/openconfig/ygot) library.
 
 # 3 Encryption, Authentication and Authorization.
 
@@ -38,10 +31,8 @@ TLS
 The gRIBI service is a single gRPC service defined in [`gribi.proto`](https://github.com/openconfig/gribi/blob/master/v1/proto/service/gribi.proto). It includes three RPCs:
 
  * `Modify` - used by the clients to modify the device's RIB.
- * `Get` - a server streaming RPC which can be used by a client to retrieve the
-   current set of installed gRIBI entries.
- * `Flush` - a unary RPC that is used as a low-complexity means to remove
-   entries from a server.
+ * `Flush` - defined in x.y.z, used by clients to remove gRIBI entries on a device.
+ * `Get` - used by clients to retrieve the current set of installed gRIBI entries.
 
 IANA has reserved [TCP port 9340](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml?search=9340#Google_Networking) for gRIBI service.
 
@@ -179,14 +170,66 @@ Implications:
     * Get() or Flush() should return failed (because the VRF is no longer there)
     * When the VRF is added back, the server is not required to restore all the gRIBI objects by itself.
 
-## 4.2 The `Get` RPC
+## 4.2 `Get`
 
-## 4.2.1 `Get` semantics
-* Contains ACKed entries installed by any client
-* Performance expectations - repeated and reconciliation
-* Relationship to `openconfig-aft` telemetry
-* If the specified network instances have no installed gRIBI objects, return an empty list instead of an error.
+The `Get` RPC is a server streaming RPC for clients to retrieve the current set of installed gRIBI entries. The `Get` RPC is typically used for reconcilation between a client and a server, or for periodical consistency checking by clients.
 
-## 4.3 The `Flush` RPC
-* Modes of operation - emergency client vs. elected master.
-* override behaviours
+A client sends a `GetRequest` message specifying the target network instance and gRIBI entry type. The device processes the request and responds a stream of `GetResponse` messages that contain the set of currently installed gRIBI entries by any client. Once all entries have been sent, the server should close the RPC.
+
+### 4.2.1 `GetRequest` message
+
+`GetRequest` message MUST have both `network_instance` and `aft` populated by client.
+* If `network_instance` is nil or `network_instance.name` is en empty string, the server should close the `Get` RPC with the generic gRPC [`Status.code`](https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto) set to `INVALID_ARGUMENT`.
+* If `aft` is set to `ALL`, the device should return all installed gRIBI entries in the specified network instance.
+* If `aft` is set to a specific `AFTType`, the device should return all installed gRIBI entries of the specified type in the specified network instance.
+* If `aft` is set to a specific `AFTType` that's not supported by the device, , the device should close the `Get` RPC with the generic gRPC [`Status.code`](https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto) set to `UNIMPLEMENTED`.
+
+### 4.2.2 `GetResponse` message
+
+A `GetResponse` contains a list of `AFTEntry` messages. A `AFTEntry` message represents an installed gRIBI entry (the data model is defined in x.y.z) and its programming status (`rib_status` and `fib_status`).
+* `rib_status` indicates the programming status of the gRIBI entry in RIB. The value should be either `PROGRAMMED` or `NOT_PROGRAMMED`.
+* `fib_status` indicates the programming status of the gRIBI entry in FIB.
+  * When the session parameter is `ack_type` = `RIB_ACK`, it's optional for the device to keep track of FIB programming status of each gRIBI entry. Therefore, this field MAY be set to `UNAVAILABLE`.
+  * When the session parameter is `ack_type` = `RIB_AND_FIB_ACK`, the value should be either `PROGRAMMED` or `NOT_PROGRAMMED`.
+
+If the specified network instances have no installed gRIBI objects, the device should return an empty list of `AFTEntry` and then close the RPC with the generic gRPC [`Status.code`](https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto) set to `OK`.
+
+## 4.3 `Flush`
+
+The `Flush` RPC is an unary RPC for clients to remove gRIBI entries from a device. A client sends a `FlushRequest` message specifying the target network instance where the device should remove all gRIBI entries. The device processes the request and responds a `FlushResponse` message indicating the execution result.
+
+The `Flush` RPC can be used in some emergency process to get the device out of undesirable routing state, therefore:
+* This RPC provides a low complexity method to remove all gRIBI entries in specified network instance.
+* This RPC allows non primary client (in `SINGLE_PRIMARY` mode) to remove all gRIBI entries in specified network instance.
+
+### 4.3.1 `FlushRequest` Message
+
+A `FlushRequest` message MUST have the `network_instance` populated by client.
+* If `network_instance` is nil or `network_instance.name` is en empty string, the device should reject the request with gRPC error [`Status.code`](https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto) set to `INVALID_ARGUMENT`. The `Status.details` should contain `FlushResponseError` message with `reason` set to `INVALID_NETWORK_INSTANCE`.
+* If the specified network instance does not exist, the device should reject the request with gRPC error [`Status.code`](https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto) set to `INVALID_ARGUMENT`. The `Status.details` should contain `FlushResponseError` message with `reason` set to `NO_SUCH_NETWORK_INSTANCE`.
+
+#### 4.3.1.1 `election` In `FlushRequest` Message
+
+Only when the client-server is in `SINGLE_PRIMARY` mode (defined in x.y.z) MUST the `election` be populated by the client.
+* If the `election` is set when the client-server is in `ALL_PRIMARY` mode (defined in x.y.z), the request should be rejected by the device with gRPC error [`Status.code`](https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto) set to `FAILED_PRECONDITION`. The `Status.details` should contain `FlushResponseError` message with `reason` set to `ELECTION_ID_IN_ALL_PRIMARY`.
+* If the `election` is not set when the client-server is in `SINGLE_PRIMARY` mode (defined in x.y.z), the request should be rejected by the device with gRPC error [`Status.code`](https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto) set to `FAILED_PRECONDITION`. The `Status.details` should contain `FlushResponseError` message with `reason` set to `UNSPECIFIED_ELECTION_BEHAVIOR`.
+
+When the client-server is in `SINGLE_PRIMARY` mode:
+* If `election` is `id`, the server should process the flush request only if the request is from the primary client.
+  * If the `id` value is equal or greater to the previous highest device known `election_id` (see x.y.z), the flush request should be accepted by the device.
+  * if the `id` value is less than the previous highest device known `election_id` (see x.y.z), the flush request should be rejected by the device with gRPC error [`Status.code`](https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto) set to `FAILED_PRECONDITION`. The `Status.details` should contain `FlushResponseError` message with `reason` set to `NOT_PRIMARY`.
+* If `election` is `override`, the flush request should be accepted by the device regardless if the client is the primary.
+
+### 4.3.2 `FlushResponse` message
+
+The `timestamp` is when the flush operation completed on the device. It is set by the device in nanoseconds since the Unix epoch.
+
+If the device has removed all gRIBI entries in the client specified network instance, the device should set `FlushResponse.result` to `OK`.
+
+It is possible that the client targeted network instance contains Next Hops or Next Hop Groups that are referenced by other network instances not specified by the client. We call those Next Hops and Next Hop Groups non-zero-referenced. The device SHOULD keep the non-zero-referenced, but remove all other gRIBI entries in the specified network instance. In this case, the device should set `FlushResponse.result` to `NON_ZERO_REFERENCE_REMAIN`.
+
+### 4.3.3 Error Handling
+
+Error encountered by the device removing a gRIBI entry SHOULD NOT block the device from continuing the effort removing other gRIBI entries, unless the error is a fatal error (e.g. daemon/job crash).
+
+If any error encountered during the operation, the device should return gRPC error with `Status.code` set to `INTERNAL`.
