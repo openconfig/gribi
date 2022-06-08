@@ -49,7 +49,7 @@ IANA has reserved [TCP port 9340](https://www.iana.org/assignments/service-names
 
 The `Modify` provides a bidirectional streaming RPC for clients to modify the device's RIB. A client sends `ModifyRequest` messages that contains a set of `AFTOperation` messages to the device. The device processes the received requests and responds them asynchronously.
 
-### 4.1.1 Client-Server Session Neogotiation
+### 4.1.1 Client-Server Session Negotiation
 
 A gRIBI client is identified by gRPC connection, i.e., if a connection drops and reconnect with the same `election_id` value, it will be considered as another client.
 
