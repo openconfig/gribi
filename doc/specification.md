@@ -70,7 +70,7 @@ It is possible that the client skips the negotiation step. In this case, the fir
 
 ### 4.1.2 Election ID
 
-Election ID helps the device to consume the election resullt in `SINGLE_PRIMARY` mode (redundancy mode is defined in x.y.z).
+The election ID informs the device of the result of an external election amongst the clients connected to it (redundancy mode is defined in x.y.z).
 
 Election ID should only be used in `SINGLE_PRIMARY` mode. If the agreed redundancy mode is `ALL_PRIMARY`, but a client populates either `ModifyRequest.election_id` or `AFTOperation.election_id`, the device should close the `Modify` RPC and set `Status.code` to `FAILED_PRECONDITION`. The `Status.details` should contain `ModifyRPCErrorDetails` message with `reason` set to `ELECTION_ID_IN_ALL_PRIMARY`.
 
