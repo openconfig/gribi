@@ -35,7 +35,7 @@ TLS
 
 # 4 Service Definition
 
-The gRIBI service is a single gRPC service currently defined in [`gribi.proto`](https://github.com/openconfig/gribi/blob/master/v1/proto/service/gribi.proto). It includes three RPCs:
+The gRIBI service is a single gRPC service defined in [`gribi.proto`](https://github.com/openconfig/gribi/blob/master/v1/proto/service/gribi.proto). It includes three RPCs:
 
  * `Modify` - used by the clients to modify the device's RIB.
  * `Get` - a server streaming RPC which can be used by a client to retrieve the
@@ -51,9 +51,9 @@ The `Modify` provides a bidirectional streaming RPC for clients to modify the de
 
 ### 4.1.1 Client-Server Session Negotiation
 
-A gRIBI client is identified by gRPC connection, i.e., if a connection drops and reconnect with the same `election_id` value, it will be considered as another client.
+A gRIBI client is identified by `Modify` RPC sessions, i.e., if a session drops and reconnect with the same `election_id` value, it will be considered as another client.
 
-Before a client starting sending `AFTOperations`, it should reach agreement with the device regarding the following session parameters
+Before a client starts sending `AFTOperation` messages, it should specify the desired parameters for the session.
 * Redundancy Mode (defined in x.y.z)
 * Persistent Mode (defined in x.y.z)
 * Acknoledge Mode (defined in x.y.z)
@@ -126,7 +126,7 @@ The life of an AFTOperation starts when a client creates it, and ends in the fol
 * `ack_type` = `RIB_AND_FIB_ACK`, the device programmed the operation into FIB successfully. // Return `FIB_PROGRAMMED`.
 * `ack_type` = `RIB_AND_FIB_ACK`, the device has successfully programmed the operation into RIB but failed to program it into FIB. // Return `FIB_FAILED`. Note that this is regardless if a device is going to retry the FIB programming or not. The client can promptly send another `AFTOperations` for explicit behaviors (e.g. `ADD` for retry, and `DELETE` for stopping retry).
 * The existing gRPC session is disconnected/canceled. All pending `AFTOperations` from the client should be cancelled.
-* The device has discovered a failover of the master client (see xxx for more details).
+* The device has discovered a change in the elected leader (see x.y.z for more details).
 
 Only during the life cycle should the device keep the client updated via `AFTResult` message. 
 
