@@ -138,7 +138,7 @@ Implications:
 
 The `Flush` RPC is an unary RPC for clients to remove gRIBI entries from a device. A client sends a `FlushRequest` message specifying the target network instance where the device should remove all gRIBI entries. The device processes the request and responds a `FlushResponse` message indicating the execution result.
 
-The `Flush` RPC can be used in some emergecy process to get the device out of bad traffic state, therefore:
+The `Flush` RPC can be used in some emergency process to get the device out of undesirable routing state, therefore:
 * This RPC provides a low complexity method to remove all gRIBI entries in specified network instance.
 * This RPC allows non primary client (in `SINGLE_PRIMARY` mode) to remove all gRIBI entries in specified network instance.
 
