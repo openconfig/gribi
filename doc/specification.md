@@ -88,7 +88,7 @@ Otherwise, the device discards the `AFTOperation` and returns a `ModifyResponse`
 
 ### 4.1.3 AFTOperation
 
-RIB modification desire sent by clients are carried by a set of `AFTOperation` messages. Three types of operations are supported:
+A client expresses modifications to the RIB modification by sending a set of `AFTOperation` messages. Three types of operations are supported:
 * `ADD` - creates an entry. If the entry already exists in the specified RIB table, the `ADD` SHOULD be treated as replacing the existing entry with the entry specified in the operation.
 * `REPLACE` - replaces an existing entry in the specified RIB table. It MUST fail if the entry does not exist. A replace operation should contain all of the relevant fields, such that existing entry is completely replaced with the specified entry.
 * `DELETE` - removes an entry from the specified RIB table, it MUST fail if the entry does not exist.
