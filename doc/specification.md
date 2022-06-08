@@ -34,8 +34,7 @@ The gRIBI service is defined as a single gRPC service, with three RPCs:
    routing entries to the server - each part of an individual operation. The 
    server responds asynchronously to these operations with an acknowledgement
    mode, based on the operating mode of the RPC.
- * `Get` - a server streaming RPC which can be used by a client to retrieve the
-   current set of installed gRIBI entries.
+ * `Get` - used by clients to retrieve the current set of installed gRIBI entries.
  * `Flush` - a unary RPC that is used as a low-complexity means to remove
    entries from a server.
 
@@ -119,23 +118,29 @@ Implications:
     * Get() or Flush() should return failed (because the VRF is no longer there)
     * When the VRF is added back, the server is not required to restore all the gRIBI objects by itself.
 
-## 4.1.10 `NextHopGroup`
+## 4.2 `Get`
 
-* `BackupNextHopGroup` operation - when to use backup vs. primary
-* Weights - expectations for quantisation
+The `Get` RPC is a server streaming RPC for clients to retrieve the current set of installed gRIBI entries. The `Get` RPC is typically used for reconcilation between a client and a server, or for periodical consistency checking by clients.
 
-## 4.1.11 `NextHop`
-`
-* Validation of next-hops
-* resolution outside of gRIBI
+A client sends a `GetRequest` message specifying the target network instance and gRIBI entry type. The device processes the request and responds a stream of `GetResponse` messages that contain the set of currently installed gRIBI entries by any client. Once all entries have been sent, the server should close the RPC.
 
-## 4.2 The `Get` RPC
+### 4.2.1 `GetRequest` message
 
-## 4.2.1 `Get` semantics
-* Contains ACKed entries installed by any client
-* Performance expectations - repeated and reconciliation
-* Relationship to `openconfig-aft` telemetry
-* If the specified network instances have no installed gRIBI objects, return an empty list instead of an error.
+`GetRequest` message MUST have both `network_instance` and `aft` populated by client.
+* If `network_instance` is nil or `network_instance.name` is en empty string, the server should close the `Get` RPC with the generic gRPC [`Status.code`](https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto) set to `INVALID_ARGUMENT`.
+* If `aft` is set to `ALL`, the device should return all installed gRIBI entries in the specified network instance.
+* If `aft` is set to a specific `AFTType`, the device should return all installed gRIBI entries of the specified type in the specified network instance.
+* If `aft` is set to a specific `AFTType` that's not supported by the device, , the device should close the `Get` RPC with the generic gRPC [`Status.code`](https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto) set to `UNIMPLEMENTED`.
+
+### 4.2.2 `GetResponse` message
+
+A `GetResponse` contains a list of `AFTEntry` messages. A `AFTEntry` message represents an installed gRIBI entry (the data model is defined in x.y.z) and its programming status (`rib_status` and `fib_status`).
+* `rib_status` indicates the programming status of the gRIBI entry in RIB. The value should be either `PROGRAMMED` or `NOT_PROGRAMMED`.
+* `fib_status` indicates the programming status of the gRIBI entry in FIB.
+  * When the session parameter is `ack_type` = `RIB_ACK`, it's optional for the device to keep track of FIB programming status of each gRIBI entry. Therefore, this field MAY be set to `UNAVAILABLE`.
+  * When the session parameter is `ack_type` = `RIB_AND_FIB_ACK`, the value should be either `PROGRAMMED` or `NOT_PROGRAMMED`.
+
+If the specified network instances have no installed gRIBI objects, the device should return an empty list of `AFTEntry` and then close the RPC with the generic gRPC [`Status.code`](https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto) set to `OK`.
 
 ## 4.3 The `Flush` RPC
 * Modes of operation - emergency client vs. elected master.
