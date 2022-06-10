@@ -181,7 +181,7 @@ The reasonings are:
 * The device should already have context of all the pending AFTOperations, ACK/NACK multiple coalesced AFTOperations based on one executed should not be a huge cost.
 * Does not require the sender to track the content of the pending AFTOperations.
 
-ACK/NACK coalesced (skipped) AFTOperations do raise the question as to whether the entry was ever in the RIB or hardware. Currently we don't think it's a concern. If future use cases/issues require so, we can introduce additional fields to indicate that the operation is coalesced (i.e., was never actually programmed in the hardware) in the response so that we don't overload the current ACK/NACK semantics.
+ACK/NACK coalesced (skipped) AFTOperations do raise the question as to whether the entry was ever in the RIB or FIB. Currently we don't think it's a concern. If future use cases/issues require so, we can introduce additional fields to indicate that the operation is coalesced (i.e., was never actually programmed in the FIB) in the response so that we don't overload the current ACK/NACK semantics.
 
 ## 4.2 `Get`
 
