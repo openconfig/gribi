@@ -79,7 +79,7 @@ Otherwise, the device discards the `AFTOperation` and returns a `ModifyResponse`
 
 #### 4.1.2.1 Election ID Reset
 
-There is no requirement for clients to reset the election ID to 0 in any cases. If clients lose track of the highest election ID known by the device, clients can learn the value via `ModifyResponse.election_id` from the device (see x.y.z for more details).
+There is no motivation to provide anyway for clients to reset the election ID on the device. If clients lose track of the highest election ID known by the device, clients can learn the value via `ModifyResponse.election_id` from the device (see x.y.z for more details).
 
 It is possible that in some scenarios (e.g., daemon crash, device reboot) the device might lose the highest learned election ID and hence set the value to 0. However, a device SHOULD NOT promptly reset the value to 0 in any cases(e.g., all clients disconnect). This helps reduce the chaince of non-primary client programming the device in some failure scenarios (e.g., some error happens on clients side that might lead to split-brain among clients and also cause all clients disconnect and then reconnect).
 
