@@ -86,15 +86,13 @@ A client expresses modifications to the RIB modification by sending a set of `AF
 
 `AFTOperation` is identified by its `id`.  The `AFTOperation.id` should be unique per `Modify` RPC session. It's the client's responsibility to gurrantee the uniqueness during a `Modify` RPC session.
 
-#### 4.1.3.1 AFTOperation Validation
-* minimum validation.
-* `election_id` check.
+#### 4.1.3.1 AFTOperation Content Validation
 
-#### 4.1.3.2 Forward References
+gRIBI relies strictly on the clients being conservative in what they send. It is the clients' responsiblity to ensure the correctness of AFTOperations content. However, the receiving device SHOULD determine each entry's viability before installing it to RIB/FIB (i.e., is the next-hop set resolvable).
 
-* Ability to NACK forward references
-* Server ability for resolving forward references is not required.
-* Client's responsibility to send AFTOperations in correct order.
+Take the scenario of forward reference for example:
+* It is the clients' responsibility to send AFTOperations in correct order.
+* It is not required for the device to have the ability of resolving forward references in the received AFTOperations.
 
 #### 4.1.3.3 AFTOperation Response
 
