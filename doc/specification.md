@@ -181,7 +181,7 @@ This is required in order to:
 * Allow the sender (client) to avoid tracking the content of the pending AFTOperations.
 
 The server (device) has context of all pending `AFTOperation` messages, since it must potentially ACK any individual operation. Sending an ACK/NACK per message does not present a significant cost.
-ACK/NACK coalesced (skipped) AFTOperations do raise the question as to whether the entry was ever in the RIB or FIB. Currently we don't think it's a concern. If future use cases/issues require so, we can introduce additional fields to indicate that the operation is coalesced (i.e., was never actually programmed in the FIB) in the response so that we don't overload the current ACK/NACK semantics.
+The requirement to send ACK/NACK for coalesced (skipped) AFTOperations does raise the question as to whether the entry was ever in the RIB or FIB. This is not currently considered as a core requirement - since the expectation is clients care about the latest state of either table. If future use cases/issues require such insight, we can introduce additional fields to indicate that the operation was coalesced (i.e., was never actually programmed in the FIB) in the response, such that the current ACK/NACK semantics are not overloaded.
 
 ## 4.2 `Get`
 
