@@ -176,7 +176,7 @@ In some scenarios, a device might coalesce multiple AFTOperations on a given gRI
 
 In this case, as long as the session is still up and the client is still the primary client, the device SHOULD ACK/NACK (defined in x.y.z) each individual AFTOperation from the same primary client.
 
-The reasonings are:
+This is required in order to:
 * Keep the API behavior clear and consistent.
 * The device should already have context of all the pending AFTOperations, ACK/NACK multiple coalesced AFTOperations based on one executed should not be a huge cost.
 * Does not require the sender to track the content of the pending AFTOperations.
