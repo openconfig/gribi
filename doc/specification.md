@@ -180,6 +180,7 @@ This is required in order to:
 * Keep the API behavior clear and consistent.
 * Allow the sender (client) to avoid tracking the content of the pending AFTOperations.
 
+The server (device) has context of all pending `AFTOperation` messages, since it must potentially ACK any individual operation. Sending an ACK/NACK per message does not present a significant cost.
 ACK/NACK coalesced (skipped) AFTOperations do raise the question as to whether the entry was ever in the RIB or FIB. Currently we don't think it's a concern. If future use cases/issues require so, we can introduce additional fields to indicate that the operation is coalesced (i.e., was never actually programmed in the FIB) in the response so that we don't overload the current ACK/NACK semantics.
 
 ## 4.2 `Get`
