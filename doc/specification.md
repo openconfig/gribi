@@ -170,6 +170,19 @@ Implications:
     * Get() or Flush() should return failed (because the VRF is no longer there)
     * When the VRF is added back, the server is not required to restore all the gRIBI objects by itself.
 
+### 4.1.10 Coalesced AFTOperations
+
+In some scenarios, a device might coalesce multiple AFTOperations on a given gRIBI entry and only execute the last one. This would be primarily done for performance optimization.
+
+In this case, as long as the session is still up and the client is still the primary client, the device SHOULD ACK/NACK (defined in x.y.z) each individual AFTOperation from the same primary client.
+
+This is required in order to:
+* Keep the API behavior clear and consistent.
+* Allow the sender (client) to avoid tracking the content of the pending AFTOperations.
+
+The server (device) has context of all pending `AFTOperation` messages, since it must potentially ACK any individual operation. Sending an ACK/NACK per message does not present a significant cost.
+The requirement to send ACK/NACK for coalesced (skipped) AFTOperations does raise the question as to whether the entry was ever in the RIB or FIB. This is not currently considered as a core requirement - since the expectation is clients care about the latest state of either table. If future use cases/issues require such insight, we can introduce additional fields to indicate that the operation was coalesced (i.e., was never actually programmed in the FIB) in the response, such that the current ACK/NACK semantics are not overloaded.
+
 ## 4.2 `Get`
 
 The `Get` RPC is a server streaming RPC for clients to retrieve the current set of installed gRIBI entries. The `Get` RPC is typically used for reconcilation between a client and a server, or for periodical consistency checking by clients.
