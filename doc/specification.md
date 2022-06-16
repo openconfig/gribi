@@ -98,7 +98,7 @@ A client expresses modifications to the RIB modification by sending a set of `AF
 
 #### 4.1.3.3 AFTOperation Response
 
-Device executes the received AFTOperations and streams the result to the sender (a gRIBI client) via a list of `AFTResult` messages in `ModifyResponse`. Each AFTOperation should be responded individually. The device MUST NOT stream the result to clients other than the sender (see x.y.z for client definition).
+Device executes the received AFTOperations and streams the results to the sender (a gRIBI client) via a list of `AFTResult` messages in `ModifyResponse`. Each AFTOperation should be responded individually. The device MUST NOT stream the results to clients other than the sender (see x.y.z for client definition).
 
 An `AFTResult` message must have the followings fields populated by the device:
 * `id` - indicates which AFTOperation this message is about.  It corresponds to the `id` field of the received `AFTOperation` message.
