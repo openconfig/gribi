@@ -66,70 +66,42 @@ module gribi-aft {
     deviate not-supported;
   }
 
-  deviation "/afts/ipv4-unicast/ipv4-entry/state/packets-forwarded" {
+  deviation "/afts/ipv4-unicast/ipv4-entry/state/counters" {
     description
       "Packet counters are not accessible over gRIBI, and rather
       over gNMI for the AFT model.";
     deviate not-supported;
   }
 
-  deviation "/afts/ipv4-unicast/ipv4-entry/state/octets-forwarded" {
+  deviation "/afts/ipv6-unicast/ipv6-entry/state/counters" {
     description
       "Packet counters are not accessible over gRIBI, and rather
       over gNMI for the AFT model.";
     deviate not-supported;
   }
 
-  deviation "/afts/ipv6-unicast/ipv6-entry/state/packets-forwarded" {
+  deviation "/afts/policy-forwarding/policy-forwarding-entry/state/counters" {
     description
       "Packet counters are not accessible over gRIBI, and rather
       over gNMI for the AFT model.";
     deviate not-supported;
   }
 
-  deviation "/afts/ipv6-unicast/ipv6-entry/state/octets-forwarded" {
+  deviation "/afts/mpls/label-entry/state/counters" {
     description
       "Packet counters are not accessible over gRIBI, and rather
       over gNMI for the AFT model.";
     deviate not-supported;
   }
 
-  deviation "/afts/policy-forwarding/policy-forwarding-entry/state/packets-forwarded" {
+  deviation "/afts/ethernet/mac-entry/state/counters" {
     description
       "Packet counters are not accessible over gRIBI, and rather
       over gNMI for the AFT model.";
     deviate not-supported;
   }
 
-  deviation "/afts/policy-forwarding/policy-forwarding-entry/state/octets-forwarded" {
-    description
-      "Packet counters are not accessible over gRIBI, and rather
-      over gNMI for the AFT model.";
-    deviate not-supported;
-  }
-
-  deviation "/afts/mpls/label-entry/state/packets-forwarded" {
-    description
-      "Packet counters are not accessible over gRIBI, and rather
-      over gNMI for the AFT model.";
-    deviate not-supported;
-  }
-
-  deviation "/afts/mpls/label-entry/state/octets-forwarded" {
-    description
-      "Packet counters are not accessible over gRIBI, and rather
-      over gNMI for the AFT model.";
-    deviate not-supported;
-  }
-
-  deviation "/afts/ethernet/mac-entry/state/packets-forwarded" {
-    description
-      "Packet counters are not accessible over gRIBI, and rather
-      over gNMI for the AFT model.";
-    deviate not-supported;
-  }
-
-  deviation "/afts/ethernet/mac-entry/state/octets-forwarded" {
+  deviation "/afts/next-hops/next-hop/state/counters" {
     description
       "Packet counters are not accessible over gRIBI, and rather
       over gNMI for the AFT model.";
@@ -148,5 +120,71 @@ module gribi-aft {
       "Next Hop programming indices are not accessible over gRIBI,
        and rather over gNMI for the AFT model.";
     deviate not-supported;
+  }
+
+  grouping entry-nhg-extensions {
+    description
+      "Leaves that are added as references in the openconfig-aft-network-instance
+      module to the /network-instance hierarchy, but are handled differntly in
+      the gRIBI model which does not include the network-instance YANG hierarchy.";
+
+    leaf next-hop-group {
+      type uint64;
+      description
+        "Identifier for the next-hop-group that is to be used for the
+        entry. In gRIBI, this value is expressed as a integer value
+        directly. The wider openconfig-network-instance model expresses
+        the relationships to other network instances as part of
+        telemetry.";
+    }
+
+    leaf next-hop-group-network-instance {
+      type string;
+      description
+        "Identifier for the network-instance within which the next-hop-group
+        is to be resolved. In gRIBI this is the string name of the network
+        instance, rather than a reference as is used in telemetry.";
+    }
+  }
+
+  augment "/afts/next-hops/next-hop/state" {
+    description
+     "Add network-instance references to next-hop.";
+
+    leaf network-instance {
+      type string;
+      description
+        "The network instance within which the network instance is to be resolved.";
+    }
+  }
+
+  augment "/afts/ipv4-unicast/ipv4-entry/state" {
+    description
+      "Add the NHG reference extensions to IPv4 unicast.";
+    uses entry-nhg-extensions;
+  }
+
+  augment "/afts/ipv6-unicast/ipv6-entry/state" {
+    description
+      "Add the NHG reference extensions to IPv6 unicast.";
+    uses entry-nhg-extensions;
+  }
+
+  augment "/afts/mpls/label-entry/state" {
+    description
+      "Add the NHG reference extensions to MPLS.";
+    uses entry-nhg-extensions;
+  }
+
+  augment "/afts/policy-forwarding/policy-forwarding-entry/state" {
+    description
+      "Add the NHG reference extensions to policy-forwarding.";
+    uses entry-nhg-extensions;
+  }
+
+  augment "/afts/ethernet/mac-entry/state" {
+    description
+      "Add the NHG reference extensions to Ethernet.";
+    uses entry-nhg-extensions;
   }
 }
