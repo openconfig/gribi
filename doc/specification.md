@@ -102,12 +102,19 @@ Device executes the received AFTOperations and streams the results to the sender
 
 An `AFTResult` message must have the followings fields populated by the device:
 * `id` - indicates which AFTOperation this message is about.  It corresponds to the `id` field of the received `AFTOperation` message.
-* `status` - records the execution result of the AFTOperation. It can have one of the following values. Note, not all the values are available in every acknowledge modes (see x.y.z for more details).
+* `status` - records the execution result of the AFTOperation. It can have one of the following values. Note, not all `status` values are available in every acknowlege mode (x.y.z defines acknowledge mode).
   * `FAILED` - indicates that the AFTOperation can not be programmed into the RIB (e.g. missing reference, invalid content, semantic errors, etc).
+    * Available in all acknowledge modes.
   * `RIB_PROGRAMMED` - indicates that the AFTOperation was successfully programmed into the RIB.
+    * Available in all acknowledge modes.
+    * OPTIONAL in the case of `FIB_PROGRAMMED`.
   * `FIB_PROGRAMMED` - indicates that the AFTOperation was successfully programmed into the FIB. "Programmed into the FIB" is defined as the forwarding entry being operational in the underlying forwarding resources across the system that it is relevant to (e.g., all linecards that host a particular VRF etc).
-  * `FIB_FAILED` - indicates that the device failed to program the AFTOperation into the FIB. The AFTOperation was meant to be programmed into the FIB.
+    * Only available in the `RIB_AND_FIB_ACK` acknowledge mode.
+    * Implies that the AFTOperation was also successfully programmed into the RIB.
+  * `FIB_FAILED` - indicates that the AFTOperation was meant to be programmed into the FIB. However, the device failed to program the AFTOperation into the FIB.
 * `timestamp` - records the time at which the gRIBI daemon received and processed the result from the underlying systems in the device. The typical use for this timestamp is to provide tracking of programming SLIs.
+
+In `RIB_AND_FIB_ACK` acknowledge mode, it's possible that a gRIBI entry is installed in the RIB, but is not the preferred route (e.g., there is a static route for the same matching entry), and therefore the gRIBI entry will not be programmed into the FIB. In this case, the device should only respond with the `status` value `RIB_PROGRAMMED`.
 
 ##### [TODO] 4.1.3.3.1 Idemopotent ADD and REPLACE
 
@@ -189,18 +196,15 @@ Implications:
     * Get() or Flush() should return failed (because the VRF is no longer there)
     * When the VRF is added back, the server is not required to restore all the gRIBI objects by itself.
 
-### [TODO]: 4.1.10 Acknowledge Mode
+### 4.1.10 Acknowledge Mode
 
-* `RIB_ACK` -
-* `RIB_AND_FIB_ACK` -
+Acknowledge mode indicates how much details should the device update the client on the result of executing the received `AFTOperations`. [x.y.z client-server session negotiation]() defines how the mode is agreed between client and server.
 
-How `status` values are used in different acknowlege modes.
+`Modify` can operate in one of the following acknowledge modes.
+* `RIB_ACK`: Afer sending an `AFTOperation`, the client expects the device to respond whether if the `AFTOperation` has been successfully programmed in the RIB.
+* `RIB_AND_FIB_ACK`: Afer sending an `AFTOperation`, the client expects the device to respond whether if the `AFTOperation` has been successfully programmed in both RIB and FIB.
 
-In `RIB_ACK` mode:
-* `FAILED` or `RIB_PROGRAMMED`.
-
-In `RIB_AND_FIB_ACK`
-* if the gRIBI route is not the prefereed one.
+The response is reflected in `AFTResult.status` (see [x.y.z AFTOperation response](a_link)).
 
 ## 4.2 `Get`
 
