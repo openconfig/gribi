@@ -98,7 +98,9 @@ A client expresses modifications to the RIB modification by sending a set of `AF
 
 #### 4.1.3.3 AFTOperation Response
 
-Device executes the received AFTOperations and streams the results to the sender (a gRIBI client) via a list of `AFTResult` messages in `ModifyResponse`. Each AFTOperation should be responded individually. The device MUST NOT stream the results to clients other than the sender (see x.y.z for client definition).
+Device executes the received AFTOperations and streams the results to the sender (a gRIBI client) via a list of `AFTResult` messages in `ModifyResponse`.
+* Each AFTOperation should be responded individually. The device MUST NOT stream the results to clients other than the sender (see x.y.z for client definition).
+* The device SHOULD NOT close the RPC session due to errors encountered processing an AFTOperation. The errors should be responded to with in-band error messages within the stream (eee `AFTResult` below).
 
 An `AFTResult` message must have the followings fields populated by the device:
 * `id` - indicates which AFTOperation this message is about.  It corresponds to the `id` field of the received `AFTOperation` message.
@@ -146,10 +148,6 @@ The life of an AFTOperation starts when a client creates it, and ends in the fol
 * The device has discovered a change in the elected leader (see x.y.z for more details).
 
 Only during the life cycle should the device keep the client updated via `AFTResult` message. 
-
-#### 4.1.3.5 AFTOperation Error Handling
-
-Should not close the RPC session due to errors encountered in an AFTOperation. Invalid AFTOperations should be responded to with failures within the stream.
 
 ### 4.1.4 Redundancy Mode
 
