@@ -153,6 +153,7 @@ Persistence mode specifies if the device should tie the validity of the received
 
 `Modify` can operate in one of the following modes. The definition of "disconnects" in this section includes timeout and cancelation of the `Modify` RPC session.
 * `DELETE` - When a client disconnects, the device should deletes all gRIBI entries, received from that client, in RIB and FIB.
+  * [TODO] might need to clarify some behaviors in `ALL_PRIMARY` mode.
 * `PRESERVE` - A client's disconnection SHOULD NOT trigger the device to delete any gRIBI entry, received from that client, in RIB or FIB.
 
 No matter which mode the `Modify` RPC session is operating in, it is always the new primary client's (in case of [`SINGLE_PRIMARY`](x.y.z)) or other clients' (in case of [`ALL_PRIMARY`](x.y.z)) responsibility to do the reconciliation (e.g. via [`Get`](x.y.z) and [`Modify`](x.y.z) RPC).
