@@ -184,8 +184,6 @@ Upon discovering a new leader has been elected, the device:
    * client liveliness
    * potential gRPC keepalives
 
-### 4.1.8 Timestamping operations.
-
 ### 4.1.9 About gRIBI Server Caching
 gRIBI server implementation is not required to cache all installed objects.
 Implications:
