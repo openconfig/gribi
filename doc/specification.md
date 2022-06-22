@@ -77,6 +77,12 @@ Otherwise, the device discards the `AFTOperation` and returns a `ModifyResponse`
 
 `ModifyRequest.election_id` MUST be non zero. When a device receives an value of 0, it should close the `Modify` RPC and set `Status.code` to `INVALID_ARGUMENT`. The election ID can only be increased monotonically by a client during a RPC session. This simplifies server implementation.
 
+#### 4.1.2.1 Election ID Reset
+
+There is no motivation to provide any way for clients to reset the election ID on the device since it is expected to be determined through a stable election mechanism. In the scenario that a client were to lose track of the highest election ID known by the device, the value can be learned via the `ModifyResponse.election_id` from the device, by sending a `ModifyRequest` with `ModifyRequest.election_id` set to the lowest possible value (1) (see x.y.z for more details).
+
+It is possible that in some scenarios (e.g., daemon crash, device reboot) the device might lose the highest learned election ID and hence unset it. However, a device SHOULD NOT reset the value in any cases (e.g., all clients disconnect). This helps reduce the chance of non-primary client programming the device in some failure scenarios (e.g., some error happens on clients side that might lead to split-brain among clients and also cause all clients disconnect and then reconnect).
+
 ### 4.1.3 AFTOperation
 
 A client expresses modifications to the RIB modification by sending a set of `AFTOperation` messages. Three types of operations are supported:
