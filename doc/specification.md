@@ -104,16 +104,44 @@ A client expresses modifications to the RIB modification by sending a set of `AF
 
 #### 4.1.3.3 AFTOperation Response
 
-Each AFTOperation should be responded individually.
+Device executes the received AFTOperations and streams the results to the sender (a gRIBI client) via a list of `AFTResult` messages in `ModifyResponse`.
+* Each AFTOperation should be responded individually. The device MUST NOT stream the results to clients other than the sender (see x.y.z for client definition).
+* The device SHOULD NOT close the RPC session due to errors encountered processing an AFTOperation. The errors should be responded to with in-band error messages within the stream (see `AFTResult` below).
 
-* FIB ACK vs. RIB ACK
-* When an ACK is sent to the client.
-* NACK cases:
-  * semantically invalid
-  * hardware failure
-  * missing entry for `DELETE`
-* coaelscion - must ACK every operation ID
-* acknowledging entries in the presence of other protocol routes.
+An `AFTResult` message must have the followings fields populated by the device:
+* `id` - indicates which AFTOperation this message is about.  It corresponds to the `id` field of the received `AFTOperation` message.
+* `status` - records the execution result of the AFTOperation. It can have one of the following values. Note, not all `status` values are available in every acknowlege mode (x.y.z defines acknowledge mode).
+  * `FAILED` - indicates that the AFTOperation can not be programmed into the RIB (e.g. missing reference, invalid content, semantic errors, etc).
+    * Available in all acknowledge modes.
+  * `RIB_PROGRAMMED` - indicates that the AFTOperation was successfully programmed into the RIB.
+    * Available in all acknowledge modes.
+    * OPTIONAL in the case of `FIB_PROGRAMMED`.
+  * `FIB_PROGRAMMED` - indicates that the AFTOperation was successfully programmed into the FIB. "Programmed into the FIB" is defined as the forwarding entry being operational in the underlying forwarding resources across the system that it is relevant to (e.g., all linecards that host a particular VRF etc).
+    * Only available in the `RIB_AND_FIB_ACK` acknowledge mode.
+    * Implies that the AFTOperation was also successfully programmed into the RIB.
+  * `FIB_FAILED` - indicates that the AFTOperation was meant to be programmed into the FIB. However, the device failed to program the AFTOperation into the FIB.
+* `timestamp` - records the time at which the gRIBI daemon received and processed the result from the underlying systems in the device. The typical use for this timestamp is to provide tracking of programming SLIs.
+
+In `RIB_AND_FIB_ACK` acknowledge mode, it's possible that a gRIBI entry is installed in the RIB, but is not the preferred route (e.g., there is a static route for the same matching entry), and therefore the gRIBI entry will not be programmed into the FIB. In this case, the device should only respond with the `status` value `RIB_PROGRAMMED`.
+
+##### [TODO] 4.1.3.3.1 Idemopotent ADD and REPLACE
+
+Clarify the following scenarios:
+* An entry is already installed in the FIB, received an AFTOperation for adding the same entry.
+* An entry was failed to be programmed into the FIB, received an AFTOperation for adding the same entry.
+
+##### 4.1.3.3.2 Coalesced AFTOperations
+
+In some scenarios, a device might coalesce multiple AFTOperations on a given gRIBI entry and only execute the last one. This would be primarily done for performance optimization.
+
+In this case, as long as the session is still up and the client is still the primary client, the device SHOULD ACK/NACK (defined in x.y.z) each individual AFTOperation from the same primary client.
+
+This is required in order to:
+* Keep the API behavior clear and consistent.
+* Allow the sender (client) to avoid tracking the content of the pending AFTOperations.
+
+The server (device) has context of all pending `AFTOperation` messages, since it must potentially ACK any individual operation. Sending an ACK/NACK per message does not present a significant cost.
+The requirement to send ACK/NACK for coalesced (skipped) AFTOperations does raise the question as to whether the entry was ever in the RIB or FIB. This is not currently considered as a core requirement - since the expectation is clients care about the latest state of either table. If future use cases/issues require such insight, we can introduce additional fields to indicate that the operation was coalesced (i.e., was never actually programmed in the FIB) in the response, such that the current ACK/NACK semantics are not overloaded.
 
 #### 4.1.3.4 Life cycle of an `AFTOperation`
 
@@ -126,10 +154,6 @@ The life of an AFTOperation starts when a client creates it, and ends in the fol
 * The device has discovered a change in the elected leader (see x.y.z for more details).
 
 Only during the life cycle should the device keep the client updated via `AFTResult` message. 
-
-#### 4.1.3.5 AFTOperation Error Handling
-
-Should not close the RPC session due to errors encountered in an AFTOperation. Invalid AFTOperations should be responded to with failures within the stream.
 
 ### 4.1.4 Redundancy Mode
 
@@ -155,18 +179,14 @@ Upon discovering a new leader has been elected, the device:
 
 ### 4.1.6 Persistence modes
 
-* `PRESERVE`
-  * across client connections - reconciliation requirement for a client.
-  * hardware state preservation requirement
-  * software state preservation
-    * across daemon failures
-    * across control-plane failovers
-    * unrecoverable failures
-* `DELETE`
-   * client liveliness
-   * potential gRPC keepalives
+Persistence mode specifies if the device should tie the validity of the received gRIBI entries from a client to the livelenss of the `Modify` RPC session. [x.y.z client-server session negotiation]() defines how the persistence mode is agreed between client and server.
 
-### 4.1.8 Timestamping operations.
+`Modify` can operate in one of the following modes. The definition of "disconnects" in this section includes timeout and cancelation of the `Modify` RPC session.
+* `DELETE` - When a client disconnects, the device should deletes all gRIBI entries, received from that client, in RIB and FIB.
+  * [TODO] might need to clarify some behaviors in `ALL_PRIMARY` mode.
+* `PRESERVE` - A client's disconnection SHOULD NOT trigger the device to delete any gRIBI entry, received from that client, in RIB or FIB.
+
+No matter which mode the `Modify` RPC session is operating in, it is always the new primary client's (in case of [`SINGLE_PRIMARY`](x.y.z)) or other clients' (in case of [`ALL_PRIMARY`](x.y.z)) responsibility to do the reconciliation (e.g. via [`Get`](x.y.z) and [`Modify`](x.y.z) RPC).
 
 ### 4.1.9 About gRIBI Server Caching
 gRIBI server implementation is not required to cache all installed objects.
@@ -175,6 +195,16 @@ Implications:
     * The device is not required to maintain gRIBI objects in the FIB or RIB.
     * Get() or Flush() should return failed (because the VRF is no longer there)
     * When the VRF is added back, the server is not required to restore all the gRIBI objects by itself.
+
+### 4.1.10 Acknowledge Mode
+
+Acknowledge mode indicates how much details should the device update the client on the result of executing the received `AFTOperations`. [x.y.z client-server session negotiation]() defines how the mode is agreed between client and server.
+
+`Modify` can operate in one of the following acknowledge modes.
+* `RIB_ACK`: Afer sending an `AFTOperation`, the client expects the device to respond whether if the `AFTOperation` has been successfully programmed in the RIB.
+* `RIB_AND_FIB_ACK`: Afer sending an `AFTOperation`, the client expects the device to respond whether if the `AFTOperation` has been successfully programmed in both RIB and FIB.
+
+The response is reflected in `AFTResult.status` (see [x.y.z AFTOperation response](a_link)).
 
 ## 4.2 `Get`
 
