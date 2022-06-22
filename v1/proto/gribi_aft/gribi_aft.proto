@@ -87,7 +87,10 @@ message Afts {
     IpInIp ip_in_ip = 157296597 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip"];
     ywrapper.StringValue mac_address = 404609192 [(yext.schemapath) = "/afts/next-hops/next-hop/state/mac-address"];
     ywrapper.StringValue network_instance = 232391308 [(yext.schemapath) = "/afts/next-hops/next-hop/state/network-instance"];
+    ywrapper.BoolValue pop_top_label = 382175404 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pop-top-label"];
     repeated PushedMplsLabelStackUnion pushed_mpls_label_stack = 489592660 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
+    ywrapper.StringValue tunnel_src_ip_address = 174262178 [(yext.schemapath) = "/afts/next-hops/next-hop/state/tunnel-src-ip-address"];
+    ywrapper.UintValue vni_label = 209933130 [(yext.schemapath) = "/afts/next-hops/next-hop/state/vni-label"];
   }
   message NextHopGroup {
     message NextHop {

@@ -34,23 +34,17 @@ runreadlink() {
 }
 
 if [ -z $SRCDIR ]; then
-	THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-	SRC_DIR=`runreadlink -m ${THIS_DIR}/..`
+  THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+  SRC_DIR=`runreadlink -m ${THIS_DIR}/..`
 fi
 
-# Apply patches to YANG that are within the version
-for i in `find ${SRC_DIR}/v1/yang/patches -name *.patch | sort`; do
-  patch -p1 < $i;
-done
-
 proto_generator \
-	-path=${SRC_DIR}/v1/yang,${SRC_DIR}/v1/yang/deps \
-	-output_dir=${SRC_DIR}/v1/proto -compress_paths -generate_fakeroot -fakeroot_name=device \
-	-package_name=gribi_aft -exclude_modules=ietf-interfaces,openconfig-interfaces \
-	-base_import_path="v1/proto" \
-	-go_package_base="github.com/openconfig/gribi/v1/proto" \
-	-consistent_union_enum_names -typedef_enum_with_defmod \
-	${SRC_DIR}/v1/yang/gribi-aft.yang 
+  -path=${SRC_DIR}/v1/yang,${SRC_DIR}/v1/yang/deps \
+  -output_dir=${SRC_DIR}/v1/proto -compress_paths -generate_fakeroot -fakeroot_name=device \
+  -package_name=gribi_aft -exclude_modules=ietf-interfaces,openconfig-interfaces \
+  -base_import_path="v1/proto" \
+  -go_package_base="github.com/openconfig/gribi/v1/proto" \
+  ${SRC_DIR}/v1/yang/gribi-aft.yang
 
 # Add licensing to the generated Go code.
 RP=`echo ${SRC_DIR} | sed 's/\./\\./g'`
@@ -58,13 +52,5 @@ RP=`echo ${SRC_DIR} | sed 's/\./\\./g'`
 
 # Replace absolute paths in the protobuf files.
 for i in `find ${SRC_DIR} -type f -name "*.proto"`; do
-	runsed -i "s;${RP};github.com/openconfig/gribi;g" $i
-done
-
-# Revert files to original (pre-patched) state.
-for i in `find ${SRC_DIR}/v1/yang/aft | egrep -v "orig$"`; do
-	git checkout HEAD -- $i
-	if [ -f "$i.orig" ]; then
-		rm $i.orig
-	fi
+  runsed -i "s;${RP};github.com/openconfig/gribi;g" $i
 done
