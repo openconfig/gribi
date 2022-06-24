@@ -7,14 +7,15 @@
 # 1 Introduction
 
 This document defines the specification for the gRPC Routing Information Base Interface (gRIBI). gRIBI is a gRPC-based protocol for injecting routing entries
-to a network device.
+to an network device. gRIBI implementation on an network device is presented as a service that can be interacted with by an external process, which may be an element of an SDN controller.
 
-gRIBI is a service that is presented by a network device (referred to as the
-server, or target) throughout this document, and interacted with by an external
-process, referred to as the client in this document, which may be an element of
-an SDN controller.
-
-This document serves as a specification for the gRIBI protocol.
+Terminology used in this document:
+* Device - refers to an network device that presents the gRIBI service.
+* Server - refers to the gRIBI server implementation on the device.
+* Client - refers to a gRIBI client implementation that is usually running externally to the device.
+* gRIBI entry - refers to an entry that can be injected to a network device via gRIBI, e.g., an IPv4 prefix, a next_hop_group, or a next_hop, etc (see the message `AFTOperation.entry`).
+* AFT operation - refers to the operation (e.g., add an next_hop) carried in an `AFTOperation` message.
+[TODO] update the whole doc with the above defined terminology.
 
 # 2 Data Model
 
