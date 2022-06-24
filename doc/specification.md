@@ -206,6 +206,12 @@ Acknowledge mode indicates how much details should the device update the client 
 
 The response is reflected in `AFTResult.status` (see [x.y.z AFTOperation response](a_link)).
 
+### 4.1.11 gRIBI Entry Preference
+
+A device might learn routing information of the same destination from different protocols (e.g., static route, gRIBI, OSPF, BGP, etc.). In that case, the device by default should prefer gRIBI over other distributed routing protocols (e.g., OSPF, BGP, etc.), and should prefer static route over gRIBI.
+
+The preference is often indicated by different values (often known as Administrative Distance or Route Preference) in a network device OS. The values are locally significant to different device OS. This spec does not enforce the exact value that a device OS should assign to gRIBI protocol.
+
 ## 4.2 `Get`
 
 The `Get` RPC is a server streaming RPC for clients to retrieve the current set of installed gRIBI entries. The `Get` RPC is typically used for reconcilation between a client and a server, or for periodical consistency checking by clients.
