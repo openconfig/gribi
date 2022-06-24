@@ -13,7 +13,7 @@ Terminology used in this document:
 * Device - referes to an network device that presents the gRIBI service.
 * Server - referes to the gRIBI server implementation on the device.
 * Client - referes to a gRIBI client implementation that is usually running externally to the device.
-* gRIBI entry - referes to an entry that can be injected to an network device via gRIBI, e.g., an IPv4, an next_hop_group, or an next_hop, etc (see the message `AFTOperation.entry`).
+* gRIBI entry - refers to an entry that can be injected to a network device via gRIBI, e.g., an IPv4 prefix, a next_hop_group, or a next_hop, etc (see the message `AFTOperation.entry`).
 * AFT operation - referes to the desire (e.g., add an next_hop) carried in an `AFTOperation` message.
 [TODO] update the whole doc with the above defined terminology.
 
