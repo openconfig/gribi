@@ -14,7 +14,7 @@ Terminology used in this document:
 * Server - referes to the gRIBI server implementation on the device.
 * Client - referes to a gRIBI client implementation that is usually running externally to the device.
 * gRIBI entry - refers to an entry that can be injected to a network device via gRIBI, e.g., an IPv4 prefix, a next_hop_group, or a next_hop, etc (see the message `AFTOperation.entry`).
-* AFT operation - referes to the desire (e.g., add an next_hop) carried in an `AFTOperation` message.
+* AFT operation - refers to the operation (e.g., add an next_hop) carried in an `AFTOperation` message.
 [TODO] update the whole doc with the above defined terminology.
 
 # 2 Data Model
