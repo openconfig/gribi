@@ -206,7 +206,7 @@ Acknowledge mode indicates how much details should the device update the client 
 
 The response is reflected in `AFTResult.status` (see [x.y.z AFTOperation response](a_link)).
 
-### 4.1.11 gRIBI Entry Preference
+### 4.1.11 gRIBI Route Preference
 
 A device might learn routing information of the same destination from different protocols (e.g., static route, gRIBI, OSPF, BGP, etc.). In that case, the device by default should prefer gRIBI over other distributed routing protocols (e.g., OSPF, BGP, etc.), and should prefer static route over gRIBI.
 
