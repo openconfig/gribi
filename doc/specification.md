@@ -95,11 +95,11 @@ A client expresses modifications to the RIB modification by sending a set of `AF
 
 #### 4.1.3.1 AFTOperation Content Validation
 
-gRIBI relies strictly on the clients being conservative in what they send. It is the clients' responsiblity to ensure the correctness of AFTOperations content. However, the receiving device SHOULD determine each entry's viability before installing it to RIB/FIB (i.e., is the next-hop set resolvable).
+It is the clients' responsibility to ensure the correctness of AFT operation content, and being conservative in what they send. The device should process AFT operations per the received order and process each AFT operation atomically, and is only required to perform the following validations:
+* Message syntax validation.
+* Entry viability validation (e.g., the next-hop can be resolved, the referenced NHG is installed, etc.). This should also catch the case where out of order AFT operation reference happens).
 
-Take the scenario of forward reference for example:
-* It is the clients' responsibility to send AFTOperations in correct order.
-* It is not required for the device to have the ability of resolving forward references in the received AFTOperations.
+Failed validation should lead to a `FAILED` response (see x.y.z for AFTOperation Response)
 
 #### 4.1.3.3 AFTOperation Response
 
