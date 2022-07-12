@@ -93,15 +93,13 @@ A client expresses modifications to the RIB modification by sending a set of `AF
 
 `AFTOperation` is identified by its `id`.  The `AFTOperation.id` should be unique per `Modify` RPC session. It's the client's responsibility to gurrantee the uniqueness during a `Modify` RPC session.
 
-#### 4.1.3.1 AFTOperation Validation
-* minimum validation.
-* `election_id` check.
+#### 4.1.3.1 AFTOperation Content Validation
 
-#### 4.1.3.2 Forward References
+It is the clients' responsibility to ensure the correctness of AFT operation content, and being conservative in what they send. The device should process AFT operations per the received order and process each AFT operation atomically, and is only required to perform the following validations:
+* Message syntax validation.
+* Entry viability validation (e.g., the next-hop can be resolved, the referenced NHG is installed, etc.). This should also catch the case where out of order AFT operation reference happens).
 
-* Ability to NACK forward references
-* Server ability for resolving forward references is not required.
-* Client's responsibility to send AFTOperations in correct order.
+Failed validation should lead to a `FAILED` response (see x.y.z for AFTOperation Response)
 
 #### 4.1.3.3 AFTOperation Response
 
