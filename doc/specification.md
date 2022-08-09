@@ -215,7 +215,7 @@ The preference is often indicated by different values (often known as Administra
 
 The `Get` RPC is a server streaming RPC for clients to retrieve the current set of installed gRIBI entries. The `Get` RPC is typically used for reconcilation between a client and a server, or for periodical consistency checking by clients.
 
-A client sends a `GetRequest` message specifying the target network instance and gRIBI entry type. The device processes the request and responds a stream of `GetResponse` messages that contain the set of currently installed gRIBI entries by any client. Once all entries have been sent, the server should close the RPC.
+A client sends a `GetRequest` message specifying the target network instance and gRIBI entry type. The device processes the request and responds a stream of `GetResponse` messages that contain the set of currently installed gRIBI entries by any client, and their server acknowledged programming status (see 4.2.2 for more details). Once all entries have been sent, the server should close the RPC.
 
 ### 4.2.1 `GetRequest` message
 
@@ -227,7 +227,7 @@ A client sends a `GetRequest` message specifying the target network instance and
 
 ### 4.2.2 `GetResponse` message
 
-A `GetResponse` contains a list of `AFTEntry` messages. A `AFTEntry` message represents an installed gRIBI entry (the data model is defined in x.y.z) and its programming status (`rib_status` and `fib_status`).
+A `GetResponse` contains a list of `AFTEntry` messages. An `AFTEntry` message represents an installed gRIBI entry (the data model is defined in x.y.z) and its server acknowledged programming status (`rib_status` and `fib_status`). "server acknowledged programming status" represents the `AFTResult` at the time of the response being sent to the client (regardless if sending the response failed)
 * `rib_status` indicates the programming status of the gRIBI entry in RIB. The value should be either `PROGRAMMED` or `NOT_PROGRAMMED`.
 * `fib_status` indicates the programming status of the gRIBI entry in FIB.
   * When the session parameter is `ack_type` = `RIB_ACK`, it's optional for the device to keep track of FIB programming status of each gRIBI entry. Therefore, this field MAY be set to `UNAVAILABLE`.
