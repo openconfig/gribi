@@ -174,8 +174,9 @@ message AFTOperation {
     // the relevant fields, such that existing entry is completely replaced
     // with the specified entry.
     REPLACE = 2;
-    // DELETE removes an entry from the table, it should fail if the entry
-    // does not exist.
+    // DELETE removes an entry from the table. It should be idempotent that it
+    // should not fail if the entry does not exist or if there is another
+    // pending deletion for the same.
     DELETE = 3;
   }
   Operation op = 3;
