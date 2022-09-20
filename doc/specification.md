@@ -25,7 +25,7 @@ The YANG model is transformed to Protobuf to be carrried within the payload of g
 
 # 3 Encryption, Authentication and Authorization.
 
-TLS
+Currently gRIBI leverages the underlying gRPC encryption, authentication and authorization support.
 
 # 4 Service Definition
 
