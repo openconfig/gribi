@@ -126,7 +126,7 @@ In `RIB_AND_FIB_ACK` acknowledge mode, it's possible that a gRIBI entry is insta
 
 The behavior of AFT operation `DELETE` MUST be idempotent as to the device RIB/FIB state. In addition, the idempotent behavior should also cover the response. For example, if the entry does not exist, the device should return `FIB_PROGRAMMED` (in the session of `ack_type=RIB_AND_FIB_ACK`).
 
-It is normal and expected that controllers might send repeated `DELETE`, or send a `DELETE` while one is still pending processing on the device. Having this behavior simplifies the implementation, instead of overloading `FAILED` or disconnecting the `Modify` RPC with errors. If future use cases/issues say different, we can consider enrich the `AFTResult` message.
+It is normal and expected that controllers might send repeated `DELETE`, or send a `DELETE` while one is still pending processing on the device. Having this behavior simplifies the implementation, instead of overloading `FAILED` or disconnecting the `Modify` RPC with errors.
 
 ##### 4.1.3.3.2 Coalesced AFT operations
 
