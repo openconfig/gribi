@@ -88,7 +88,7 @@ It is possible that in some scenarios (e.g., daemon crash, device reboot) the de
 A client expresses modifications to the RIB by sending a set of `AFTOperation` messages. Three types of operations are supported:
 * `ADD` - creates an entry. If the entry already exists in the specified RIB table, the `ADD` SHOULD be treated as replacing the existing entry with the entry specified in the operation.
 * `REPLACE` - replaces an existing entry in the specified RIB table. It MUST fail if the entry does not exist. A replace operation should contain all of the relevant fields, such that existing entry is completely replaced with the specified entry.
-* `DELETE` - removes an entry from the specified RIB table, it MUST fail if the entry does not exist.
+* `DELETE` - removes an entry from the specified RIB table.
 
 An AFT Operation is identified by its `id` in the `AFTOperation` message.  The `AFTOperation.id` should be unique per `Modify` RPC session. It's the client's responsibility to guarantee the uniqueness during a `Modify` RPC session.
 
@@ -122,11 +122,11 @@ An `AFTResult` message MUST have the followings fields populated by the device:
 
 In `RIB_AND_FIB_ACK` acknowledge mode, it's possible that a gRIBI entry is installed in the RIB, but is not the preferred route (e.g., there is a static route for the same matching entry), and therefore the gRIBI entry will not be programmed into the FIB. In this case, the device should only respond with the `status` value `RIB_PROGRAMMED`.
 
-##### [TODO] 4.1.3.3.1 Idempotent ADD and REPLACE
+##### 4.1.3.3.1 Idempotent DELETE
 
-Clarify the following scenarios:
-* An entry is already installed in the FIB, received an AFTOperation for adding the same entry.
-* An entry was failed to be programmed into the FIB, received an AFTOperation for adding the same entry.
+The behavior of AFT operation `DELETE` MUST be idempotent as to the device RIB/FIB state. In addition, the idempotent behavior should also cover the response. For example, if the entry does not exist, the device should return `FIB_PROGRAMMED` (in the session of `ack_type=RIB_AND_FIB_ACK`).
+
+It is normal and expected that controllers might send repeated `DELETE`, or send a `DELETE` while one is still pending processing on the device. Having this behavior simplifies the implementation, instead of overloading `FAILED` or disconnecting the `Modify` RPC with errors.
 
 ##### 4.1.3.3.2 Coalesced AFT operations
 
