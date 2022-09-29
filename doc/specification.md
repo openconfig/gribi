@@ -96,7 +96,7 @@ An AFT Operation is identified by its `id` in the `AFTOperation` message.  The `
 
 It is the clients' responsibility to ensure the correctness of AFT operation content, and being conservative in what they send. The device should process AFT operations per the received order and process each AFT operation atomically, and is only required to perform the following validations:
 * Message syntax validation.
-* Entry viability validation (e.g., the next-hop can be resolved, the referenced NHG is installed, etc.). This should also catch the case where out of order AFT operation reference happens).
+* Entry reference validation (e.g. the referenced NHG is installed). This should also catch the case where out of order AFT operation reference happens).
 
 Failed validation should return a `ModifyResponse` message with `result` set to `FAILED` (see x.y.z for AFTOperation Response).
 
