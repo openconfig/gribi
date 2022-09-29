@@ -229,7 +229,7 @@ gRIBI server implementation is not required to cache all installed objects.
 Implications:
   * When a VRF is removed (e.g. accidentally by user via cli):
     * The device is not required to maintain gRIBI objects in the FIB or RIB.
-    * `Get`([4.2](#42-get-rpc)) or `Flush`([4.3](#43-flush-rpc)) should return `FAILED` (because the VRF is no longer there)
+    * `Get`([4.2](#42-get-rpc)) or `Flush`([4.3](#43-flush-rpc)) should return corresponding errors (because the VRF is no longer there)
     * When the VRF is added back, the server is not required to restore all the gRIBI objects by itself.
 
 ### 4.1.8 gRIBI Route Preference
