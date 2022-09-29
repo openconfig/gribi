@@ -4,23 +4,54 @@
 **Version**: 1.0.0  
 **Last Update**: 2021-11-29  
 
+# Table of Contents
+
+* [1 Introduction](#1-introduction)
+* [2 Data Model](#2-data-model)
+* [3 Encryption, Authentication and Authorization.](#3-encryption-authentication-and-authorization)
+* [4 Service Definition](#4-service-definition)
+   * [4.1 Modify RPC](#41-modify-rpc)
+      * [4.1.1 Client-Server Session Negotiation](#411-client-server-session-negotiation)
+      * [4.1.2 Election ID](#412-election-id)
+         * [4.1.2.1 Election ID Reset](#4121-election-id-reset)
+      * [4.1.3 AFT Operation](#413-aft-operation)
+         * [4.1.3.1 AFT Operation Content Validation](#4131-aft-operation-content-validation)
+         * [4.1.3.2 AFT Operation Response](#4132-aft-operation-response)
+            * [4.1.3.2.1 Idempotent DELETE](#41321-idempotent-delete)
+            * [4.1.3.2.2 Coalesced AFT operations](#41322-coalesced-aft-operations)
+         * [4.1.3.3 Life cycle of an AFT operation](#4133-life-cycle-of-an-aft-operation)
+      * [4.1.4 Redundancy Mode](#414-redundancy-mode)
+         * [4.1.4.1 Client Election In SINGLE_PRIMARY](#4141-client-election-in-single_primary)
+         * [4.1.4.2 New Leader Election In SINGLE_PRIMARY](#4142-new-leader-election-in-single_primary)
+      * [4.1.5 Persistence modes](#415-persistence-modes)
+      * [4.1.6 Acknowledge Mode](#416-acknowledge-mode)
+      * [4.1.7 About gRIBI Server Caching](#417-about-gribi-server-caching)
+      * [4.1.8 gRIBI Route Preference](#418-gribi-route-preference)
+   * [4.2 Get RPC](#42-get-rpc)
+      * [4.2.1 GetRequest message](#421-getrequest-message)
+      * [4.2.2 GetResponse message](#422-getresponse-message)
+   * [4.3 Flush RPC](#43-flush-rpc)
+      * [4.3.1 FlushRequest Message](#431-flushrequest-message)
+         * [4.3.1.1 election In FlushRequest Message](#4311-election-in-flushrequest-message)
+      * [4.3.2 FlushResponse message](#432-flushresponse-message)
+      * [4.3.3 Error Handling](#433-error-handling)
+
 # 1 Introduction
 
-This document defines the specification for the gRPC Routing Information Base Interface (gRIBI). gRIBI is a gRPC-based protocol for injecting routing entries
-to an network device. gRIBI implementation on an network device is presented as a service that can be interacted with by an external process, which may be an element of an SDN controller.
+This document defines the specification for the gRPC Routing Information Base Interface (gRIBI). gRIBI is a gRPC-based protocol for injecting routing entries to an network device. gRIBI implementation on an network device is presented as a service that can be interacted with by an external process, which may be an element of an SDN controller.
 
 Terminology used in this document:
 * Device - refers to an network device that presents the gRIBI service.
 * Server - refers to the gRIBI server implementation on the device.
 * Client - refers to a gRIBI client implementation that is usually running externally to the device.
-* gRIBI entry - refers to an entry that can be injected to a network device via gRIBI, e.g., an IPv4 prefix, a next_hop_group, or a next_hop, etc (see the message `AFTOperation.entry`).
-* AFT operation - refers to the operation (e.g., add an next_hop) carried in an `AFTOperation` message.
+* gRIBI entry - refers to an entry that can be injected to a network device via gRIBI, e.g., an IPv4 prefix, a next hop group, or a next hop, etc. (see the `entry` field in `AFTOperation.entry` message).
+* AFT operation - refers to the operation (e.g., add an next hop) carried in an `AFTOperation` message.
 
 # 2 Data Model
 
 gRIBI uses the [OC (OpenConfig) AFT model](https://github.com/openconfig/public/tree/master/release/models/aft) as an abstracted view of the device RIB. Using the same schema as the OC AFT model simplifies gRIBI injection service as much as possible. It guarantees that injected gRIBI entries are mappable to the existing gNMI `Get` and `Subscribe` RPCs for retrieving and streaming AFT entries.
 
-The YANG model is transformed to Protobuf to be carried within the payload of gRIBI RPCs. The process of machine translating YANG to Protobuf is implemented in the [ygot](https://github.com/openconfig/ygot) library.
+The YANG model is transformed to Protobuf ([gribi_aft.proto](https://github.com/openconfig/gribi/blob/master/v1/proto/gribi_aft/gribi_aft.proto)) to be carried within the payload of gRIBI RPCs. The process of machine translating YANG to Protobuf is implemented in the [ygot](https://github.com/openconfig/ygot) library.
 
 # 3 Encryption, Authentication and Authorization.
 
@@ -30,9 +61,9 @@ Currently gRIBI does not define its own specification for encryption, authentica
 
 The gRIBI service is a single gRPC service defined in [`gribi.proto`](https://github.com/openconfig/gribi/blob/master/v1/proto/service/gribi.proto). It includes three RPCs:
 
- * `Modify` - defined in x.y.z, used by the clients to modify the device's RIB.
- * `Flush` - defined in x.y.z, used by clients to remove gRIBI entries on a device.
- * `Get` - defined in x.y.z, used by clients to retrieve the current set of installed gRIBI entries.
+ * `Modify` - defined in [4.1](#41-modify-rpc), used by the clients to modify the device's RIB.
+ * `Flush` - defined in [4.2](#42-get-rpc), used by clients to remove gRIBI entries on a device.
+ * `Get` - defined in [4.3](#43-flush-rpc), used by clients to retrieve the current set of installed gRIBI entries.
 
 IANA has reserved [TCP port 9340](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml?search=9340#Google_Networking) for gRIBI service.
 
@@ -45,9 +76,9 @@ The `Modify` RPC is a bidirectional streaming RPC for clients to modify the devi
 A gRIBI client is identified by `Modify` RPC sessions, i.e., if a session drops and reconnect with the same `election_id` value, it will be considered as another client.
 
 Before a client starts sending `AFTOperation` messages, it should specify the desired parameters for the session.
-* Redundancy Mode (defined in x.y.z)
-* Persistent Mode (defined in x.y.z)
-* Acknowledge Mode (defined in x.y.z)
+* Redundancy Mode - defined in [4.1.4](#414-redundancy-mode)
+* Persistent Mode - defined in [4.1.5](#415-persistence-modes)
+* Acknowledge Mode - defined in [4.1.6](#416-acknowledge-mode)
 
 A client starts the negotiation process by sending the first `ModifyRequest` message with only `params` populated. `params` MUST NOT be sent more than once during the lifetime of the RPC session. All clients MUST send the same values of all the attributes of `params`. If the device can process and support the requested parameters, it should respond with `ModifyResponse` that has `session_params_result.status = OK`. Otherwise, the device should close the `Modify` RPC and set the generic gRPC [`Status.code`][gRPC status code] per the following scenarios:
 * If any of the requested parameter is not fully implemented, set `Status.code` to `UNIMPLEMENTED`. The `Status.details` should contain `ModifyRPCErrorDetails` message with `reason` set to `UNSUPPORTED_PARAMS`.
@@ -61,12 +92,12 @@ It is possible that the client skips the negotiation step. In this case, the fir
 
 ### 4.1.2 Election ID
 
-Election ID informs the device of the result of an external election amongst the clients connected to it (redundancy mode is defined in x.y.z).
+Election ID informs the device of the result of an external election amongst the clients connected to it (redundancy mode is defined in [4.1.4](#414-redundancy-mode)).
 
 Election ID should only be used in `SINGLE_PRIMARY` mode. If the agreed redundancy mode is `ALL_PRIMARY`, but a client populates either `ModifyRequest.election_id` or `AFTOperation.election_id`, the device should close the `Modify` RPC and set `Status.code` to `FAILED_PRECONDITION`. The `Status.details` should contain `ModifyRPCErrorDetails` message with `reason` set to `ELECTION_ID_IN_ALL_PRIMARY`.
 
 There are two fields for election ID.
-* `ModifyRequest.election_id` is to indicate the clients election result. It should only be populated when the client's election ID changed after an election result (election is defined in x.y.z).
+* `ModifyRequest.election_id` is to indicate the clients election result. It should only be populated when the client's election ID changed after an election result (election is defined in [4.1.4.1](#4141-client-election-in-single_primary)).
 * `AFTOperation.election_id` is consumed by the server to determine whether to process the AFTOperation. In `SINGLE_PRIMARY` mode, an `AFTOperation` message should always have the `election_id` populated.
 
 In `SINGLE_PRIMARY` mode, the device processes the `AFTOperation` only if all the following conditions met:
@@ -79,7 +110,7 @@ Otherwise, the device discards the `AFTOperation` message and returns a `ModifyR
 
 #### 4.1.2.1 Election ID Reset
 
-There is no motivation to provide any way for clients to reset the election ID on the device since it is expected to be determined through a stable election mechanism. In the scenario that a client were to lose track of the highest election ID known by the device, the value can be learned via the `ModifyResponse.election_id` from the device, by sending a `ModifyRequest` with `ModifyRequest.election_id` set to the lowest possible value (1) (see x.y.z for more details).
+There is no motivation to provide any way for clients to reset the election ID on the device since it is expected to be determined through a stable election mechanism. In the scenario that a client were to lose track of the highest election ID known by the device, the value can be learned via the `ModifyResponse.election_id` from the device, by sending a `ModifyRequest` with `ModifyRequest.election_id` set to the lowest possible value (1) (see [4.1.4.1](#4141-client-election-in-single_primary) for more details).
 
 It is possible that in some scenarios (e.g., daemon crash, device reboot) the device might lose the highest learned election ID and hence unset it. However, a device SHOULD NOT promptly reset the value in any cases (e.g., all clients disconnect). This helps reduce the chance of non-primary client programming the device in some failure scenarios (e.g., some error happens on clients side that might lead to split-brain among clients and also cause all clients disconnect and then reconnect).
 
@@ -98,17 +129,17 @@ It is the clients' responsibility to ensure the correctness of AFT operation con
 * Message syntax validation.
 * Entry reference validation (e.g. the referenced NHG is installed). This should also catch the case where out of order AFT operation reference happens).
 
-Failed validation should return a `ModifyResponse` message with `result` set to `FAILED` (see x.y.z for AFTOperation Response).
+Failed validation should return a `ModifyResponse` message with `result` set to `FAILED`.
 
-#### 4.1.3.3 AFT Operation Response
+#### 4.1.3.2 AFT Operation Response
 
 Device executes the received AFT operations and streams the results to the sender (a gRIBI client) via a list of `AFTResult` messages in `ModifyResponse`.
-* Each AFT operation should be responded individually. The device MUST NOT stream the results to clients other than the sender (see x.y.z for client definition).
+* Each AFT operation should be responded individually. The device MUST NOT stream the results to clients other than the sender (see [4.1.1](#411-client-server-session-negotiation) for client identification).
 * The device SHOULD NOT close the RPC session due to errors encountered processing an AFT operation. The errors should be responded to with in-band error messages within the stream (see `AFTResult` below).
 
 An `AFTResult` message MUST have the followings fields populated by the device:
 * `id` - indicates which AFT Operation this message is about.  It corresponds to the `id` field of the received `AFTOperation` message.
-* `status` - records the execution result of the AFT operation. It can have one of the following values. Note, not all `status` values are available in every acknowledge mode (x.y.z defines acknowledge mode).
+* `status` - records the execution result of the AFT operation. It can have one of the following values. Note, not all `status` values are available in every acknowledge mode ([4.1.6](#416-acknowledge-mode) defines acknowledge mode).
   * `FAILED` - indicates that the AFT operation can not be programmed into the RIB (e.g. missing reference, invalid content, semantic errors, etc).
     * Available in all acknowledge modes.
   * `RIB_PROGRAMMED` - indicates that the AFT operation was successfully programmed into the RIB.
@@ -122,17 +153,17 @@ An `AFTResult` message MUST have the followings fields populated by the device:
 
 In `RIB_AND_FIB_ACK` acknowledge mode, it's possible that a gRIBI entry is installed in the RIB, but is not the preferred route (e.g., there is a static route for the same matching entry), and therefore the gRIBI entry will not be programmed into the FIB. In this case, the device should only respond with the `status` value `RIB_PROGRAMMED`.
 
-##### 4.1.3.3.1 Idempotent DELETE
+##### 4.1.3.2.1 Idempotent DELETE
 
 The behavior of AFT operation `DELETE` MUST be idempotent as to the device RIB/FIB state. In addition, the idempotent behavior should also cover the response. For example, if the entry does not exist, the device should return `FIB_PROGRAMMED` (in the session of `ack_type=RIB_AND_FIB_ACK`).
 
 It is normal and expected that controllers might send repeated `DELETE`, or send a `DELETE` while one is still pending processing on the device. Having this behavior simplifies the implementation, instead of overloading `FAILED` or disconnecting the `Modify` RPC with errors.
 
-##### 4.1.3.3.2 Coalesced AFT operations
+##### 4.1.3.2.2 Coalesced AFT operations
 
 In some scenarios, a device might coalesce multiple AFT operations on a given gRIBI entry and only execute the last one. This would be primarily done for performance optimization.
 
-In this case, as long as the session is still up and the client is still the primary client, the device SHOULD respond to (defined in x.y.z) each individual AFT operation from the same primary client.
+In this case, as long as the session is still up and the client is still the primary client, the device SHOULD respond to each individual AFT operation from the same primary client.
 
 This is required in order to:
 * Keep the API behavior clear and consistent.
@@ -140,22 +171,22 @@ This is required in order to:
 
 Responding to each individual AFT operation does not present a significant cost, because the server/device already has context of all pending AFT operations. However, it does raise the question as to whether the AFT operation has ever modified the RIB or FIB. This is not currently considered as a core requirement - since the expectation is that clients care about the latest state of either table. If future use cases/issues require such insight, we can introduce additional fields to indicate that the operation was coalesced (i.e., was never actually programmed in the FIB) in the response, such that the current `AFTResult.Status` semantics are not overloaded.
 
-#### 4.1.3.4 Life cycle of an AFT operation
+#### 4.1.3.3 Life cycle of an AFT operation
 
 The life of an AFT operation starts when a client creates it, and ends in the following scenarios:
-* The device failed to program the operation into RIB. // Return `FAILED`.
+* The device failed to program the operation into RIB (returns `FAILED`).
 * `ack_type` = `RIB_ACK`, the device programmed the operation into RIB successfully (returns `RIB_PROGRAMMED`).
 * `ack_type` = `RIB_AND_FIB_ACK`, the device programmed the operation into FIB successfully (returns `FIB_PROGRAMMED`).
 * `ack_type` = `RIB_AND_FIB_ACK`, the device has successfully programmed the operation into RIB but failed to program it into FIB (returns `FIB_FAILED`). Note that this is regardless if a device is going to retry the FIB programming or not. The client can promptly send another AFT operation for explicit behaviors (e.g. `ADD` for retry, and `DELETE` for stopping retry).
 * The existing gRPC session is disconnected/canceled. All pending AFT operations from the client should be cancelled.
-* The device has discovered a change in the elected leader (see x.y.z for more details).
+* The device has discovered a change in the elected leader (see [4.1.4.2](#4142-new-leader-election-in-single_primary) for more details).
 
 Only during the life cycle should the device keep the client updated via `AFTResult` message in `ModifyResponse`.
 
 ### 4.1.4 Redundancy Mode
 
-`Modify` can operate in one of the following redundancy mode:
-* `SINGLE_PRIMARY`: The device accepts AFT operations from the primary client only. The device discards AFT operations received from non-primary client and responses error (see x.y.x for details). 
+`Modify` can operate in one of the following redundancy mode ([4.1.1](#411-client-server-session-negotiation) defines how the mode is agreed between client and server):
+* `SINGLE_PRIMARY`: The device accepts AFT operations from the primary client only. The device discards AFT operations received from non-primary client and respond error (see [4.1.2](#412-election-id) for details). 
 * `ALL_PRIMARY`: The device accepts AFT operations from all clients.
 
 #### 4.1.4.1 Client Election In `SINGLE_PRIMARY`
@@ -164,8 +195,7 @@ gRIBI server does not participate in the election process, rather it consumes th
 
 When a client's election ID changed, the client should send a `ModifyRequest` with only the `ModifyRequest.election_id` populated. The device should respond with a `ModifyResponse` that has only the `election_id` field populated. The `ModifyResponse.election_id` by the server should be the highest election ID that the device has learnt from any client.
 
-If the `ModifyRequest.election_id` sent by a client matches the previous highest value, the newer client is considered primary. This allows for a client to reconnect
-without an external election having taken place. It is gRIBI clients' responsibility to avoid more than one `Modify` RPC sessions that are of the same highest Election ID, i.e., "dual-primary" situation in a `SINGLE_PRIMARY` mode.
+If the `ModifyRequest.election_id` sent by a client matches the previous highest value, the newer client is considered primary. This allows for a client to reconnect without an external election having taken place. It is gRIBI clients' responsibility to avoid more than one `Modify` RPC sessions that are of the same highest Election ID, i.e., "dual-primary" situation in a `SINGLE_PRIMARY` mode.
 
 #### 4.1.4.2 New Leader Election In `SINGLE_PRIMARY`
 Switching to a new leader client occurs when a new client connects with `ModifyRequest.election_id` equals to, or greater than, the previous highest value that learnt by the server from any client.
@@ -174,35 +204,35 @@ Upon discovering a new leader has been elected, the device:
 * SHOULD stop processing pending AFT operations that were sent by the previous primary.
 * MUST not send responses for AFT operations of the previous primary to the acquiring-primary.
 
-### 4.1.6 Persistence modes
+### 4.1.5 Persistence modes
 
-Persistence mode specifies if the device should tie the validity of the received gRIBI entries from a client to the liveness of the `Modify` RPC session. [x.y.z client-server session negotiation]() defines how the persistence mode is agreed between client and server.
+Persistence mode specifies if the device should tie the validity of the received gRIBI entries from a client to the liveness of the `Modify` RPC session. [4.1.1](#411-client-server-session-negotiation) defines how the persistence mode is agreed between client and server.
 
 `Modify` can operate in one of the following modes. The definition of "disconnects" in this section includes timeout and cancellation of the `Modify` RPC session.
 * `DELETE` - When a client disconnects, the device should deletes all gRIBI entries, received from that client, in RIB and FIB.
 * `PRESERVE` - A client's disconnection SHOULD NOT trigger the device to delete any gRIBI entry, received from that client, in RIB or FIB.
 
-No matter which mode the `Modify` RPC session is operating in, it is always the new primary client's (in case of [`SINGLE_PRIMARY`](x.y.z)) or other clients' (in case of [`ALL_PRIMARY`](x.y.z)) responsibility to do the reconciliation (e.g. via [`Get`](x.y.z) and [`Modify`](x.y.z) RPC).
+No matter which mode the `Modify` RPC session is operating in, it is always the new primary client's (in case of [`SINGLE_PRIMARY`]((#414-redundancy-mode))) or other clients' (in case of [`ALL_PRIMARY`](#414-redundancy-mode)) responsibility to do the reconciliation (e.g. via [`Get`](#42-get-rpc) and [`Modify`](#41-modify-rpc) RPC).
 
-### 4.1.9 About gRIBI Server Caching
-gRIBI server implementation is not required to cache all installed objects.
-Implications:
-  * When a VRF is removed (e.g. accidentally by user via cli):
-    * The device is not required to maintain gRIBI objects in the FIB or RIB.
-    * Get() or Flush() should return failed (because the VRF is no longer there)
-    * When the VRF is added back, the server is not required to restore all the gRIBI objects by itself.
+### 4.1.6 Acknowledge Mode
 
-### 4.1.10 Acknowledge Mode
-
-Acknowledge mode indicates how much details should the device update the client on the result of executing the received AFT operations. [x.y.z client-server session negotiation]() defines how the mode is agreed between client and server.
+Acknowledge mode indicates how much details should the device update the client on the result of executing the received AFT operations. [4.1.1](#411-client-server-session-negotiation) defines how the mode is agreed between client and server.
 
 `Modify` can operate in one of the following acknowledge modes.
 * `RIB_ACK`: After sending an AFT operation, the client expects the device to respond whether if the AFT operation has been successfully programmed in the RIB.
 * `RIB_AND_FIB_ACK`: After sending an AFT operation, the client expects the device to respond whether if the AFT operation has been successfully programmed in both RIB and FIB.
 
-The response is reflected in `AFTResult.status` (see [x.y.z AFTOperation response](a_link)).
+The response is reflected in `AFTResult.status` (see [4.1.3.2](#4132-aft-operation-response)).
 
-### 4.1.11 gRIBI Route Preference
+### 4.1.7 About gRIBI Server Caching
+gRIBI server implementation is not required to cache all installed objects.
+Implications:
+  * When a VRF is removed (e.g. accidentally by user via cli):
+    * The device is not required to maintain gRIBI objects in the FIB or RIB.
+    * `Get`([4.2](#42-get-rpc)) or `Flush`([4.3](#43-flush-rpc)) should return `FAILED` (because the VRF is no longer there)
+    * When the VRF is added back, the server is not required to restore all the gRIBI objects by itself.
+
+### 4.1.8 gRIBI Route Preference
 
 A device might learn routing information of the same destination from different protocols (e.g., static route, gRIBI, OSPF, BGP, etc.). In that case, the device by default should prefer gRIBI over other distributed routing protocols (e.g., OSPF, BGP, etc.), and should prefer static route over gRIBI.
 
@@ -212,7 +242,7 @@ The preference is often indicated by different values (often known as Administra
 
 The `Get` RPC is a server streaming RPC for clients to retrieve the current set of installed gRIBI entries. The `Get` RPC is typically used for reconciliation between a client and a server, or for periodical consistency checking by clients.
 
-A client sends a `GetRequest` message specifying the target network instance and gRIBI entry type. The device processes the request and responds a stream of `GetResponse` messages that contain the set of currently installed gRIBI entries by any client, and their server acknowledged programming status (see 4.2.2 for more details). Once all entries have been sent, the server should close the RPC.
+A client sends a `GetRequest` message specifying the target network instance and gRIBI entry type. The device processes the request and responds a stream of `GetResponse` messages that contain the set of currently installed gRIBI entries by any client, and their server acknowledged programming status (see [4.1.6](#416-acknowledge-mode) for more details). Once all entries have been sent, the server should close the RPC.
 
 ### 4.2.1 `GetRequest` message
 
@@ -224,7 +254,7 @@ A client sends a `GetRequest` message specifying the target network instance and
 
 ### 4.2.2 `GetResponse` message
 
-A `GetResponse` contains a list of `AFTEntry` messages. An `AFTEntry` message represents an installed gRIBI entry (the data model is defined in x.y.z) and its server acknowledged programming status (`rib_status` and `fib_status`). "server acknowledged programming status" represents the `AFTResult` at the time of the response being sent to the client (regardless if sending the response failed)
+A `GetResponse` contains a list of `AFTEntry` messages. An `AFTEntry` message represents an installed gRIBI entry (the data model is defined in [section 2](#2-data-model)) and its server acknowledged programming status (`rib_status` and `fib_status`). "server acknowledged programming status" represents the `AFTResult` at the time of the response being sent to the client (regardless if sending the response failed)
 * `rib_status` indicates the programming status of the gRIBI entry in RIB. The value should be either `PROGRAMMED` or `NOT_PROGRAMMED`.
 * `fib_status` indicates the programming status of the gRIBI entry in FIB.
   * When the session parameter is `ack_type` = `RIB_ACK`, it's optional for the device to keep track of FIB programming status of each gRIBI entry. Therefore, this field MAY be set to `UNAVAILABLE`.
@@ -248,14 +278,14 @@ A `FlushRequest` message MUST have the `network_instance` populated by client.
 
 #### 4.3.1.1 `election` In `FlushRequest` Message
 
-Only when the client-server is in `SINGLE_PRIMARY` mode (defined in x.y.z) MUST the client populate the `election` field.
-* If the `election` is set when the client-server is in `ALL_PRIMARY` mode (defined in x.y.z), the request should be rejected by the device with gRPC error [`Status.code`][gRPC status code] set to `FAILED_PRECONDITION`. The `Status.details` should contain `FlushResponseError` message with `reason` set to `ELECTION_ID_IN_ALL_PRIMARY`.
-* If the `election` is not set when the client-server is in `SINGLE_PRIMARY` mode (defined in x.y.z), the request should be rejected by the device with gRPC error [`Status.code`][gRPC status code] set to `FAILED_PRECONDITION`. The `Status.details` should contain `FlushResponseError` message with `reason` set to `UNSPECIFIED_ELECTION_BEHAVIOR`.
+Only when the client-server is in `SINGLE_PRIMARY` mode (defined in [4.1.4](#414-redundancy-mode)) MUST the client populate the `election` field.
+* If the `election` is set when the client-server is in `ALL_PRIMARY` mode (defined in [4.1.4](#414-redundancy-mode)), the request should be rejected by the device with gRPC error [`Status.code`][gRPC status code] set to `FAILED_PRECONDITION`. The `Status.details` should contain `FlushResponseError` message with `reason` set to `ELECTION_ID_IN_ALL_PRIMARY`.
+* If the `election` is not set when the client-server is in `SINGLE_PRIMARY` mode, the request should be rejected by the device with gRPC error [`Status.code`][gRPC status code] set to `FAILED_PRECONDITION`. The `Status.details` should contain `FlushResponseError` message with `reason` set to `UNSPECIFIED_ELECTION_BEHAVIOR`.
 
 When the client-server is in `SINGLE_PRIMARY` mode:
 * If `election` is `id`, the server should process the flush request only if the request is from the primary client.
-  * If the `id` value is equal or greater to the previous highest device known `election_id` (see x.y.z), the flush request should be accepted by the server.
-  * if the `id` value is less than the previous highest device known `election_id` (see x.y.z), the flush request should be rejected by the server with gRPC error [`Status.code`][gRPC status code] set to `FAILED_PRECONDITION`. The `Status.details` should contain `FlushResponseError` message with `reason` set to `NOT_PRIMARY`.
+  * If the `id` value is equal or greater to the previous highest device known `election_id` (see [4.1.2](#412-election-id)), the flush request should be accepted by the server.
+  * if the `id` value is less than the previous highest device known `election_id`, the flush request should be rejected by the server with gRPC error [`Status.code`][gRPC status code] set to `FAILED_PRECONDITION`. The `Status.details` should contain `FlushResponseError` message with `reason` set to `NOT_PRIMARY`.
 * If `election` is `override`, the flush request should be accepted by the device regardless if the client is the primary.
 
 ### 4.3.2 `FlushResponse` message
