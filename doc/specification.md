@@ -82,7 +82,7 @@ The gRIBI service is a single gRPC service defined in
 [`gribi.proto`](https://github.com/openconfig/gribi/blob/master/v1/proto/service/gribi.proto).
 It includes three RPCs:
 
-*   `Modify` - defined in [4.1](#41-modify-rpc), used by the clients to modify
+*   `Modify` - defined in [4.1](#41-modify-rpc), used by the clients to make changes to
     the device's RIB.
 *   `Flush` - defined in [4.2](#42-get-rpc), used by clients to remove gRIBI
     entries on a device.
