@@ -40,7 +40,7 @@
 
 This document defines the specification for the gRPC Routing Information Base
 Interface (gRIBI). gRIBI is a gRPC-based protocol for injecting routing entries
-to an network device. gRIBI implementation on an network device is presented as
+to an network device. The gRIBI implementation on an network device is presented as
 a service that can be interacted with by an external process, which may be an
 element of an SDN controller.
 
