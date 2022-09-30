@@ -85,7 +85,7 @@ It includes three RPCs:
 *   `Modify` - defined in [4.1](#41-modify-rpc), used by the clients to make changes to
     the device's RIB.
 *   `Flush` - defined in [4.2](#42-get-rpc), used by clients to remove gRIBI
-    entries on a device.
+    entries on a device in bulk.
 *   `Get` - defined in [4.3](#43-flush-rpc), used by clients to retrieve the
     current set of installed gRIBI entries.
 
