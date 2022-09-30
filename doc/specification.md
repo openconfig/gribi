@@ -91,7 +91,7 @@ It includes three RPCs:
 
 IANA has reserved
 [TCP port 9340](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml?search=9340#Google_Networking)
-for gRIBI service.
+for the gRIBI service.
 
 ## 4.1 `Modify` RPC
 
