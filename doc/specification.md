@@ -459,7 +459,7 @@ exact value that a device OS should assign to gRIBI protocol.
 
 The `Get` RPC is a server streaming RPC for clients to retrieve the current set
 of installed gRIBI entries. The `Get` RPC is typically used for reconciliation
-between a client and a server, or for periodical consistency checking by
+between a client and a server, or for periodic consistency checking by
 clients.
 
 A client sends a `GetRequest` message specifying the target network instance and
