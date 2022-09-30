@@ -96,36 +96,36 @@ for the gRIBI service.
 ## 4.1 `Modify` RPC
 
 The `Modify` RPC is a bidirectional streaming RPC for clients to modify the
-device's RIB. A client sends `ModifyRequest` messages that contains a set of
+device's RIB. A client sends `ModifyRequest` messages that contain a set of
 `AFTOperation` messages to the device. The device processes the received
-requests and responds them asynchronously.
+requests and responds to them asynchronously.
 
 ### 4.1.1 Client-Server Session Negotiation
 
-A gRIBI client is identified by `Modify` RPC sessions, i.e., if a session drops
-and reconnect with the same `election_id` value, it will be considered as
+A gRIBI client is identified by `Modify` RPC streams, i.e., if an RPC drops or is cancelled
+and reconnects with the same `election_id` value, it will be considered as
 another client.
 
 Before a client starts sending `AFTOperation` messages, it should specify the
 desired parameters for the session:
 
 *   Redundancy Mode - defined in [4.1.4](#414-redundancy-mode)
-*   Persistent Mode - defined in [4.1.5](#415-persistence-modes)
-*   Acknowledge Mode - defined in [4.1.6](#416-acknowledge-mode)
+*   Persistence Mode - defined in [4.1.5](#415-persistence-modes)
+*   Acknowledgement Mode - defined in [4.1.6](#416-acknowledge-mode)
 
 A client starts the negotiation process by sending the first `ModifyRequest`
 message with only `params` populated. `params` MUST NOT be sent more than once
-during the lifetime of the RPC session. All clients MUST send the same values of
+during the lifetime of the RPC session and MUST be the first message within a session. All clients MUST send the same values of
 all the attributes of `params`. If the device can process and support the
 requested parameters, it should respond with `ModifyResponse` that has
 `session_params_result.status = OK`. Otherwise, the device should close the
 `Modify` RPC and set the generic gRPC [`Status.code`][gRPC status code] per the
 following scenarios:
 
-*   If any of the requested parameter is not fully implemented, set
+*   If any of the requested parameters is not supported by the server, set
     `Status.code` to `UNIMPLEMENTED`. The `Status.details` should contain
     `ModifyRPCErrorDetails` message with `reason` set to `UNSUPPORTED_PARAMS`.
-*   If the requested `params` does not match parameters of other live `Modify`
+*   If the requested `params` does not match the parameters of other live `Modify`
     RPC sessions, set the `Status.code` to `FAILED_PRECONDITION`. The
     `Status.details` should contain `ModifyRPCErrorDetails` message with
     `reason` set to `PARAMS_DIFFER_FROM_OTHER_CLIENTS`.
@@ -149,7 +149,7 @@ should contain `ModifyRPCErrorDetails` message with `reason` set to
 
 ### 4.1.2 Election ID
 
-Election ID informs the device of the result of an external election amongst the
+The Election ID informs the device of the result of an external election amongst the
 clients connected to it (redundancy mode is defined in
 [4.1.4](#414-redundancy-mode)).
 
@@ -240,7 +240,7 @@ Failed validation should return a `ModifyResponse` message with `result` set to
 
 #### 4.1.3.2 AFT Operation Response
 
-Device executes the received AFT operations and streams the results to the
+The device executes the received AFT operations and streams the results to the
 sender (a gRIBI client) via a list of `AFTResult` messages in `ModifyResponse`.
 
 *   Each AFT operation should be responded individually. The device MUST NOT
@@ -250,36 +250,36 @@ sender (a gRIBI client) via a list of `AFTResult` messages in `ModifyResponse`.
     processing an AFT operation. The errors should be responded to with in-band
     error messages within the stream (see `AFTResult` below).
 
-An `AFTResult` message MUST have the followings fields populated by the device:
+An `AFTResult` message MUST have the following fields populated by the device:
 
 *   `id` - indicates which AFT Operation this message is about. It corresponds
     to the `id` field of the received `AFTOperation` message.
 *   `status` - records the execution result of the AFT operation. It can have
     one of the following values. Note, not all `status` values are available in
-    every acknowledge mode ([4.1.6](#416-acknowledge-mode) defines acknowledge
+    every acknowledgement mode ([4.1.6](#416-acknowledge-mode) defines acknowledgement
     mode).
     *   `FAILED` - indicates that the AFT operation can not be programmed into
         the RIB (e.g. missing reference, invalid content, semantic errors, etc).
-    *   Available in all acknowledge modes.
+      *   Available in all acknowledge modes.
     *   `RIB_PROGRAMMED` - indicates that the AFT operation was successfully
         programmed into the RIB.
-    *   Available in all acknowledge modes.
-    *   OPTIONAL in the case of `FIB_PROGRAMMED`.
+      *   Available in all acknowledge modes.
+      *   OPTIONAL in the case that the server is running in `FIB_PROGRAMMED` acknowledgement mode.
     *   `FIB_PROGRAMMED` - indicates that the AFT operation was successfully
         programmed into the FIB. "Programmed into the FIB" is defined as the
         forwarding entry being operational in the underlying forwarding
         resources across the system that it is relevant to (e.g., all linecards
         that host a particular VRF etc).
-    *   Only available in the `RIB_AND_FIB_ACK` acknowledge mode.
-    *   Implies that the AFT operation was also successfully programmed into the
+      *   Only available in the `RIB_AND_FIB_ACK` acknowledge mode.
+      *   Implies that the AFT operation was also successfully programmed into the
         RIB.
     *   `FIB_FAILED` - indicates that the AFT operation was meant to be
         programmed into the FIB but the device failed to do it.
 *   `timestamp` - records the time at which the gRIBI daemon received and
     processed the result from the underlying systems in the device. The typical
-    use for this timestamp is to provide tracking of programming SLIs.
+    use for this timestamp is to provide tracking of programming [service level indicators](https://cloud.google.com/blog/products/devops-sre/sre-fundamentals-slis-slas-and-slos).
 
-In `RIB_AND_FIB_ACK` acknowledge mode, it's possible that a gRIBI entry is
+In `RIB_AND_FIB_ACK` acknowledgement mode, it's possible that a gRIBI entry is
 installed in the RIB, but is not the preferred route (e.g., there is a static
 route for the same matching entry), and therefore the gRIBI entry will not be
 programmed into the FIB. In this case, the device should only respond with the
@@ -299,13 +299,13 @@ disconnecting the `Modify` RPC with errors.
 
 ##### 4.1.3.2.2 Coalesced AFT operations
 
-In some scenarios, a device might coalesce multiple AFT operations on a given
+In some scenarios, a device might coalesce multiple RIB or FIB programming operations (i.e., southbound changes towards the device's RIB and forwarding tables) on a given
 gRIBI entry and only execute the last one. This would be primarily done for
 performance optimization.
 
 In this case, as long as the session is still up and the client is still the
-primary client, the device SHOULD respond to each individual AFT operation from
-the same primary client.
+primary client, the device MUST respond to each individual AFT operation from
+the same primary client (regardless of whether the downstream programming operation was coalesced).
 
 This is required in order to:
 
@@ -348,7 +348,7 @@ Only during the life cycle should the device keep the client updated via
 
 ### 4.1.4 Redundancy Mode
 
-`Modify` can operate in one of the following redundancy mode
+`Modify` can operate in one of the following redundancy modes
 ([4.1.1](#411-client-server-session-negotiation) defines how the mode is agreed
 between client and server):
 
@@ -360,11 +360,11 @@ between client and server):
 #### 4.1.4.1 Client Election In `SINGLE_PRIMARY`
 
 gRIBI server does not participate in the election process, rather it consumes
-the election result. Election result is reflected in the
-`ModifyRequest.election_id` sent by clients. gRIBI server treats the client of
+the election result. The election result is reflected in the
+`ModifyRequest.election_id` sent by clients. Particularly, the "winner" on an election with ID = `X` is the only client that should both update the current election ID with value `X`, and use it in subsequent programming operations. The gRIBI server treats the client of
 the highest election ID as the primary client.
 
-When a client's election ID changed, the client should send a `ModifyRequest`
+When a client is elected as the leader (i.e., "wins" a new election), the client should send a `ModifyRequest` containing the ID of the election that it "won" to the server. This update should be sent regardless of whether the client was previously the leader, or not.
 with only the `ModifyRequest.election_id` populated. The device should respond
 with a `ModifyResponse` that has only the `election_id` field populated. The
 `ModifyResponse.election_id` by the server should be the highest election ID
@@ -391,7 +391,7 @@ Upon discovering a new leader has been elected, the device:
 
 ### 4.1.5 Persistence modes
 
-Persistence mode specifies if the device should tie the validity of the received
+The persistence mode specifies if the device should tie the validity of the received
 gRIBI entries from a client to the liveness of the `Modify` RPC session.
 [4.1.1](#411-client-server-session-negotiation) defines how the persistence mode
 is agreed between client and server.
@@ -411,14 +411,14 @@ or other clients' (in case of [`ALL_PRIMARY`](#414-redundancy-mode))
 responsibility to do the reconciliation (e.g. via [`Get`](#42-get-rpc) and
 [`Modify`](#41-modify-rpc) RPC).
 
-### 4.1.6 Acknowledge Mode
+### 4.1.6 Acknowledgement Mode
 
-Acknowledge mode indicates how much details should the device update the client
-on the result of executing the received AFT operations.
+The acknowledgement mode indicates when a response should be sent to a client
+as the result of executing the received AFT operations.
 [4.1.1](#411-client-server-session-negotiation) defines how the mode is agreed
 between client and server.
 
-`Modify` can operate in one of the following acknowledge modes:
+`Modify` can operate in one of the following acknowledgement modes:
 
 *   `RIB_ACK`: After sending an AFT operation, the client expects the device to
     respond whether if the AFT operation has been successfully programmed in the
@@ -432,16 +432,16 @@ The response is reflected in `AFTResult.status` (see
 
 ### 4.1.7 About gRIBI Server Caching
 
-gRIBI server implementation is not required to cache all installed objects.
+gRIBI server implementation is not required to cache entries that have been removed, or invalidated by the system.
 
-Implications:
+The implication of this is that:
 
 *   When a VRF is removed (e.g. accidentally by user via cli):
     *   The device is not required to maintain gRIBI objects in the FIB or RIB.
-    *   `Get`([4.2](#42-get-rpc)) or `Flush`([4.3](#43-flush-rpc)) should return
+    *   New `Get`([4.2](#42-get-rpc)) or `Flush`([4.3](#43-flush-rpc)) should return
         corresponding errors (because the VRF is no longer there)
     *   When the VRF is added back, the server is not required to restore all
-        the gRIBI objects by itself.
+        the gRIBI objects without an explicit client request.
 
 ### 4.1.8 gRIBI Route Preference
 
