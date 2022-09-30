@@ -511,7 +511,7 @@ generic gRPC [`Status.code`][gRPC status code] set to `OK`.
 ## 4.3 `Flush` RPC
 
 The `Flush` RPC is an unary RPC for clients to remove gRIBI entries from a
-device. A client sends a `FlushRequest` message specifying the target network
+device in bulk. A client sends a `FlushRequest` message specifying the target network
 instance where the device should remove all gRIBI entries. The device processes
 the request and responds a `FlushResponse` message indicating the execution
 result.
