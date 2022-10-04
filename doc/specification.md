@@ -127,7 +127,7 @@ during the lifetime of the RPC session.
 
 Since clients that are programming the same server are expected to implement
 common modes of operation, servers are not required to support all combinations.
-Particularly, for the parameters of the `params (i.e., persistence, election and
+Particularly, for the parameters described in `params` (i.e., persistence, election and
 acknowledgement modes), servers need only support one common mode across all
 clients. Therefore, all clients MUST send the same values of all the attributes
 of`params`.
