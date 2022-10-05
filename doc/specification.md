@@ -127,10 +127,10 @@ during the lifetime of the RPC session.
 
 Since clients that are programming the same server are expected to implement
 common modes of operation, servers are not required to support all combinations.
-Particularly, for the parameters described in `params` (i.e., persistence, election and
-acknowledgement modes), servers need only support one common mode across all
-clients. Therefore, all clients MUST send the same values of all the attributes
-of`params`.
+Particularly, for the parameters described in `params` (i.e., persistence,
+election and acknowledgement modes), servers need only support one common mode
+across all clients. Therefore, all clients MUST send the same values of all the
+attributes of`params`.
 
 If the device can process and support the requested parameters, it should
 respond with `ModifyResponse` that has `session_params_result.status = OK`.
@@ -475,13 +475,12 @@ The implication of this is that:
 
 A device might learn routing information of the same destination from different
 protocols (e.g., static route, gRIBI, OSPF, BGP, etc.), and prefer one over the
-others. The preference is often configurable and indicated by different values
-(often known as Administrative Distance or Route Preference) in a network device
-OS. The values are locally significant to different device OS.
+others. The preference is normally indicated by different values (often known as
+Administrative Distance or Route Preference) in a network device OS. The values
+are locally significant to different device OS.
 
 This spec does not enforce the exact value that a device OS should assign to
-gRIBI protocol. However, the value MUST be configurable or by default between
-static and everything else (where static is preferred over gRIBI).
+gRIBI protocol,but the value MUST be configurable.
 
 ## 4.2 `Get` RPC
 
