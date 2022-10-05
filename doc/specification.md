@@ -480,7 +480,7 @@ Administrative Distance or Route Preference) in a network device OS. The values
 are locally significant to different device OS.
 
 This spec does not enforce the exact value that a device OS should assign to
-gRIBI protocol,but the value MUST be configurable.
+gRIBI protocol, but the value MUST be configurable.
 
 ## 4.2 `Get` RPC
 
