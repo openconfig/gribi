@@ -53,8 +53,8 @@ message Afts {
   }
   message LabelEntryKey {
     oneof label {
-      gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum label_openconfigmplstypesmplslabelenum = 505941675;
-      uint64 label_uint64 = 50948579;
+      gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum label_openconfigmplstypesmplslabelenum = 505941675 [(yext.schemapath) = "/afts/mpls/label-entry/state/label|/afts/mpls/label-entry/label"];
+      uint64 label_uint64 = 50948579 [(yext.schemapath) = "/afts/mpls/label-entry/state/label|/afts/mpls/label-entry/label"];
     }
     LabelEntry label_entry = 2;
   }
@@ -117,15 +117,15 @@ message Afts {
     ywrapper.UintValue ip_dscp = 350830798 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/ip-dscp"];
     ywrapper.StringValue ip_prefix = 66278688 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/ip-prefix"];
     oneof ip_protocol {
-      gribi_aft.enums.OpenconfigPacketMatchTypesIPPROTOCOL ip_protocol_openconfigpacketmatchtypesipprotocol = 157826780;
-      uint64 ip_protocol_uint64 = 248927945;
+      gribi_aft.enums.OpenconfigPacketMatchTypesIPPROTOCOL ip_protocol_openconfigpacketmatchtypesipprotocol = 157826780 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/ip-protocol"];
+      uint64 ip_protocol_uint64 = 248927945 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/ip-protocol"];
     }
     ywrapper.UintValue l4_dst_port = 447405406 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/l4-dst-port"];
     ywrapper.UintValue l4_src_port = 502173263 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/l4-src-port"];
     ywrapper.StringValue mac_address = 422272134 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/mac-address"];
     oneof mpls_label {
-      gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum mpls_label_openconfigmplstypesmplslabelenum = 47620234;
-      uint64 mpls_label_uint64 = 306275022;
+      gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum mpls_label_openconfigmplstypesmplslabelenum = 47620234 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/mpls-label"];
+      uint64 mpls_label_uint64 = 306275022 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/mpls-label"];
     }
     ywrapper.UintValue mpls_tc = 281754514 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/mpls-tc"];
     ywrapper.UintValue next_hop_group = 188303215 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/next-hop-group"];
