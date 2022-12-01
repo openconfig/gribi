@@ -43,8 +43,8 @@ message Afts {
   }
   message LabelEntry {
     message PoppedMplsLabelStackUnion {
-      gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum popped_mpls_label_stack_openconfigmplstypesmplslabelenum = 524692292;
-      uint64 popped_mpls_label_stack_uint64 = 510588408;
+      gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum popped_mpls_label_stack_openconfigmplstypesmplslabelenum = 524692292 [(yext.schemapath) = "/afts/mpls/label-entry/state/popped-mpls-label-stack"];
+      uint64 popped_mpls_label_stack_uint64 = 510588408 [(yext.schemapath) = "/afts/mpls/label-entry/state/popped-mpls-label-stack"];
     }
     ywrapper.BytesValue entry_metadata = 100486674 [(yext.schemapath) = "/afts/mpls/label-entry/state/entry-metadata"];
     ywrapper.UintValue next_hop_group = 307713279 [(yext.schemapath) = "/afts/mpls/label-entry/state/next-hop-group"];
@@ -77,8 +77,8 @@ message Afts {
       ywrapper.StringValue src_ip = 220560118 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip/state/src-ip"];
     }
     message PushedMplsLabelStackUnion {
-      gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum pushed_mpls_label_stack_openconfigmplstypesmplslabelenum = 307755077;
-      uint64 pushed_mpls_label_stack_uint64 = 47493573;
+      gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum pushed_mpls_label_stack_openconfigmplstypesmplslabelenum = 307755077 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
+      uint64 pushed_mpls_label_stack_uint64 = 47493573 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
     }
     gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType decapsulate_header = 104970793 [(yext.schemapath) = "/afts/next-hops/next-hop/state/decapsulate-header"];
     gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType encapsulate_header = 69966061 [(yext.schemapath) = "/afts/next-hops/next-hop/state/encapsulate-header"];
