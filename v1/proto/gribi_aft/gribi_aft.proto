@@ -49,7 +49,7 @@ message Afts {
     ywrapper.BytesValue entry_metadata = 100486674 [(yext.schemapath) = "/afts/mpls/label-entry/state/entry-metadata"];
     ywrapper.UintValue next_hop_group = 307713279 [(yext.schemapath) = "/afts/mpls/label-entry/state/next-hop-group"];
     ywrapper.StringValue next_hop_group_network_instance = 303628026 [(yext.schemapath) = "/afts/mpls/label-entry/state/next-hop-group-network-instance"];
-    repeated PoppedMplsLabelStackUnion popped_mpls_label_stack = 62799927 [(yext.schemapath) = "/afts/mpls/label-entry/state/popped-mpls-label-stack"];
+    repeated PoppedMplsLabelStackUnion popped_mpls_label_stack = 62799927 [(yext.leaflistunion) = true,(yext.schemapath) = "/afts/mpls/label-entry/state/popped-mpls-label-stack"];
   }
   message LabelEntryKey {
     oneof label {
@@ -88,7 +88,7 @@ message Afts {
     ywrapper.StringValue mac_address = 404609192 [(yext.schemapath) = "/afts/next-hops/next-hop/state/mac-address"];
     ywrapper.StringValue network_instance = 232391308 [(yext.schemapath) = "/afts/next-hops/next-hop/state/network-instance"];
     ywrapper.BoolValue pop_top_label = 382175404 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pop-top-label"];
-    repeated PushedMplsLabelStackUnion pushed_mpls_label_stack = 489592660 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
+    repeated PushedMplsLabelStackUnion pushed_mpls_label_stack = 489592660 [(yext.leaflistunion) = true,(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
     ywrapper.StringValue tunnel_src_ip_address = 174262178 [(yext.schemapath) = "/afts/next-hops/next-hop/state/tunnel-src-ip-address"];
     ywrapper.UintValue vni_label = 209933130 [(yext.schemapath) = "/afts/next-hops/next-hop/state/vni-label"];
   }
