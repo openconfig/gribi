@@ -283,7 +283,7 @@ message AFTResult {
     //
     // In cases where the FIB was meant to be programmed, but an error
     // code was received from the underlying hardware abstraction layer
-    // the FAILED error code is returned.
+    // the FIB_FAILED error code is returned.
     FIB_PROGRAMMED = 4;
     // FIB_FAILED indicates that the received operation failed FIB
     // programming. It is used when the operation has been accepted by
@@ -301,13 +301,14 @@ message AFTResult {
   // The timestamp is expressed as nanoseconds since the Unix Epoch in UTC.
   int64 timestamp = 3;
 
-  // Contains error details if status is FAILED.
+  // Contains error details if status is FAILED or FIB_FAILED.
   AFTErrorDetails error_details = 4;
 }
 
 // Populated in 'error_details' in AFTResult for failed operations.
 message AFTErrorDetails {
-  // Human-readable error message in the case that status is FAILED.
+  // Human-readable error message in the case that status is FAILED
+  // or FIB_FAILED.
   string error_message = 1;
 }
 
