@@ -121,8 +121,10 @@ const (
 	// the relevant fields, such that existing entry is completely replaced
 	// with the specified entry.
 	AFTOperation_REPLACE AFTOperation_Operation = 2
-	// DELETE removes an entry from the table, it should fail if the entry
-	// does not exist.
+	// DELETE removes an entry from the table. It should be idempotent as to
+	// the table state. The idempotent behavior should also cover the response.
+	// For example, if the entry does not exist, the device should return
+	// FIB_PROGRAMMED (in the session of ack_type=RIB_AND_FIB_ACK).
 	AFTOperation_DELETE AFTOperation_Operation = 3
 )
 
