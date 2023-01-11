@@ -207,7 +207,7 @@ const (
 	//
 	// In cases where the FIB was meant to be programmed, but an error
 	// code was received from the underlying hardware abstraction layer
-	// the FAILED error code is returned.
+	// the FIB_FAILED error code is returned.
 	AFTResult_FIB_PROGRAMMED AFTResult_Status = 4
 	// FIB_FAILED indicates that the received operation failed FIB
 	// programming. It is used when the operation has been accepted by
@@ -1204,7 +1204,7 @@ type AFTResult struct {
 	//
 	// The timestamp is expressed as nanoseconds since the Unix Epoch in UTC.
 	Timestamp int64 `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	// Contains error details if status is FAILED.
+	// Contains error details if status is FAILED or FIB_FAILED.
 	ErrorDetails *AFTErrorDetails `protobuf:"bytes,4,opt,name=error_details,json=errorDetails,proto3" json:"error_details,omitempty"`
 }
 
@@ -1274,7 +1274,8 @@ type AFTErrorDetails struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Human-readable error message in the case that status is FAILED.
+	// Human-readable error message in the case that status is FAILED
+	// or FIB_FAILED.
 	ErrorMessage string `protobuf:"bytes,1,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
 }
 
