@@ -49,6 +49,12 @@ service gRIBI {
 
 // ModifyRequest is a message used by the client to manipulate the state of
 // the RIB on the target device.
+//
+// Within a single ModifyRequest only one of 'operation', 'params' and
+// 'election_id' may be specified (see the individual fields for how
+// these fields are used). If a client specifies >1 of these fields
+// in the same message the server should return an error specifying
+// the `INVALID_ARGUMENT` canonical error code.
 message ModifyRequest {
   // A group of requests to add/modify/remove a single AFT entry.
   //

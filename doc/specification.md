@@ -3,8 +3,8 @@
 **Editors:** {xiaowa, nflath, robjs}@google.com \
 **Contributors:** {nandan,prakash}@arista.com, {ashp, amilliso}@cisco.com,
 {vkestur}@juniper.net, {adam.1.simpson}@nokia.com \
-**Version**: 1.0.0 \
-**Last Update**: 2022-10-05
+**Version**: 1.0.1 \
+**Last Update**: 2023-01-23
 
 # Table of Contents
 
@@ -107,6 +107,15 @@ The `Modify` RPC is a bidirectional streaming RPC for clients to modify the
 device's RIB. A client sends `ModifyRequest` messages that contain a set of
 `AFTOperation` messages to the device. The device processes the received
 requests and responds to them asynchronously.
+
+The `ModifyRequest` message is used for session negotation, to inform a
+target device of the result of an external election, or to supply operations
+to modify the device's RIB. These operations are described in detail below.
+Only one of these usages is valid within a single message - such that it is
+an error for more than one of the `params`, `election_id` or `operation` fields
+to be populated in the same message. In the case that a client sends such a
+message, the device should respond with the `INVALID_ARGUMENT` canonical RPC
+status code.
 
 ### 4.1.1 Client-Server Session Negotiation
 
