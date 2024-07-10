@@ -288,6 +288,8 @@ An `AFTResult` message MUST have the following fields populated by the device:
     *   `FAILED` - indicates that the AFT operation can not be programmed into
         the RIB (e.g. missing reference, invalid content, semantic errors, etc).
         *   Available in all acknowledge modes.
+        *   A unviable but valid next-hop should not cause a FAILED status.  For
+            example, next-hop that encaps to a unresolvable prefix should not fail.
     *   `RIB_PROGRAMMED` - indicates that the AFT operation was successfully
         programmed into the RIB.
         *   Available in all acknowledge modes.
@@ -301,6 +303,7 @@ An `AFTResult` message MUST have the following fields populated by the device:
         *   Only available in the `RIB_AND_FIB_ACK` acknowledge mode.
         *   Implies that the AFT operation was also successfully programmed into
             the RIB.
+        *   Returned for unviable but valid next-hops and operations using them.
     *   `FIB_FAILED` - indicates that the AFT operation was meant to be
         programmed into the FIB but the device failed to do it.
 *   `timestamp` - records the time at which the gRIBI daemon received and
