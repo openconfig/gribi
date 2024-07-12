@@ -303,7 +303,8 @@ An `AFTResult` message MUST have the following fields populated by the device:
         *   Only available in the `RIB_AND_FIB_ACK` acknowledge mode.
         *   Implies that the AFT operation was also successfully programmed into
             the RIB.
-        *   Returned for unviable but valid next-hops and operations using them.
+        *   Returned for unviable but valid next-hops and operations using them -
+            these are allowed to blackhole.
     *   `FIB_FAILED` - indicates that the AFT operation was meant to be
         programmed into the FIB but the device failed to do it.
 *   `timestamp` - records the time at which the gRIBI daemon received and
