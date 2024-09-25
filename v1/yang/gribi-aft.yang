@@ -122,6 +122,20 @@ module gribi-aft {
     deviate not-supported;
   }
 
+  deviation "/afts/state-synced" {
+    description
+      "state-synced is not accessible over gRIBI but rather over gNMI via
+       the AFT model.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/next-hop-groups/next-hop-group/state/backup-active" {
+    description
+      "Backup active is only set by a device and is not accessible over gRIBI,
+      but rather over gNMI via the AFT model.";
+    deviate not-supported;
+  }
+
   grouping entry-nhg-extensions {
     description
       "Leaves that are added as references in the openconfig-aft-network-instance

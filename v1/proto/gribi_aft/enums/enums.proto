@@ -35,6 +35,17 @@ enum OpenconfigMplsTypesMplsLabelEnum {
   OPENCONFIGMPLSTYPESMPLSLABELENUM_NO_LABEL = 9 [(yext.yang_name) = "NO_LABEL"];
 }
 
+// OpenconfigMplsTypesMplsLabelStackEnum represents an enumerated type generated for the YANG enumerated type mpls-label-stack.
+enum OpenconfigMplsTypesMplsLabelStackEnum {
+  OPENCONFIGMPLSTYPESMPLSLABELSTACKENUM_UNSET = 0;
+  OPENCONFIGMPLSTYPESMPLSLABELSTACKENUM_IPV4_EXPLICIT_NULL = 1 [(yext.yang_name) = "IPV4_EXPLICIT_NULL"];
+  OPENCONFIGMPLSTYPESMPLSLABELSTACKENUM_ROUTER_ALERT = 2 [(yext.yang_name) = "ROUTER_ALERT"];
+  OPENCONFIGMPLSTYPESMPLSLABELSTACKENUM_IPV6_EXPLICIT_NULL = 3 [(yext.yang_name) = "IPV6_EXPLICIT_NULL"];
+  OPENCONFIGMPLSTYPESMPLSLABELSTACKENUM_IMPLICIT_NULL = 4 [(yext.yang_name) = "IMPLICIT_NULL"];
+  OPENCONFIGMPLSTYPESMPLSLABELSTACKENUM_ENTROPY_LABEL_INDICATOR = 8 [(yext.yang_name) = "ENTROPY_LABEL_INDICATOR"];
+  OPENCONFIGMPLSTYPESMPLSLABELSTACKENUM_NO_LABEL = 9 [(yext.yang_name) = "NO_LABEL"];
+}
+
 // OpenconfigPacketMatchTypesIPPROTOCOL represents an enumerated type generated for the YANG identity IP_PROTOCOL.
 enum OpenconfigPacketMatchTypesIPPROTOCOL {
   OPENCONFIGPACKETMATCHTYPESIPPROTOCOL_UNSET = 0;
