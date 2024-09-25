@@ -129,6 +129,13 @@ module gribi-aft {
     deviate not-supported;
   }
 
+  deviation "/afts/next-hop-groups/next-hop-group/state/next-hop-group-name" {
+    description
+      "Next hop group name is only set by a device and is not accessible over
+      gRIBI, but rather over gNMI via the AFT model.";
+    deviate not-supported;
+  }
+
   deviation "/afts/next-hop-groups/next-hop-group/state/backup-active" {
     description
       "Backup active is only set by a device and is not accessible over gRIBI,

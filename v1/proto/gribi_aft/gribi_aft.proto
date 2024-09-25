@@ -157,7 +157,6 @@ message Afts {
     ywrapper.UintValue backup_next_hop_group = 366506898 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/backup-next-hop-group"];
     ywrapper.UintValue color = 242427279 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/color"];
     repeated NextHopKey next_hop = 211071474 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/next-hops/next-hop"];
-    ywrapper.StringValue next_hop_group_name = 513600563 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/next-hop-group-name"];
   }
   message NextHopGroupKey {
     uint64 id = 1 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/id|/afts/next-hop-groups/next-hop-group/id"];
