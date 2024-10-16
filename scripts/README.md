@@ -8,6 +8,7 @@
 
 ## Update aft yang
 
+* Copy the yang model files for openconfig public afts
 * Add deviations as needed to gribi-aft.yang
 * Run update_schema.sh
 * Run generate_proto.sh

@@ -83,21 +83,28 @@ message Afts {
         ywrapper.StringValue src_ip = 254664891 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6/state/src-ip"];
       }
       message Mpls {
-        message PushedMplsLabelStackUnion {
-          gribi_aft.enums.OpenconfigMplsTypesMplsLabelStackEnum pushed_mpls_label_stack_openconfigmplstypesmplslabelstackenum = 223636841 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/pushed-mpls-label-stack"];
-          uint64 pushed_mpls_label_stack_uint64 = 99033361 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/pushed-mpls-label-stack"];
+        message MplsLabelStackUnion {
+          gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum mpls_label_stack_openconfigmplstypesmplslabelenum = 212167609 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/mpls-label-stack"];
+          uint64 mpls_label_stack_uint64 = 205621201 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/mpls-label-stack"];
         }
-        ywrapper.BoolValue pop_top_label = 82837808 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/pop-top-label"];
-        repeated PushedMplsLabelStackUnion pushed_mpls_label_stack = 272279064 [(yext.leaflistunion) = true,(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/pushed-mpls-label-stack"];
+        repeated MplsLabelStackUnion mpls_label_stack = 310218456 [(yext.leaflistunion) = true,(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/mpls-label-stack"];
         ywrapper.UintValue traffic_class = 380564126 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/traffic-class"];
       }
-      message Udp {
-        ywrapper.StringValue dst_ip = 358316874 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp/state/dst-ip"];
-        ywrapper.UintValue dst_udp_port = 95131674 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp/state/dst-udp-port"];
-        ywrapper.UintValue ip_dscp = 93423295 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp/state/ip-dscp"];
-        ywrapper.UintValue ip_ttl = 183013395 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp/state/ip-ttl"];
-        ywrapper.StringValue src_ip = 348571899 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp/state/src-ip"];
-        ywrapper.UintValue src_udp_port = 363617175 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp/state/src-udp-port"];
+      message UdpV4 {
+        ywrapper.UintValue dscp = 404304264 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v4/state/dscp"];
+        ywrapper.StringValue dst_ip = 425782075 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v4/state/dst-ip"];
+        ywrapper.UintValue dst_udp_port = 26930775 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v4/state/dst-udp-port"];
+        ywrapper.UintValue ip_ttl = 489501006 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v4/state/ip-ttl"];
+        ywrapper.StringValue src_ip = 223532242 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v4/state/src-ip"];
+        ywrapper.UintValue src_udp_port = 332943154 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v4/state/src-udp-port"];
+      }
+      message UdpV6 {
+        ywrapper.UintValue dscp = 493128346 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/dscp"];
+        ywrapper.StringValue dst_ip = 148029921 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/dst-ip"];
+        ywrapper.UintValue dst_udp_port = 275733981 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/dst-udp-port"];
+        ywrapper.UintValue ip_ttl = 394480800 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/ip-ttl"];
+        ywrapper.StringValue src_ip = 494881688 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/src-ip"];
+        ywrapper.UintValue src_udp_port = 485812424 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/src-udp-port"];
       }
       message Vxlan {
         ywrapper.StringValue tunnel_src_ip_address = 448199679 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/vxlan/state/tunnel-src-ip-address"];
@@ -108,7 +115,8 @@ message Afts {
       Ipv6 ipv6 = 191386202 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6"];
       Mpls mpls = 393605309 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls"];
       gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType type = 254997883 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/state/type"];
-      Udp udp = 265552666 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp"];
+      UdpV4 udp_v4 = 171499561 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v4"];
+      UdpV6 udp_v6 = 171499563 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6"];
       Vxlan vxlan = 397229320 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/vxlan"];
     }
     message EncapHeaderKey {
@@ -129,7 +137,7 @@ message Afts {
       ywrapper.StringValue src_ip = 220560118 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip/state/src-ip"];
     }
     message PushedMplsLabelStackUnion {
-      gribi_aft.enums.OpenconfigMplsTypesMplsLabelStackEnum pushed_mpls_label_stack_openconfigmplstypesmplslabelstackenum = 376847701 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
+      gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum pushed_mpls_label_stack_openconfigmplstypesmplslabelenum = 307755077 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
       uint64 pushed_mpls_label_stack_uint64 = 47493573 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
     }
     gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType decapsulate_header = 104970793 [(yext.schemapath) = "/afts/next-hops/next-hop/state/decapsulate-header"];
