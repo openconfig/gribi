@@ -22,6 +22,7 @@ enum OpenconfigAftTypesEncapsulationHeaderType {
   OPENCONFIGAFTTYPESENCAPSULATIONHEADERTYPE_IPV6 = 3 [(yext.yang_name) = "IPV6"];
   OPENCONFIGAFTTYPESENCAPSULATIONHEADERTYPE_MPLS = 4 [(yext.yang_name) = "MPLS"];
   OPENCONFIGAFTTYPESENCAPSULATIONHEADERTYPE_VXLAN = 5 [(yext.yang_name) = "VXLAN"];
+  OPENCONFIGAFTTYPESENCAPSULATIONHEADERTYPE_UDP = 6 [(yext.yang_name) = "UDP"];
 }
 
 // OpenconfigMplsTypesMplsLabelEnum represents an enumerated type generated for the YANG enumerated type mpls-label.
