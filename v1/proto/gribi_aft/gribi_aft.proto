@@ -106,10 +106,6 @@ message Afts {
         ywrapper.StringValue src_ip = 494881688 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/src-ip"];
         ywrapper.UintValue src_udp_port = 485812424 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/src-udp-port"];
       }
-      message Vxlan {
-        ywrapper.StringValue tunnel_src_ip_address = 448199679 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/vxlan/state/tunnel-src-ip-address"];
-        ywrapper.UintValue vni_label = 524989411 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/vxlan/state/vni-label"];
-      }
       Gre gre = 301373623 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/gre"];
       Ipv4 ipv4 = 191386200 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv4"];
       Ipv6 ipv6 = 191386202 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6"];
@@ -117,7 +113,6 @@ message Afts {
       gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType type = 254997883 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/state/type"];
       UdpV4 udp_v4 = 171499561 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v4"];
       UdpV6 udp_v6 = 171499563 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6"];
-      Vxlan vxlan = 397229320 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/vxlan"];
     }
     message EncapHeaderKey {
       uint64 index = 1 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/state/index|/afts/next-hops/next-hop/encap-headers/encap-header/index"];

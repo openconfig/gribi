@@ -1,14 +1,15 @@
-# How to rebuild the gribi protos
+# How to rebuild the gRIBI protos on OSX
 
 ## Install dependencies
 
 * brew install coreutils
-* http://github.com/openconfig/ygot for proto_generator
-* build ygot proto_generator
+* brew install protoc-gen-go-grpc
+* brew install protoc-gen-go
+* go install github.com/openconfig/ygot/proto_generator@latest
 
-## Update aft yang
+## Update AFT yang
 
-* Copy the yang model files for openconfig public afts
+* Copy the YANG model files for openconfig public AFTs
 * Add deviations as needed to gribi-aft.yang
 * Run update_schema.sh
 * Run generate_proto.sh
