@@ -39,7 +39,6 @@ if [ -z $SRCDIR ]; then
   SRC_DIR=`runreadlink -m ${THIS_DIR}/..`
 fi
 
-echo ${SRC_DIR}
 ${GOPATH}/bin/proto_generator \
   -path=${SRC_DIR}/v1/yang,${SRC_DIR}/v1/yang/deps \
   -output_dir=${SRC_DIR}/v1/proto -compress_paths -generate_fakeroot -fakeroot_name=device \
