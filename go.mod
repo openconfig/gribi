@@ -4,8 +4,8 @@ go 1.22
 
 require (
 	github.com/openconfig/ygot v0.29.20
-	google.golang.org/grpc v1.68.1
-	google.golang.org/protobuf v1.35.2
+	google.golang.org/grpc v1.69.4
+	google.golang.org/protobuf v1.36.3
 )
 
 require (
