@@ -95,6 +95,10 @@ module openconfig-aft-types {
         description
           "The encapsulation header is a VXLAN packet header";
       }
+      enum UDP {
+        description
+          "The encapsulation header is UDP packet header.";
+      }
       enum UDPV4 {
         description
           "The encapsulation header is UDPV4 packet header.";
