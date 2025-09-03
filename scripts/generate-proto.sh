@@ -23,8 +23,10 @@ if [ -z $SRCDIR ]; then
 fi
 
 mkdir -p ${SRC_DIR}/v1/build_deps/github.com/openconfig/ygot/proto/{ywrapper,yext} 
+mkdir -p ${SRC_DIR}/v1/build_deps/google/protobuf
 curl -o ${SRC_DIR}/v1/build_deps/github.com/openconfig/ygot/proto/yext/yext.proto https://raw.githubusercontent.com/openconfig/ygot/master/proto/yext/yext.proto
 curl -o ${SRC_DIR}/v1/build_deps/github.com/openconfig/ygot/proto/ywrapper/ywrapper.proto https://raw.githubusercontent.com/openconfig/ygot/master/proto/ywrapper/ywrapper.proto
+curl -o ${SRC_DIR}/v1/build_deps/google/protobuf/descriptor.proto https://raw.githubusercontent.com/protocolbuffers/protobuf/refs/heads/main/src/google/protobuf/descriptor.proto
 
 cd ${SRC_DIR}
 protoc -I${SRC_DIR} -I ${SRC_DIR}/v1/build_deps --go-grpc_out=. --go-grpc_opt=paths=source_relative --go_out=. --go_opt=paths=source_relative ${SRC_DIR}/v1/proto/service/gribi.proto
