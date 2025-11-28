@@ -1,0 +1,117 @@
+submodule openconfig-aft-srv6 {
+  belongs-to "openconfig-aft" {
+    prefix "oc-aft";
+  }
+
+  import openconfig-extensions { prefix "oc-ext"; }
+  import openconfig-inet-types { prefix "oc-inet"; }
+  import openconfig-srv6-types { prefix "oc-srv6-types"; }
+  import openconfig-mpls-types { prefix "oc-mplst"; }
+  import ietf-interfaces { prefix "if"; }
+  import ietf-yang-types { prefix "yang"; }
+
+  // Include common cross-AFT groupings from the common submodule.
+  include openconfig-aft-common;
+
+
+  organization
+    "OpenConfig working group";
+
+  contact
+    "OpenConfig working group
+    www.openconfig.net";
+
+  description
+    "Submodule containing definitions of groupings for the abstract
+    forwarding table for SRv6.";
+
+  oc-ext:openconfig-version "1.0.0";
+
+  revision 2025-11-26 {
+    description
+      "Initial revision.";
+    reference "1.0.0";
+  }
+
+  grouping aft-srv6-structural {
+    description
+      "Structural grouping defining the schema for the SRv6
+      abstract forwarding table.";
+
+    list srv6-sid-entry {
+      key "sid";
+
+      oc-ext:telemetry-atomic;
+      description
+        "List of the SRv6 SID entries within the abstract
+        forwarding table. This list is keyed by the SID value.";
+
+      leaf sid {
+        type leafref {
+          path "../state/sid";
+        }
+        description
+          "Reference to the SRv6 SID matched by the entry.";
+      }
+
+      container state {
+        config false;
+        description
+          "Operational state parameters for the SRv6 AFT entry.";
+        uses aft-srv6-sid-entry-state;
+      }
+    }
+  }
+
+  grouping aft-srv6-sid-entry-state {
+    description
+      "Operational state parameters for the SRv6 entry.";
+
+    leaf sid {
+      type oc-inet:ipv6-prefix;
+      description
+        "The SRv6 SID that should be matched to utilize the AFT entry.";
+    }
+
+    container sid-params {
+      leaf behavior-type {
+        mandatory true;
+        type uint16;
+        description
+          "Behavior type associated with the SID. The behavior types are
+          defined in the IANA SRv6 Endpoint Behaviors registry.";
+        reference
+          "IANA SRv6 Endpoint Behaviors registry
+          (https://www.iana.org/assignments/segment-routing/segment-routing.xhtml)";
+      }
+
+      leaf lookup-network-instance {
+        type string;
+        description
+          "Network instance (VRF) associated with the SID.";
+      }
+
+      leaf interface {
+        type if:interface-ref;
+        description
+          "Outgoing interface (adj) associated with the SID.";
+      }
+
+      leaf next-hop {
+        type oc-inet:ip-address;
+        description
+          "Next-hop address (adj) associated with the SID.";
+      }
+
+      container encap-object-bsid {
+        uses oc-srv6-types:srv6-encap-object-bsid;
+        description
+          "This is used in the case of a Binding SID. It's a reference to the
+          encapsulation object associated to the BSID. It may contain either
+          SRv6 or MPLS SID list.";
+      }
+    }
+
+    uses aft-common-entry-state;
+  }
+}

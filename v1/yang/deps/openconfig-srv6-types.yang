@@ -1,0 +1,70 @@
+module openconfig-srv6-types {
+  yang-version "1";
+  namespace "http://openconfig.net/yang/srv6-types";
+  prefix "oc-srv6-types";
+
+  import openconfig-extensions { prefix "oc-ext"; }
+  import openconfig-inet-types { prefix "oc-inet"; }
+  import openconfig-mpls-types { prefix "oc-mplst"; }
+
+  organization
+    "OpenConfig working group";
+
+  contact
+    "OpenConfig working group
+    www.openconfig.net";
+
+  description
+    "This module contains general data definitions for use in SRv6
+    (Segment Routing over IPv6) models. The types defined here are
+    based on IANA registrations for SRv6 Endpoint Behaviors.";
+
+  oc-ext:openconfig-version "1.0.0";
+
+  revision 2025-11-26 {
+    description
+      "Initial revision with SRv6 endpoint behavior types and
+      encapsulation types based on IANA registrations.";
+    reference
+      "RFC 8986: Segment Routing over IPv6 (SRv6) Network Programming
+       RFC 9800: Segment Routing over IPv6 (SRv6) Network Programming
+       IANA SRv6 Endpoint Behaviors Registry";
+  }
+
+  grouping srv6-encap-object-bsid {
+    description
+      "Reference to an SRv6 encapsulation object. This object contains
+      the encapsulation parameters including the encapsulation type and
+      the list of SRv6 SIDs or SR-MPLS labels to be used for encapsulation.";
+
+    leaf encap-type {
+      description
+        "Type of SRv6 encapsulation.";
+
+      type enumeration {
+        enum SRv6 {
+          description
+            "SRv6 encapsulation using IPv6 headers and SRH.";
+        }
+        enum MPLS {
+          description
+            "SR-MPLS encapsulation using MPLS labels.";
+        }
+      }
+    }
+
+    leaf-list srv6-sidlist {
+      type oc-inet:ipv6-address;
+      ordered-by user;
+      description
+        "List of SRv6 SIDs to be used for encapsulation.";
+    }
+
+    leaf-list sr-mpls-label-stack {
+      type oc-mplst:mpls-label;
+      ordered-by user;
+      description
+        "List of SR-MPLS labels to be used for encapsulation.";
+    }
+  }
+}

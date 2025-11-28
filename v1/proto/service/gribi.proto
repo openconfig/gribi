@@ -214,6 +214,9 @@ message AFTOperation {
     // /network-instances/network-instance/afts/policy-forwarding/
     // policy-forwarding-entry
     gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
+    // Schema for SRv6 SID Entry is generated from
+    // /network-instances/network-instance/afts/srv6/srv6-sid-entry
+    gribi_aft.Afts.Srv6SidEntryKey srv6_sid_entry = 11;
   }
 
   // Election ID of the client.
@@ -228,7 +231,7 @@ message AFTOperation {
   //    the client is the primary client
   // If the election_id in the AFTOperation does not meet these criteria
   // the server discards the AFTOperation and returns FAILED in AFTResult
-  Uint128 election_id = 11;
+  Uint128 election_id = 12;
 }
 
 // A set of AFT responses.
@@ -435,6 +438,7 @@ enum AFTType {
   NEXTHOP_GROUP = 6;
   MAC = 7;
   POLICY_FORWARDING = 8;
+  SRv6 = 9;
 }
 
 // Empty is a specific message that is used as a marker where
@@ -479,6 +483,7 @@ message AFTEntry {
     gribi_aft.Afts.NextHopKey next_hop = 8;
     gribi_aft.Afts.MacEntryKey mac_entry = 9;
     gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
+    gribi_aft.Afts.Srv6SidEntryKey srv6_sid_entry = 11;
   }
   enum Status {
     // The programming status is not available.
@@ -489,9 +494,9 @@ message AFTEntry {
     NOT_PROGRAMMED = 2;
   }
   // RIB programming status of the entry.
-  Status rib_status = 11;
+  Status rib_status = 12;
   // FIB programming status of the entry.
-  Status fib_status = 12;
+  Status fib_status = 13;
 }
 
 message GetResponse {
