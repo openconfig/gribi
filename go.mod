@@ -2,17 +2,17 @@ module github.com/openconfig/gribi
 
 go 1.25.0
 
-toolchain go1.26.5
+toolchain go1.27.0
 
 require (
-	github.com/openconfig/ygot v0.34.0
-	google.golang.org/grpc v1.82.1
-	google.golang.org/protobuf v1.36.11
+	github.com/openconfig/ygot v0.35.0
+	google.golang.org/grpc v1.83.1
+	google.golang.org/protobuf v1.36.12
 )
 
 require (
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260414002931-afd174a4e478 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 )
