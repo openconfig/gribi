@@ -76,11 +76,19 @@ message Afts {
       }
       message Ipv4 {
         ywrapper.StringValue dst_ip = 403354420 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv4/state/dst-ip"];
+        ywrapper.UintValue flow_label = 289883916 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv4/state/flow-label"];
+        ywrapper.UintValue hop_limit = 283181808 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv4/state/hop-limit"];
         ywrapper.StringValue src_ip = 293130725 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv4/state/src-ip"];
+        repeated ywrapper.StringValue srv6_sid_list = 310946886 [(yext.leaflist) = true,(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv4/state/srv6-sid-list"];
+        ywrapper.UintValue traffic_class = 194170971 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv4/state/traffic-class"];
       }
       message Ipv6 {
         ywrapper.StringValue dst_ip = 469869578 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6/state/dst-ip"];
+        ywrapper.UintValue flow_label = 270712198 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6/state/flow-label"];
+        ywrapper.UintValue hop_limit = 61459698 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6/state/hop-limit"];
         ywrapper.StringValue src_ip = 254664891 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6/state/src-ip"];
+        repeated ywrapper.StringValue srv6_sid_list = 485609228 [(yext.leaflist) = true,(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6/state/srv6-sid-list"];
+        ywrapper.UintValue traffic_class = 512523469 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6/state/traffic-class"];
       }
       message Mpls {
         message MplsLabelStackUnion {
@@ -129,7 +137,11 @@ message Afts {
     }
     message IpInIp {
       ywrapper.StringValue dst_ip = 184775743 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip/state/dst-ip"];
+      ywrapper.UintValue flow_label = 467674047 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip/state/flow-label"];
+      ywrapper.UintValue hop_limit = 387365241 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip/state/hop-limit"];
       ywrapper.StringValue src_ip = 220560118 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip/state/src-ip"];
+      repeated ywrapper.StringValue srv6_sid_list = 116473819 [(yext.leaflist) = true,(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip/state/srv6-sid-list"];
+      ywrapper.UintValue traffic_class = 3867942 [(yext.schemapath) = "/afts/next-hops/next-hop/ip-in-ip/state/traffic-class"];
     }
     message PushedMplsLabelStackUnion {
       gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum pushed_mpls_label_stack_openconfigmplstypesmplslabelenum = 307755077 [(yext.schemapath) = "/afts/next-hops/next-hop/state/pushed-mpls-label-stack"];
@@ -192,6 +204,40 @@ message Afts {
     uint64 index = 1 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/index|/afts/policy-forwarding/policy-forwarding-entry/index"];
     PolicyForwardingEntry policy_forwarding_entry = 2;
   }
+  message Srv6SidEntry {
+    message Counters {
+      ywrapper.UintValue octets_forwarded = 78868378 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/counters/octets-forwarded"];
+      ywrapper.UintValue packets_forwarded = 383907571 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/counters/packets-forwarded"];
+    }
+    message SidParams {
+      message EncapObjectBsid {
+        message SrMplsLabelStackUnion {
+          gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum sr_mpls_label_stack_openconfigmplstypesmplslabelenum = 240022689 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid-params/encap-object-bsid/sr-mpls-label-stack"];
+          uint64 sr_mpls_label_stack_uint64 = 423055545 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid-params/encap-object-bsid/sr-mpls-label-stack"];
+        }
+        enum EncapType {
+          ENCAPTYPE_UNSET = 0;
+          ENCAPTYPE_SRv6 = 1 [(yext.yang_name) = "SRv6"];
+          ENCAPTYPE_MPLS = 2 [(yext.yang_name) = "MPLS"];
+        }
+        EncapType encap_type = 243563702 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid-params/encap-object-bsid/encap-type"];
+        repeated SrMplsLabelStackUnion sr_mpls_label_stack = 334102688 [(yext.leaflistunion) = true,(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid-params/encap-object-bsid/sr-mpls-label-stack"];
+        repeated ywrapper.StringValue srv6_sidlist = 492921610 [(yext.leaflist) = true,(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid-params/encap-object-bsid/srv6-sidlist"];
+      }
+      ywrapper.UintValue behavior_type = 515161612 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid-params/behavior-type"];
+      EncapObjectBsid encap_object_bsid = 489556639 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid-params/encap-object-bsid"];
+      ywrapper.StringValue interface = 167778842 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid-params/interface"];
+      ywrapper.StringValue lookup_network_instance = 341558990 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid-params/lookup-network-instance"];
+      ywrapper.StringValue next_hop = 330968820 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid-params/next-hop"];
+    }
+    Counters counters = 322811970 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/counters"];
+    ywrapper.BytesValue entry_metadata = 329921363 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/entry-metadata"];
+    SidParams sid_params = 125991390 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid-params"];
+  }
+  message Srv6SidEntryKey {
+    string sid = 1 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry/state/sid|/afts/srv6/srv6-sid-entry/sid"];
+    Srv6SidEntry srv6_sid_entry = 2;
+  }
   repeated Ipv4EntryKey ipv4_entry = 410397655 [(yext.schemapath) = "/afts/ipv4-unicast/ipv4-entry"];
   repeated Ipv6EntryKey ipv6_entry = 403891971 [(yext.schemapath) = "/afts/ipv6-unicast/ipv6-entry"];
   repeated LabelEntryKey label_entry = 153428187 [(yext.schemapath) = "/afts/mpls/label-entry"];
@@ -199,4 +245,5 @@ message Afts {
   repeated NextHopKey next_hop = 132654769 [(yext.schemapath) = "/afts/next-hops/next-hop"];
   repeated NextHopGroupKey next_hop_group = 362999033 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group"];
   repeated PolicyForwardingEntryKey policy_forwarding_entry = 269536139 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry"];
+  repeated Srv6SidEntryKey srv6_sid_entry = 318782260 [(yext.schemapath) = "/afts/srv6/srv6-sid-entry"];
 }

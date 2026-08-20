@@ -22,6 +22,8 @@ module openconfig-aft {
   include openconfig-aft-common;
   // Include the state synced submodule.
   include openconfig-aft-state-synced;
+  // Include the SRv6 AFT submodule.
+  include openconfig-aft-srv6;
 
   organization
     "OpenConfig working group";
@@ -292,6 +294,15 @@ module openconfig-aft {
           client that AFT data/view is consistent.";
 
         uses aft-state-synced-structural;
+      }
+
+      container srv6 {
+        description
+          "The abstract forwarding table for SRv6 SID entries.
+          Entries within the table are keyed based on the
+          SID value.";
+
+        uses aft-srv6-structural;
       }
 
       uses aft-next-hop-groups-structural;

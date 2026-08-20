@@ -11,6 +11,7 @@ submodule openconfig-aft-common {
   import openconfig-policy-types { prefix "oc-pol-types"; }
   import openconfig-aft-types { prefix "oc-aftt"; }
   import openconfig-evpn-types { prefix "oc-evpn-types"; }
+  import openconfig-srv6-types { prefix "oc-srv6-types"; }
 
   organization
     "OpenConfig working group";
@@ -612,6 +613,36 @@ submodule openconfig-aft-common {
       type oc-inet:ip-address;
       description
         "Destination IP address to use for the encapsulated packet.";
+    }
+
+    leaf-list srv6-sid-list {
+      type oc-inet:ipv6-address;
+      ordered-by user;
+      description
+        "Additional SRv6 SIDs set on the Segment Routing Header (SRH).";
+    }
+
+    leaf flow-label {
+      type uint32 {
+        range "0..1048575";
+      }
+      description
+        "Flow Label, used to identify a packet belong to a particular flow.
+        If this value is set, it overrides the hashing computed by the device
+        and forces the value configured.";
+    }
+
+    leaf traffic-class {
+      type uint8;
+      description
+        "Traffic Class value.";
+    }
+
+    leaf hop-limit {
+      type uint8;
+      default "64";
+      description
+        "Hop Limit value.";
     }
   }
 
