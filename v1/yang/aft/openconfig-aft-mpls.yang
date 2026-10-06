@@ -21,7 +21,82 @@ submodule openconfig-aft-mpls {
     "Submodule containing definitions of groupings for the abstract
     forwarding table for MPLS label forwarding.";
 
-  oc-ext:openconfig-version "2.1.0";
+  oc-ext:openconfig-version "3.5.0";
+
+  revision "2026-09-01" {
+    description
+      "Add backup activation state for next-hop-groups.";
+    reference "3.5.0";
+  }
+
+  revision "2026-03-10" {
+    description
+      "Add global-filter container to support per-network-instance AFT prefix filtering.";
+    reference "3.4.0";
+  }
+
+  revision "2026-02-09" {
+    description
+      "Deprecate popped-mpls-label-stack and AFT NH pushed-mpls-label-stack
+       and mpls-label-stack leafs as they do not support duplicates.
+       Add decap-mpls-label-stack and AFT NH encap-mpls-label-stack
+       and encap-mpls-label-stack leafs that support duplicates.";
+    reference "3.3.0";
+  }
+
+  revision "2025-08-07" {
+    description
+      "Factor out AFT counters from atomic container into a unified subtree.";
+    reference "3.2.0";
+  }
+
+  revision "2025-05-15" {
+    description
+      "Add GRE and MPLS to encap-headers.";
+    reference "3.1.0";
+  }
+
+  revision "2025-03-12" {
+    description
+      "Use IP address-family specific types for UDP-V4 and UDP-V6 encapsulations in AFT.";
+    reference "3.0.0";
+  }
+
+  revision "2024-09-19" {
+    description
+      "Add atomic-exempt attribute to AFT counters containers.";
+    reference "2.8.0";
+  }
+
+  revision "2024-09-05" {
+    description
+        "Add encapsulate-stack under aft next-hops.";
+      reference "2.7.0";
+  }
+
+  revision "2024-04-25" {
+    description
+      "Add backup-active to AFT NHG state.";
+    reference "2.6.0";
+  }
+
+  revision "2024-04-25" {
+    description
+      "Add backup-active to AFT NHG state.";
+    reference "2.5.0";
+  }
+
+  revision "2023-04-19" {
+    description
+      "Add atomic attribute to AFT containers.";
+    reference "2.3.0";
+  }
+
+  revision "2022-06-16" {
+    description
+      "Add state-synced container under afts.";
+    reference "2.2.0";
+  }
 
   revision "2022-06-15" {
     description
@@ -132,6 +207,7 @@ submodule openconfig-aft-mpls {
     list label-entry {
       key "label";
 
+      oc-ext:telemetry-atomic;
       description
         "List of the MPLS entries within the abstract
         forwarding table. This list is keyed by the top-most MPLS
@@ -153,6 +229,7 @@ submodule openconfig-aft-mpls {
           entry.";
         uses aft-mpls-entry-state;
       }
+      uses aft-mpls-entry-label-state;
     }
   }
 
@@ -171,11 +248,15 @@ submodule openconfig-aft-mpls {
 
     leaf-list popped-mpls-label-stack {
       type oc-mplst:mpls-label;
+      status deprecated;
       description
         "The MPLS label stack to be popped from the packet when
         switched by the system. The stack is encoded as a leaf-list
         such that the first entry is the label that is outer-most (i.e.,
-        furthest from the bottom of the stack).
+        furthest from the bottom of the stack). This does not support
+        duplicate labels.
+
+        This node is deprecated in favor of the list decap-mpls-label-stack.
 
         If the local system pops the outer-most label 400, then the
         value of this list is [400,]. If the local system removes two
@@ -184,6 +265,62 @@ submodule openconfig-aft-mpls {
 
         A swap operation is reflected by entries in the
         popped-mpls-label-stack and pushed-mpls-label-stack nodes.";
+    }
+  }
+
+  grouping aft-mpls-entry-label-state {
+    description
+      "Parameters relating to mpls label state.";
+
+    container decap-mpls-label-stacks {
+      description
+        "Surrounding container for groups of decap-mpls-label-stack.";
+
+      list decap-mpls-label-stack {
+        ordered-by user;
+        description
+          "The MPLS label stack to be popped from the packet when
+          switched by the system. The stack is encoded as a list
+          such that the first entry is the label that is outer-most (i.e.,
+          furthest from the bottom of the stack). This supports duplicate
+          labels.
+
+          If the local system pops the outer-most label 400, then the
+          value of this list is [400,]. If the local system removes two
+          labels, the outer-most being 500, and the second of which is
+          400, then the value of the list is [500, 400].
+
+          A swap operation is reflected by entries in the
+          decap-mpls-label-stack and encap-mpls-label-stack nodes.";
+
+        key "id";
+
+        leaf id {
+          type leafref {
+            path "../state/id";
+          }
+          description
+            "Reference to list key";
+        }
+
+        container state {
+          config false;
+          description
+            "State parameters relating to nexthop encap";
+
+          leaf id {
+            type uint8;
+            description
+              "Index for a label in the list.";
+          }
+
+          leaf label {
+            type oc-mplst:mpls-label;
+            description
+              "MPLS label value.";
+          }
+        }
+      }
     }
   }
 }
