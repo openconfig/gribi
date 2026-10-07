@@ -214,6 +214,9 @@ message AFTOperation {
     // /network-instances/network-instance/afts/policy-forwarding/
     // policy-forwarding-entry
     gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
+    // Schema for BackupActivateKey is generated from
+    // /network-instances/network-instance/afts/backup-activate
+    gribi_aft.Afts.BackupActivateKey backup_activate = 12;
   }
 
   // Election ID of the client.
@@ -435,6 +438,7 @@ enum AFTType {
   NEXTHOP_GROUP = 6;
   MAC = 7;
   POLICY_FORWARDING = 8;
+  BACKUP_ACTIVATE = 9;
 }
 
 // Empty is a specific message that is used as a marker where
@@ -479,6 +483,7 @@ message AFTEntry {
     gribi_aft.Afts.NextHopKey next_hop = 8;
     gribi_aft.Afts.MacEntryKey mac_entry = 9;
     gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
+    gribi_aft.Afts.BackupActivateKey backup_activate = 13;
   }
   enum Status {
     // The programming status is not available.
