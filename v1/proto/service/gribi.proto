@@ -496,7 +496,7 @@ message AFTEntry {
   // RIB programming status of the entry.
   Status rib_status = 11;
   // FIB programming status of the entry.
-  Status fib_status = 12;
+  Status fib_status = 13;
 }
 
 message GetResponse {

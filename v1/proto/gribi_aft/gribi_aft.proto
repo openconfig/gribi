@@ -21,6 +21,15 @@ message Device {
 }
 
 message Afts {
+  message BackupActivate {
+  }
+  message BackupActivateKey {
+ 	uint64 next_hop_group = 1 [(yext.schemapath) = "/afts/backup-activate/backup-activate/state/next-hop-group|/afts/backup-activate/backup-activate/next-hop-group"];
+ 	BackupActivate backup_activate = 2;
+  }
+  // Repeated container for backup_activate entries in the AFT
+  repeated BackupActivateKey backup_activate = 268235568 [(yext.schemapath) = "/afts/backup-activate/backup-activate"];
+
   message BackupActivation {
   }
   message BackupActivationKey {
