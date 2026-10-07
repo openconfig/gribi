@@ -1531,7 +1531,7 @@ func (x *Afts_LabelEntry_DecapMplsLabelStackKey) ProtoReflect() protoreflect.Mes
 		}
 		return ms
 	}
-	return mi.MessageOf(x)
+	return nil
 }
 
 // Deprecated: Use Afts_LabelEntry_DecapMplsLabelStackKey.ProtoReflect.Descriptor instead.
@@ -1595,14 +1595,14 @@ func (x *Afts_LabelEntry_PoppedMplsLabelStackUnion) GetPoppedMplsLabelStackOpenc
 	if x != nil {
 		return x.PoppedMplsLabelStackOpenconfigmplstypesmplslabelenum
 	}
-	return enums.OpenconfigMplsTypesMplsLabelEnum(0)
+	return 0
 }
 
 func (x *Afts_LabelEntry_PoppedMplsLabelStackUnion) GetPoppedMplsLabelStackUint64() uint64 {
 	if x != nil {
 		return x.PoppedMplsLabelStackUint64
 	}
-	return 0
+	return nil
 }
 
 type Afts_NextHop_EncapHeader struct {

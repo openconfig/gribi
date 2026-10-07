@@ -16,6 +16,7 @@
 
 # Hack to ensure that if we are running on OS X with a homebrew installed
 # GNU sed then we can still run sed.
+
 runsed() {
   if hash gsed 2>/dev/null; then
     gsed "$@"
@@ -38,7 +39,7 @@ if [ -z $SRCDIR ]; then
   SRC_DIR=`runreadlink -m ${THIS_DIR}/..`
 fi
 
-proto_generator \
+${GOPATH}/bin/proto_generator \
   -path=${SRC_DIR}/v1/yang,${SRC_DIR}/v1/yang/deps \
   -output_dir=${SRC_DIR}/v1/proto -compress_paths -generate_fakeroot -fakeroot_name=device \
   -package_name=gribi_aft -exclude_modules=ietf-interfaces,openconfig-interfaces \
