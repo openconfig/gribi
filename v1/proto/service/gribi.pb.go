@@ -1710,9 +1710,9 @@ type AFTEntry struct {
 	//	*AFTEntry_BackupActivate
 	Entry isAFTEntry_Entry `protobuf_oneof:"entry"`
 	// RIB programming status of the entry.
-	RibStatus AFTEntry_Status `protobuf:"varint,12,opt,name=rib_status,json=ribStatus,proto3,enum=gribi.AFTEntry_Status" json:"rib_status,omitempty"`
+	RibStatus AFTEntry_Status `protobuf:"varint,11,opt,name=rib_status,json=ribStatus,proto3,enum=gribi.AFTEntry_Status" json:"rib_status,omitempty"`
 	// FIB programming status of the entry.
-	FibStatus     AFTEntry_Status `protobuf:"varint,13,opt,name=fib_status,json=fibStatus,proto3,enum=gribi.AFTEntry_Status" json:"fib_status,omitempty"`
+	FibStatus     AFTEntry_Status `protobuf:"varint,12,opt,name=fib_status,json=fibStatus,proto3,enum=gribi.AFTEntry_Status" json:"fib_status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1884,7 +1884,7 @@ type AFTEntry_PolicyForwardingEntry struct {
 }
 
 type AFTEntry_BackupActivate struct {
-	BackupActivate *gribi_aft.Afts_BackupActivateKey `protobuf:"bytes,11,opt,name=backup_activate,json=backupActivate,proto3,oneof"`
+	BackupActivate *gribi_aft.Afts_BackupActivateKey `protobuf:"bytes,13,opt,name=backup_activate,json=backupActivate,proto3,oneof"`
 }
 
 func (*AFTEntry_Ipv4) isAFTEntry_Entry() {}
@@ -2320,11 +2320,11 @@ const file_v1_proto_service_gribi_proto_rawDesc = "" +
 	"\tmac_entry\x18\t \x01(\v2\x1b.gribi_aft.Afts.MacEntryKeyH\x00R\bmacEntry\x12b\n" +
 	"\x17policy_forwarding_entry\x18\n" +
 	" \x01(\v2(.gribi_aft.Afts.PolicyForwardingEntryKeyH\x00R\x15policyForwardingEntry\x12L\n" +
-	"\x0fbackup_activate\x18\v \x01(\v2!.gribi_aft.Afts.BackupActivateKeyH\x00R\x0ebackupActivate\x125\n" +
+	"\x0fbackup_activate\x18\r \x01(\v2!.gribi_aft.Afts.BackupActivateKeyH\x00R\x0ebackupActivate\x125\n" +
 	"\n" +
-	"rib_status\x18\f \x01(\x0e2\x16.gribi.AFTEntry.StatusR\tribStatus\x125\n" +
+	"rib_status\x18\v \x01(\x0e2\x16.gribi.AFTEntry.StatusR\tribStatus\x125\n" +
 	"\n" +
-	"fib_status\x18\r \x01(\x0e2\x16.gribi.AFTEntry.StatusR\tfibStatus\"=\n" +
+	"fib_status\x18\f \x01(\x0e2\x16.gribi.AFTEntry.StatusR\tfibStatus\"=\n" +
 	"\x06Status\x12\x0f\n" +
 	"\vUNAVAILABLE\x10\x00\x12\x0e\n" +
 	"\n" +

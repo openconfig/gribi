@@ -483,7 +483,7 @@ message AFTEntry {
     gribi_aft.Afts.NextHopKey next_hop = 8;
     gribi_aft.Afts.MacEntryKey mac_entry = 9;
     gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
-    gribi_aft.Afts.BackupActivateKey backup_activate = 11;
+    gribi_aft.Afts.BackupActivateKey backup_activate = 13;
   }
   enum Status {
     // The programming status is not available.
@@ -494,9 +494,9 @@ message AFTEntry {
     NOT_PROGRAMMED = 2;
   }
   // RIB programming status of the entry.
-  Status rib_status = 12;
+  Status rib_status = 11;
   // FIB programming status of the entry.
-  Status fib_status = 13;
+  Status fib_status = 12;
 }
 
 message GetResponse {
