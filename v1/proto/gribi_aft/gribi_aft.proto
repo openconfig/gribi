@@ -134,10 +134,6 @@ message Afts {
         ywrapper.StringValue src_ip = 494881688 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/src-ip"];
         ywrapper.UintValue src_udp_port = 485812424 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/src-udp-port"];
       }
-      message Vxlan {
-        ywrapper.StringValue tunnel_src_ip_address = 448199679 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/vxlan/state/tunnel-src-ip-address"];
-        ywrapper.UintValue vni_label = 524989411 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/vxlan/state/vni-label"];
-      }
       Gre gre = 301373623 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/gre"];
       Ipv4 ipv4 = 191386200 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv4"];
       Ipv6 ipv6 = 191386202 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6"];
@@ -145,7 +141,6 @@ message Afts {
       gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType type = 254997883 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/state/type"];
       UdpV4 udp_v4 = 171499561 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v4"];
       UdpV6 udp_v6 = 171499563 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6"];
-      Vxlan vxlan = 397229320 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/vxlan"];
     }
     message EncapHeaderKey {
       uint64 index = 1 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/state/index|/afts/next-hops/next-hop/encap-headers/encap-header/index"];
@@ -190,11 +185,9 @@ message Afts {
       uint64 index = 1 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/next-hops/next-hop/state/index|/afts/next-hop-groups/next-hop-group/next-hops/next-hop/index"];
       NextHop next_hop = 2;
     }
-    ywrapper.BoolValue backup_active = 112883487 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/backup-active"];
     ywrapper.UintValue backup_next_hop_group = 366506898 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/backup-next-hop-group"];
     ywrapper.UintValue color = 242427279 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/color"];
     repeated NextHopKey next_hop = 211071474 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/next-hops/next-hop"];
-    ywrapper.StringValue next_hop_group_name = 513600563 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/next-hop-group-name"];
   }
   message NextHopGroupKey {
     uint64 id = 1 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group/state/id|/afts/next-hop-groups/next-hop-group/id"];
@@ -227,10 +220,6 @@ message Afts {
     uint64 index = 1 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/index|/afts/policy-forwarding/policy-forwarding-entry/index"];
     PolicyForwardingEntry policy_forwarding_entry = 2;
   }
-  message StateSynced {
-    ywrapper.BoolValue ipv4_unicast = 342109067 [(yext.schemapath) = "/afts/state-synced/state/ipv4-unicast"];
-    ywrapper.BoolValue ipv6_unicast = 449798453 [(yext.schemapath) = "/afts/state-synced/state/ipv6-unicast"];
-  }
   repeated BackupActivationKey backup_activation = 177885967 [(yext.schemapath) = "/afts/backup-activations/backup-activation"];
   repeated Ipv4EntryKey ipv4_entry = 410397655 [(yext.schemapath) = "/afts/ipv4-unicast/ipv4-entry"];
   repeated Ipv6EntryKey ipv6_entry = 403891971 [(yext.schemapath) = "/afts/ipv6-unicast/ipv6-entry"];
@@ -239,5 +228,4 @@ message Afts {
   repeated NextHopKey next_hop = 132654769 [(yext.schemapath) = "/afts/next-hops/next-hop"];
   repeated NextHopGroupKey next_hop_group = 362999033 [(yext.schemapath) = "/afts/next-hop-groups/next-hop-group"];
   repeated PolicyForwardingEntryKey policy_forwarding_entry = 269536139 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry"];
-  StateSynced state_synced = 401573993 [(yext.schemapath) = "/afts/state-synced"];
 }

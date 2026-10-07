@@ -2333,7 +2333,7 @@ const file_v1_proto_service_gribi_proto_rawDesc = "" +
 	"\x05gRIBI\x129\n" +
 	"\x06Modify\x12\x14.gribi.ModifyRequest\x1a\x15.gribi.ModifyResponse(\x010\x01\x12.\n" +
 	"\x03Get\x12\x11.gribi.GetRequest\x1a\x12.gribi.GetResponse0\x01\x122\n" +
-	"\x05Flush\x12\x13.gribi.FlushRequest\x1a\x14.gribi.FlushResponseB1Z/github.com/openconfig/gribi/proto/service;gribib\x06proto3"
+	"\x05Flush\x12\x13.gribi.FlushRequest\x1a\x14.gribi.FlushResponseB4Z2github.com/openconfig/gribi/v1/proto/service;gribib\x06proto3"
 
 var (
 	file_v1_proto_service_gribi_proto_rawDescOnce sync.Once

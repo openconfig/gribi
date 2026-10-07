@@ -87,7 +87,6 @@ type Afts struct {
 	NextHop               []*Afts_NextHopKey               `protobuf:"bytes,132654769,rep,name=next_hop,json=nextHop,proto3" json:"next_hop,omitempty"`
 	NextHopGroup          []*Afts_NextHopGroupKey          `protobuf:"bytes,362999033,rep,name=next_hop_group,json=nextHopGroup,proto3" json:"next_hop_group,omitempty"`
 	PolicyForwardingEntry []*Afts_PolicyForwardingEntryKey `protobuf:"bytes,269536139,rep,name=policy_forwarding_entry,json=policyForwardingEntry,proto3" json:"policy_forwarding_entry,omitempty"`
-	StateSynced           *Afts_StateSynced                `protobuf:"bytes,401573993,opt,name=state_synced,json=stateSynced,proto3" json:"state_synced,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -174,13 +173,6 @@ func (x *Afts) GetNextHopGroup() []*Afts_NextHopGroupKey {
 func (x *Afts) GetPolicyForwardingEntry() []*Afts_PolicyForwardingEntryKey {
 	if x != nil {
 		return x.PolicyForwardingEntry
-	}
-	return nil
-}
-
-func (x *Afts) GetStateSynced() *Afts_StateSynced {
-	if x != nil {
-		return x.StateSynced
 	}
 	return nil
 }
@@ -933,11 +925,9 @@ func (x *Afts_NextHop) GetVniLabel() *ywrapper.UintValue {
 
 type Afts_NextHopGroup struct {
 	state              protoimpl.MessageState          `protogen:"open.v1"`
-	BackupActive       *ywrapper.BoolValue             `protobuf:"bytes,112883487,opt,name=backup_active,json=backupActive,proto3" json:"backup_active,omitempty"`
 	BackupNextHopGroup *ywrapper.UintValue             `protobuf:"bytes,366506898,opt,name=backup_next_hop_group,json=backupNextHopGroup,proto3" json:"backup_next_hop_group,omitempty"`
 	Color              *ywrapper.UintValue             `protobuf:"bytes,242427279,opt,name=color,proto3" json:"color,omitempty"`
 	NextHop            []*Afts_NextHopGroup_NextHopKey `protobuf:"bytes,211071474,rep,name=next_hop,json=nextHop,proto3" json:"next_hop,omitempty"`
-	NextHopGroupName   *ywrapper.StringValue           `protobuf:"bytes,513600563,opt,name=next_hop_group_name,json=nextHopGroupName,proto3" json:"next_hop_group_name,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -972,13 +962,6 @@ func (*Afts_NextHopGroup) Descriptor() ([]byte, []int) {
 	return file_v1_proto_gribi_aft_gribi_aft_proto_rawDescGZIP(), []int{1, 11}
 }
 
-func (x *Afts_NextHopGroup) GetBackupActive() *ywrapper.BoolValue {
-	if x != nil {
-		return x.BackupActive
-	}
-	return nil
-}
-
 func (x *Afts_NextHopGroup) GetBackupNextHopGroup() *ywrapper.UintValue {
 	if x != nil {
 		return x.BackupNextHopGroup
@@ -996,13 +979,6 @@ func (x *Afts_NextHopGroup) GetColor() *ywrapper.UintValue {
 func (x *Afts_NextHopGroup) GetNextHop() []*Afts_NextHopGroup_NextHopKey {
 	if x != nil {
 		return x.NextHop
-	}
-	return nil
-}
-
-func (x *Afts_NextHopGroup) GetNextHopGroupName() *ywrapper.StringValue {
-	if x != nil {
-		return x.NextHopGroupName
 	}
 	return nil
 }
@@ -1365,58 +1341,6 @@ func (x *Afts_PolicyForwardingEntryKey) GetPolicyForwardingEntry() *Afts_PolicyF
 	return nil
 }
 
-type Afts_StateSynced struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ipv4Unicast   *ywrapper.BoolValue    `protobuf:"bytes,342109067,opt,name=ipv4_unicast,json=ipv4Unicast,proto3" json:"ipv4_unicast,omitempty"`
-	Ipv6Unicast   *ywrapper.BoolValue    `protobuf:"bytes,449798453,opt,name=ipv6_unicast,json=ipv6Unicast,proto3" json:"ipv6_unicast,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Afts_StateSynced) Reset() {
-	*x = Afts_StateSynced{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[18]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Afts_StateSynced) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Afts_StateSynced) ProtoMessage() {}
-
-func (x *Afts_StateSynced) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[18]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Afts_StateSynced.ProtoReflect.Descriptor instead.
-func (*Afts_StateSynced) Descriptor() ([]byte, []int) {
-	return file_v1_proto_gribi_aft_gribi_aft_proto_rawDescGZIP(), []int{1, 16}
-}
-
-func (x *Afts_StateSynced) GetIpv4Unicast() *ywrapper.BoolValue {
-	if x != nil {
-		return x.Ipv4Unicast
-	}
-	return nil
-}
-
-func (x *Afts_StateSynced) GetIpv6Unicast() *ywrapper.BoolValue {
-	if x != nil {
-		return x.Ipv6Unicast
-	}
-	return nil
-}
-
 type Afts_LabelEntry_DecapMplsLabelStack struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Label:
@@ -1430,7 +1354,7 @@ type Afts_LabelEntry_DecapMplsLabelStack struct {
 
 func (x *Afts_LabelEntry_DecapMplsLabelStack) Reset() {
 	*x = Afts_LabelEntry_DecapMplsLabelStack{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[19]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1442,7 +1366,7 @@ func (x *Afts_LabelEntry_DecapMplsLabelStack) String() string {
 func (*Afts_LabelEntry_DecapMplsLabelStack) ProtoMessage() {}
 
 func (x *Afts_LabelEntry_DecapMplsLabelStack) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[19]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1511,7 +1435,7 @@ type Afts_LabelEntry_DecapMplsLabelStackKey struct {
 
 func (x *Afts_LabelEntry_DecapMplsLabelStackKey) Reset() {
 	*x = Afts_LabelEntry_DecapMplsLabelStackKey{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[20]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1523,7 +1447,7 @@ func (x *Afts_LabelEntry_DecapMplsLabelStackKey) String() string {
 func (*Afts_LabelEntry_DecapMplsLabelStackKey) ProtoMessage() {}
 
 func (x *Afts_LabelEntry_DecapMplsLabelStackKey) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[20]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1531,7 +1455,7 @@ func (x *Afts_LabelEntry_DecapMplsLabelStackKey) ProtoReflect() protoreflect.Mes
 		}
 		return ms
 	}
-	return nil
+	return mi.MessageOf(x)
 }
 
 // Deprecated: Use Afts_LabelEntry_DecapMplsLabelStackKey.ProtoReflect.Descriptor instead.
@@ -1563,7 +1487,7 @@ type Afts_LabelEntry_PoppedMplsLabelStackUnion struct {
 
 func (x *Afts_LabelEntry_PoppedMplsLabelStackUnion) Reset() {
 	*x = Afts_LabelEntry_PoppedMplsLabelStackUnion{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[21]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1575,7 +1499,7 @@ func (x *Afts_LabelEntry_PoppedMplsLabelStackUnion) String() string {
 func (*Afts_LabelEntry_PoppedMplsLabelStackUnion) ProtoMessage() {}
 
 func (x *Afts_LabelEntry_PoppedMplsLabelStackUnion) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[21]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1595,14 +1519,14 @@ func (x *Afts_LabelEntry_PoppedMplsLabelStackUnion) GetPoppedMplsLabelStackOpenc
 	if x != nil {
 		return x.PoppedMplsLabelStackOpenconfigmplstypesmplslabelenum
 	}
-	return 0
+	return enums.OpenconfigMplsTypesMplsLabelEnum(0)
 }
 
 func (x *Afts_LabelEntry_PoppedMplsLabelStackUnion) GetPoppedMplsLabelStackUint64() uint64 {
 	if x != nil {
 		return x.PoppedMplsLabelStackUint64
 	}
-	return nil
+	return 0
 }
 
 type Afts_NextHop_EncapHeader struct {
@@ -1614,14 +1538,13 @@ type Afts_NextHop_EncapHeader struct {
 	Type          enums.OpenconfigAftTypesEncapsulationHeaderType `protobuf:"varint,254997883,opt,name=type,proto3,enum=gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType" json:"type,omitempty"`
 	UdpV4         *Afts_NextHop_EncapHeader_UdpV4                 `protobuf:"bytes,171499561,opt,name=udp_v4,json=udpV4,proto3" json:"udp_v4,omitempty"`
 	UdpV6         *Afts_NextHop_EncapHeader_UdpV6                 `protobuf:"bytes,171499563,opt,name=udp_v6,json=udpV6,proto3" json:"udp_v6,omitempty"`
-	Vxlan         *Afts_NextHop_EncapHeader_Vxlan                 `protobuf:"bytes,397229320,opt,name=vxlan,proto3" json:"vxlan,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Afts_NextHop_EncapHeader) Reset() {
 	*x = Afts_NextHop_EncapHeader{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[22]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1633,7 +1556,7 @@ func (x *Afts_NextHop_EncapHeader) String() string {
 func (*Afts_NextHop_EncapHeader) ProtoMessage() {}
 
 func (x *Afts_NextHop_EncapHeader) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[22]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1698,13 +1621,6 @@ func (x *Afts_NextHop_EncapHeader) GetUdpV6() *Afts_NextHop_EncapHeader_UdpV6 {
 	return nil
 }
 
-func (x *Afts_NextHop_EncapHeader) GetVxlan() *Afts_NextHop_EncapHeader_Vxlan {
-	if x != nil {
-		return x.Vxlan
-	}
-	return nil
-}
-
 type Afts_NextHop_EncapHeaderKey struct {
 	state         protoimpl.MessageState    `protogen:"open.v1"`
 	Index         uint64                    `protobuf:"varint,1,opt,name=index,proto3" json:"index,omitempty"`
@@ -1715,7 +1631,7 @@ type Afts_NextHop_EncapHeaderKey struct {
 
 func (x *Afts_NextHop_EncapHeaderKey) Reset() {
 	*x = Afts_NextHop_EncapHeaderKey{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[23]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1727,7 +1643,7 @@ func (x *Afts_NextHop_EncapHeaderKey) String() string {
 func (*Afts_NextHop_EncapHeaderKey) ProtoMessage() {}
 
 func (x *Afts_NextHop_EncapHeaderKey) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[23]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1768,7 +1684,7 @@ type Afts_NextHop_Gre struct {
 
 func (x *Afts_NextHop_Gre) Reset() {
 	*x = Afts_NextHop_Gre{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[24]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1780,7 +1696,7 @@ func (x *Afts_NextHop_Gre) String() string {
 func (*Afts_NextHop_Gre) ProtoMessage() {}
 
 func (x *Afts_NextHop_Gre) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[24]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1827,7 +1743,7 @@ type Afts_NextHop_InterfaceRef struct {
 
 func (x *Afts_NextHop_InterfaceRef) Reset() {
 	*x = Afts_NextHop_InterfaceRef{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[25]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1839,7 +1755,7 @@ func (x *Afts_NextHop_InterfaceRef) String() string {
 func (*Afts_NextHop_InterfaceRef) ProtoMessage() {}
 
 func (x *Afts_NextHop_InterfaceRef) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[25]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1879,7 +1795,7 @@ type Afts_NextHop_IpInIp struct {
 
 func (x *Afts_NextHop_IpInIp) Reset() {
 	*x = Afts_NextHop_IpInIp{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[26]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1891,7 +1807,7 @@ func (x *Afts_NextHop_IpInIp) String() string {
 func (*Afts_NextHop_IpInIp) ProtoMessage() {}
 
 func (x *Afts_NextHop_IpInIp) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[26]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1931,7 +1847,7 @@ type Afts_NextHop_PushedMplsLabelStackUnion struct {
 
 func (x *Afts_NextHop_PushedMplsLabelStackUnion) Reset() {
 	*x = Afts_NextHop_PushedMplsLabelStackUnion{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[27]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1943,7 +1859,7 @@ func (x *Afts_NextHop_PushedMplsLabelStackUnion) String() string {
 func (*Afts_NextHop_PushedMplsLabelStackUnion) ProtoMessage() {}
 
 func (x *Afts_NextHop_PushedMplsLabelStackUnion) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[27]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1984,7 +1900,7 @@ type Afts_NextHop_EncapHeader_Gre struct {
 
 func (x *Afts_NextHop_EncapHeader_Gre) Reset() {
 	*x = Afts_NextHop_EncapHeader_Gre{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[28]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1996,7 +1912,7 @@ func (x *Afts_NextHop_EncapHeader_Gre) String() string {
 func (*Afts_NextHop_EncapHeader_Gre) ProtoMessage() {}
 
 func (x *Afts_NextHop_EncapHeader_Gre) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[28]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2043,7 +1959,7 @@ type Afts_NextHop_EncapHeader_Ipv4 struct {
 
 func (x *Afts_NextHop_EncapHeader_Ipv4) Reset() {
 	*x = Afts_NextHop_EncapHeader_Ipv4{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[29]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2055,7 +1971,7 @@ func (x *Afts_NextHop_EncapHeader_Ipv4) String() string {
 func (*Afts_NextHop_EncapHeader_Ipv4) ProtoMessage() {}
 
 func (x *Afts_NextHop_EncapHeader_Ipv4) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[29]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2095,7 +2011,7 @@ type Afts_NextHop_EncapHeader_Ipv6 struct {
 
 func (x *Afts_NextHop_EncapHeader_Ipv6) Reset() {
 	*x = Afts_NextHop_EncapHeader_Ipv6{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[30]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2107,7 +2023,7 @@ func (x *Afts_NextHop_EncapHeader_Ipv6) String() string {
 func (*Afts_NextHop_EncapHeader_Ipv6) ProtoMessage() {}
 
 func (x *Afts_NextHop_EncapHeader_Ipv6) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[30]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2148,7 +2064,7 @@ type Afts_NextHop_EncapHeader_Mpls struct {
 
 func (x *Afts_NextHop_EncapHeader_Mpls) Reset() {
 	*x = Afts_NextHop_EncapHeader_Mpls{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[31]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2160,7 +2076,7 @@ func (x *Afts_NextHop_EncapHeader_Mpls) String() string {
 func (*Afts_NextHop_EncapHeader_Mpls) ProtoMessage() {}
 
 func (x *Afts_NextHop_EncapHeader_Mpls) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[31]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2211,7 +2127,7 @@ type Afts_NextHop_EncapHeader_UdpV4 struct {
 
 func (x *Afts_NextHop_EncapHeader_UdpV4) Reset() {
 	*x = Afts_NextHop_EncapHeader_UdpV4{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[32]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2223,7 +2139,7 @@ func (x *Afts_NextHop_EncapHeader_UdpV4) String() string {
 func (*Afts_NextHop_EncapHeader_UdpV4) ProtoMessage() {}
 
 func (x *Afts_NextHop_EncapHeader_UdpV4) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[32]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2295,7 +2211,7 @@ type Afts_NextHop_EncapHeader_UdpV6 struct {
 
 func (x *Afts_NextHop_EncapHeader_UdpV6) Reset() {
 	*x = Afts_NextHop_EncapHeader_UdpV6{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[33]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2307,7 +2223,7 @@ func (x *Afts_NextHop_EncapHeader_UdpV6) String() string {
 func (*Afts_NextHop_EncapHeader_UdpV6) ProtoMessage() {}
 
 func (x *Afts_NextHop_EncapHeader_UdpV6) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[33]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2365,58 +2281,6 @@ func (x *Afts_NextHop_EncapHeader_UdpV6) GetSrcUdpPort() *ywrapper.UintValue {
 	return nil
 }
 
-type Afts_NextHop_EncapHeader_Vxlan struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	TunnelSrcIpAddress *ywrapper.StringValue  `protobuf:"bytes,448199679,opt,name=tunnel_src_ip_address,json=tunnelSrcIpAddress,proto3" json:"tunnel_src_ip_address,omitempty"`
-	VniLabel           *ywrapper.UintValue    `protobuf:"bytes,524989411,opt,name=vni_label,json=vniLabel,proto3" json:"vni_label,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
-}
-
-func (x *Afts_NextHop_EncapHeader_Vxlan) Reset() {
-	*x = Afts_NextHop_EncapHeader_Vxlan{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[34]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Afts_NextHop_EncapHeader_Vxlan) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Afts_NextHop_EncapHeader_Vxlan) ProtoMessage() {}
-
-func (x *Afts_NextHop_EncapHeader_Vxlan) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[34]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Afts_NextHop_EncapHeader_Vxlan.ProtoReflect.Descriptor instead.
-func (*Afts_NextHop_EncapHeader_Vxlan) Descriptor() ([]byte, []int) {
-	return file_v1_proto_gribi_aft_gribi_aft_proto_rawDescGZIP(), []int{1, 10, 0, 6}
-}
-
-func (x *Afts_NextHop_EncapHeader_Vxlan) GetTunnelSrcIpAddress() *ywrapper.StringValue {
-	if x != nil {
-		return x.TunnelSrcIpAddress
-	}
-	return nil
-}
-
-func (x *Afts_NextHop_EncapHeader_Vxlan) GetVniLabel() *ywrapper.UintValue {
-	if x != nil {
-		return x.VniLabel
-	}
-	return nil
-}
-
 type Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStack struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Label:
@@ -2430,7 +2294,7 @@ type Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStack struct {
 
 func (x *Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStack) Reset() {
 	*x = Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStack{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[35]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2442,7 +2306,7 @@ func (x *Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStack) String() string {
 func (*Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStack) ProtoMessage() {}
 
 func (x *Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStack) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[35]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2511,7 +2375,7 @@ type Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStackKey struct {
 
 func (x *Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStackKey) Reset() {
 	*x = Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStackKey{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[36]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2523,7 +2387,7 @@ func (x *Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStackKey) String() string {
 func (*Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStackKey) ProtoMessage() {}
 
 func (x *Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStackKey) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[36]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2563,7 +2427,7 @@ type Afts_NextHop_EncapHeader_Mpls_MplsLabelStackUnion struct {
 
 func (x *Afts_NextHop_EncapHeader_Mpls_MplsLabelStackUnion) Reset() {
 	*x = Afts_NextHop_EncapHeader_Mpls_MplsLabelStackUnion{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[37]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2575,7 +2439,7 @@ func (x *Afts_NextHop_EncapHeader_Mpls_MplsLabelStackUnion) String() string {
 func (*Afts_NextHop_EncapHeader_Mpls_MplsLabelStackUnion) ProtoMessage() {}
 
 func (x *Afts_NextHop_EncapHeader_Mpls_MplsLabelStackUnion) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[37]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2614,7 +2478,7 @@ type Afts_NextHopGroup_NextHop struct {
 
 func (x *Afts_NextHopGroup_NextHop) Reset() {
 	*x = Afts_NextHopGroup_NextHop{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[38]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2626,7 +2490,7 @@ func (x *Afts_NextHopGroup_NextHop) String() string {
 func (*Afts_NextHopGroup_NextHop) ProtoMessage() {}
 
 func (x *Afts_NextHopGroup_NextHop) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[38]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2659,7 +2523,7 @@ type Afts_NextHopGroup_NextHopKey struct {
 
 func (x *Afts_NextHopGroup_NextHopKey) Reset() {
 	*x = Afts_NextHopGroup_NextHopKey{}
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[39]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2671,7 +2535,7 @@ func (x *Afts_NextHopGroup_NextHopKey) String() string {
 func (*Afts_NextHopGroup_NextHopKey) ProtoMessage() {}
 
 func (x *Afts_NextHopGroup_NextHopKey) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[39]
+	mi := &file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2707,7 +2571,7 @@ const file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc = "" +
 	"\n" +
 	"\"v1/proto/gribi_aft/gribi_aft.proto\x12\tgribi_aft\x1a8github.com/openconfig/ygot/proto/ywrapper/ywrapper.proto\x1a0github.com/openconfig/ygot/proto/yext/yext.proto\x1a$v1/proto/gribi_aft/enums/enums.proto\":\n" +
 	"\x06Device\x120\n" +
-	"\x04afts\x18\xb4\x96\x94\x11 \x01(\v2\x0f.gribi_aft.AftsB\b\x82A\x05/aftsR\x04afts\"\xf4\x8d\x01\n" +
+	"\x04afts\x18\xb4\x96\x94\x11 \x01(\v2\x0f.gribi_aft.AftsB\b\x82A\x05/aftsR\x04afts\"\xf9\x85\x01\n" +
 	"\x04Afts\x12\x82\x01\n" +
 	"\x11backup_activation\x18\x8f\xa6\xe9T \x03(\v2#.gribi_aft.Afts.BackupActivationKeyB-\x82A*/afts/backup-activations/backup-activationR\x10backupActivation\x12a\n" +
 	"\n" +
@@ -2719,8 +2583,7 @@ const file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc = "" +
 	"\tmac_entry\x18\xc1\x9e\xa8M \x03(\v2\x1b.gribi_aft.Afts.MacEntryKeyB\x1b\x82A\x18/afts/ethernet/mac-entryR\bmacEntry\x12U\n" +
 	"\bnext_hop\x18\xb1͠? \x03(\v2\x1a.gribi_aft.Afts.NextHopKeyB\x1b\x82A\x18/afts/next-hops/next-hopR\anextHop\x12r\n" +
 	"\x0enext_hop_group\x18\xf9ً\xad\x01 \x03(\v2\x1f.gribi_aft.Afts.NextHopGroupKeyB'\x82A$/afts/next-hop-groups/next-hop-groupR\fnextHopGroup\x12\x98\x01\n" +
-	"\x17policy_forwarding_entry\x18\x8b\x97À\x01 \x03(\v2(.gribi_aft.Afts.PolicyForwardingEntryKeyB2\x82A//afts/policy-forwarding/policy-forwarding-entryR\x15policyForwardingEntry\x12Y\n" +
-	"\fstate_synced\x18鐾\xbf\x01 \x01(\v2\x1b.gribi_aft.Afts.StateSyncedB\x15\x82A\x12/afts/state-syncedR\vstateSynced\x1a\x12\n" +
+	"\x17policy_forwarding_entry\x18\x8b\x97À\x01 \x03(\v2(.gribi_aft.Afts.PolicyForwardingEntryKeyB2\x82A//afts/policy-forwarding/policy-forwarding-entryR\x15policyForwardingEntry\x1a\x12\n" +
 	"\x10BackupActivation\x1a\x89\x02\n" +
 	"\x13BackupActivationKey\x12\xa2\x01\n" +
 	"\x0enext_hop_group\x18\x01 \x01(\x04B|\x82Ay/afts/backup-activations/backup-activation/state/next-hop-group|/afts/backup-activations/backup-activation/next-hop-groupR\fnextHopGroup\x12M\n" +
@@ -2773,7 +2636,7 @@ const file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc = "" +
 	"\vMacEntryKey\x12s\n" +
 	"\vmac_address\x18\x01 \x01(\tBR\x82AO/afts/ethernet/mac-entry/state/mac-address|/afts/ethernet/mac-entry/mac-addressR\n" +
 	"macAddress\x125\n" +
-	"\tmac_entry\x18\x02 \x01(\v2\x18.gribi_aft.Afts.MacEntryR\bmacEntry\x1a\xeaC\n" +
+	"\tmac_entry\x18\x02 \x01(\v2\x18.gribi_aft.Afts.MacEntryR\bmacEntry\x1a\xae@\n" +
 	"\aNextHop\x12\xa2\x01\n" +
 	"\x12decapsulate_header\x18\xa9\xf4\x862 \x01(\x0e2:.gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderTypeB4\x82A1/afts/next-hops/next-hop/state/decapsulate-headerR\x11decapsulateHeader\x12\x84\x01\n" +
 	"\fencap_header\x18\xd2\xe6\xf8; \x03(\v2&.gribi_aft.Afts.NextHop.EncapHeaderKeyB6\x82A3/afts/next-hops/next-hop/encap-headers/encap-headerR\vencapHeader\x12\xa2\x01\n" +
@@ -2789,7 +2652,7 @@ const file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc = "" +
 	"\rpop_top_label\x18\xac\x91\x9e\xb6\x01 \x01(\v2\x13.ywrapper.BoolValueB/\x82A,/afts/next-hops/next-hop/state/pop-top-labelR\vpopTopLabel\x12\xaa\x01\n" +
 	"\x17pushed_mpls_label_stack\x18Ԯ\xba\xe9\x01 \x03(\v21.gribi_aft.Afts.NextHop.PushedMplsLabelStackUnionB<\x82A6/afts/next-hops/next-hop/state/pushed-mpls-label-stack\xe0I\x01R\x14pushedMplsLabelStack\x12\x84\x01\n" +
 	"\x15tunnel_src_ip_address\x18\xa2\x8f\x8cS \x01(\v2\x15.ywrapper.StringValueB7\x82A4/afts/next-hops/next-hop/state/tunnel-src-ip-addressR\x12tunnelSrcIpAddress\x12`\n" +
-	"\tvni_label\x18ʦ\x8dd \x01(\v2\x13.ywrapper.UintValueB+\x82A(/afts/next-hops/next-hop/state/vni-labelR\bvniLabel\x1a\xa2,\n" +
+	"\tvni_label\x18ʦ\x8dd \x01(\v2\x13.ywrapper.UintValueB+\x82A(/afts/next-hops/next-hop/state/vni-labelR\bvniLabel\x1a\xe6(\n" +
 	"\vEncapHeader\x12y\n" +
 	"\x03gre\x18\xb7\xb1ڏ\x01 \x01(\v2'.gribi_aft.Afts.NextHop.EncapHeader.GreB:\x82A7/afts/next-hops/next-hop/encap-headers/encap-header/greR\x03gre\x12|\n" +
 	"\x04ipv4\x18ؤ\xa1[ \x01(\v2(.gribi_aft.Afts.NextHop.EncapHeader.Ipv4B;\x82A8/afts/next-hops/next-hop/encap-headers/encap-header/ipv4R\x04ipv4\x12|\n" +
@@ -2797,8 +2660,7 @@ const file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc = "" +
 	"\x04mpls\x18\xbd\xe1\u05fb\x01 \x01(\v2(.gribi_aft.Afts.NextHop.EncapHeader.MplsB;\x82A8/afts/next-hops/next-hop/encap-headers/encap-header/mplsR\x04mpls\x12\x94\x01\n" +
 	"\x04type\x18\xfb\xea\xcby \x01(\x0e2:.gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderTypeBA\x82A>/afts/next-hops/next-hop/encap-headers/encap-header/state/typeR\x04type\x12\x82\x01\n" +
 	"\x06udp_v4\x18\xa9\xc0\xe3Q \x01(\v2).gribi_aft.Afts.NextHop.EncapHeader.UdpV4B=\x82A:/afts/next-hops/next-hop/encap-headers/encap-header/udp-v4R\x05udpV4\x12\x82\x01\n" +
-	"\x06udp_v6\x18\xab\xc0\xe3Q \x01(\v2).gribi_aft.Afts.NextHop.EncapHeader.UdpV6B=\x82A:/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6R\x05udpV6\x12\x81\x01\n" +
-	"\x05vxlan\x18\x88\xfa\xb4\xbd\x01 \x01(\v2).gribi_aft.Afts.NextHop.EncapHeader.VxlanB<\x82A9/afts/next-hops/next-hop/encap-headers/encap-header/vxlanR\x05vxlan\x1a\xeb\x02\n" +
+	"\x06udp_v6\x18\xab\xc0\xe3Q \x01(\v2).gribi_aft.Afts.NextHop.EncapHeader.UdpV6B=\x82A:/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6R\x05udpV6\x1a\xeb\x02\n" +
 	"\x03Gre\x12y\n" +
 	"\x06dst_ip\x18\xf5\xe3\xe5\x9d\x01 \x01(\v2\x15.ywrapper.StringValueBG\x82AD/afts/next-hops/next-hop/encap-headers/encap-header/gre/state/dst-ipR\x05dstIp\x12y\n" +
 	"\x06src_ip\x18\xcc\xd2\xfd\xf2\x01 \x01(\v2\x15.ywrapper.StringValueBG\x82AD/afts/next-hops/next-hop/encap-headers/encap-header/gre/state/src-ipR\x05srcIp\x12n\n" +
@@ -2840,10 +2702,7 @@ const file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc = "" +
 	"\x06ip_ttl\x18\xa0\x99\x8d\xbc\x01 \x01(\v2\x13.ywrapper.UintValueBJ\x82AG/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/ip-ttlR\x05ipTtl\x12|\n" +
 	"\x06src_ip\x18\x98\x97\xfd\xeb\x01 \x01(\v2\x15.ywrapper.StringValueBJ\x82AG/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/src-ipR\x05srcIp\x12\x8b\x01\n" +
 	"\fsrc_udp_port\x18\xc8\xd1\xd3\xe7\x01 \x01(\v2\x13.ywrapper.UintValueBP\x82AM/afts/next-hops/next-hop/encap-headers/encap-header/udp-v6/state/src-udp-portR\n" +
-	"srcUdpPort\x1a\xb5\x02\n" +
-	"\x05Vxlan\x12\xa6\x01\n" +
-	"\x15tunnel_src_ip_address\x18\xff\xf7\xdb\xd5\x01 \x01(\v2\x15.ywrapper.StringValueBX\x82AU/afts/next-hops/next-hop/encap-headers/encap-header/vxlan/state/tunnel-src-ip-addressR\x12tunnelSrcIpAddress\x12\x82\x01\n" +
-	"\tvni_label\x18\xe3\xe7\xaa\xfa\x01 \x01(\v2\x13.ywrapper.UintValueBL\x82AI/afts/next-hops/next-hop/encap-headers/encap-header/vxlan/state/vni-labelR\bvniLabel\x1a\xed\x01\n" +
+	"srcUdpPort\x1a\xed\x01\n" +
 	"\x0eEncapHeaderKey\x12\x92\x01\n" +
 	"\x05index\x18\x01 \x01(\x04B|\x82Ay/afts/next-hops/next-hop/encap-headers/encap-header/state/index|/afts/next-hops/next-hop/encap-headers/encap-header/indexR\x05index\x12F\n" +
 	"\fencap_header\x18\x02 \x01(\v2#.gribi_aft.Afts.NextHop.EncapHeaderR\vencapHeader\x1a\x9a\x02\n" +
@@ -2859,13 +2718,11 @@ const file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc = "" +
 	"\x06src_ip\x18\xf6\xf5\x95i \x01(\v2\x15.ywrapper.StringValueB1\x82A./afts/next-hops/next-hop/ip-in-ip/state/src-ipR\x05srcIp\x1a\x89\x03\n" +
 	"\x19PushedMplsLabelStackUnion\x12\xe8\x01\n" +
 	"8pushed_mpls_label_stack_openconfigmplstypesmplslabelenum\x18\xc5\xf0ߒ\x01 \x01(\x0e21.gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnumB9\x82A6/afts/next-hops/next-hop/state/pushed-mpls-label-stackR4pushedMplsLabelStackOpenconfigmplstypesmplslabelenum\x12\x80\x01\n" +
-	"\x1epushed_mpls_label_stack_uint64\x18\xc5\xe3\xd2\x16 \x01(\x04B9\x82A6/afts/next-hops/next-hop/state/pushed-mpls-label-stackR\x1apushedMplsLabelStackUint64\x1a\x83\b\n" +
-	"\fNextHopGroup\x12x\n" +
-	"\rbackup_active\x18\x9f\xee\xe95 \x01(\v2\x13.ywrapper.BoolValueB;\x82A8/afts/next-hop-groups/next-hop-group/state/backup-activeR\fbackupActive\x12\x8f\x01\n" +
+	"\x1epushed_mpls_label_stack_uint64\x18\xc5\xe3\xd2\x16 \x01(\x04B9\x82A6/afts/next-hops/next-hop/state/pushed-mpls-label-stackR\x1apushedMplsLabelStackUint64\x1a\xfb\x05\n" +
+	"\fNextHopGroup\x12\x8f\x01\n" +
 	"\x15backup_next_hop_group\x18\x92\xe7\xe1\xae\x01 \x01(\v2\x13.ywrapper.UintValueBC\x82A@/afts/next-hop-groups/next-hop-group/state/backup-next-hop-groupR\x12backupNextHopGroup\x12a\n" +
 	"\x05color\x18\x8f\xcb\xccs \x01(\v2\x13.ywrapper.UintValueB3\x82A0/afts/next-hop-groups/next-hop-group/state/colorR\x05color\x12\x81\x01\n" +
-	"\bnext_hop\x18\xf2\xe3\xd2d \x03(\v2'.gribi_aft.Afts.NextHopGroup.NextHopKeyB:\x82A7/afts/next-hop-groups/next-hop-group/next-hops/next-hopR\anextHop\x12\x8b\x01\n" +
-	"\x13next_hop_group_name\x18\xb3\xd8\xf3\xf4\x01 \x01(\v2\x15.ywrapper.StringValueBA\x82A>/afts/next-hop-groups/next-hop-group/state/next-hop-group-nameR\x10nextHopGroupName\x1a\x82\x01\n" +
+	"\bnext_hop\x18\xf2\xe3\xd2d \x03(\v2'.gribi_aft.Afts.NextHopGroup.NextHopKeyB:\x82A7/afts/next-hop-groups/next-hop-group/next-hops/next-hopR\anextHop\x1a\x82\x01\n" +
 	"\aNextHop\x12w\n" +
 	"\x06weight\x18\x8fԱ` \x01(\v2\x13.ywrapper.UintValueBG\x82AD/afts/next-hop-groups/next-hop-group/next-hops/next-hop/state/weightR\x06weight\x1a\xec\x01\n" +
 	"\n" +
@@ -2899,10 +2756,7 @@ const file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc = "" +
 	"mpls_label\x1a\x86\x02\n" +
 	"\x18PolicyForwardingEntryKey\x12\x8a\x01\n" +
 	"\x05index\x18\x01 \x01(\x04Bt\x82Aq/afts/policy-forwarding/policy-forwarding-entry/state/index|/afts/policy-forwarding/policy-forwarding-entry/indexR\x05index\x12]\n" +
-	"\x17policy_forwarding_entry\x18\x02 \x01(\v2%.gribi_aft.Afts.PolicyForwardingEntryR\x15policyForwardingEntry\x1a\xd9\x01\n" +
-	"\vStateSynced\x12d\n" +
-	"\fipv4_unicast\x18\x8bא\xa3\x01 \x01(\v2\x13.ywrapper.BoolValueB(\x82A%/afts/state-synced/state/ipv4-unicastR\vipv4Unicast\x12d\n" +
-	"\fipv6_unicast\x18\xb5½\xd6\x01 \x01(\v2\x13.ywrapper.BoolValueB(\x82A%/afts/state-synced/state/ipv6-unicastR\vipv6UnicastB0Z.github.com/openconfig/gribi/v1/proto/gribi_aftb\x06proto3"
+	"\x17policy_forwarding_entry\x18\x02 \x01(\v2%.gribi_aft.Afts.PolicyForwardingEntryR\x15policyForwardingEntryB0Z.github.com/openconfig/gribi/v1/proto/gribi_aftb\x06proto3"
 
 var (
 	file_v1_proto_gribi_aft_gribi_aft_proto_rawDescOnce sync.Once
@@ -2916,7 +2770,7 @@ func file_v1_proto_gribi_aft_gribi_aft_proto_rawDescGZIP() []byte {
 	return file_v1_proto_gribi_aft_gribi_aft_proto_rawDescData
 }
 
-var file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes = make([]protoimpl.MessageInfo, 40)
+var file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes = make([]protoimpl.MessageInfo, 38)
 var file_v1_proto_gribi_aft_gribi_aft_proto_goTypes = []any{
 	(*Device)(nil),                                               // 0: gribi_aft.Device
 	(*Afts)(nil),                                                 // 1: gribi_aft.Afts
@@ -2936,35 +2790,33 @@ var file_v1_proto_gribi_aft_gribi_aft_proto_goTypes = []any{
 	(*Afts_NextHopKey)(nil),                                      // 15: gribi_aft.Afts.NextHopKey
 	(*Afts_PolicyForwardingEntry)(nil),                           // 16: gribi_aft.Afts.PolicyForwardingEntry
 	(*Afts_PolicyForwardingEntryKey)(nil),                        // 17: gribi_aft.Afts.PolicyForwardingEntryKey
-	(*Afts_StateSynced)(nil),                                     // 18: gribi_aft.Afts.StateSynced
-	(*Afts_LabelEntry_DecapMplsLabelStack)(nil),                  // 19: gribi_aft.Afts.LabelEntry.DecapMplsLabelStack
-	(*Afts_LabelEntry_DecapMplsLabelStackKey)(nil),               // 20: gribi_aft.Afts.LabelEntry.DecapMplsLabelStackKey
-	(*Afts_LabelEntry_PoppedMplsLabelStackUnion)(nil),            // 21: gribi_aft.Afts.LabelEntry.PoppedMplsLabelStackUnion
-	(*Afts_NextHop_EncapHeader)(nil),                             // 22: gribi_aft.Afts.NextHop.EncapHeader
-	(*Afts_NextHop_EncapHeaderKey)(nil),                          // 23: gribi_aft.Afts.NextHop.EncapHeaderKey
-	(*Afts_NextHop_Gre)(nil),                                     // 24: gribi_aft.Afts.NextHop.Gre
-	(*Afts_NextHop_InterfaceRef)(nil),                            // 25: gribi_aft.Afts.NextHop.InterfaceRef
-	(*Afts_NextHop_IpInIp)(nil),                                  // 26: gribi_aft.Afts.NextHop.IpInIp
-	(*Afts_NextHop_PushedMplsLabelStackUnion)(nil),               // 27: gribi_aft.Afts.NextHop.PushedMplsLabelStackUnion
-	(*Afts_NextHop_EncapHeader_Gre)(nil),                         // 28: gribi_aft.Afts.NextHop.EncapHeader.Gre
-	(*Afts_NextHop_EncapHeader_Ipv4)(nil),                        // 29: gribi_aft.Afts.NextHop.EncapHeader.Ipv4
-	(*Afts_NextHop_EncapHeader_Ipv6)(nil),                        // 30: gribi_aft.Afts.NextHop.EncapHeader.Ipv6
-	(*Afts_NextHop_EncapHeader_Mpls)(nil),                        // 31: gribi_aft.Afts.NextHop.EncapHeader.Mpls
-	(*Afts_NextHop_EncapHeader_UdpV4)(nil),                       // 32: gribi_aft.Afts.NextHop.EncapHeader.UdpV4
-	(*Afts_NextHop_EncapHeader_UdpV6)(nil),                       // 33: gribi_aft.Afts.NextHop.EncapHeader.UdpV6
-	(*Afts_NextHop_EncapHeader_Vxlan)(nil),                       // 34: gribi_aft.Afts.NextHop.EncapHeader.Vxlan
-	(*Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStack)(nil),    // 35: gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStack
-	(*Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStackKey)(nil), // 36: gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStackKey
-	(*Afts_NextHop_EncapHeader_Mpls_MplsLabelStackUnion)(nil),    // 37: gribi_aft.Afts.NextHop.EncapHeader.Mpls.MplsLabelStackUnion
-	(*Afts_NextHopGroup_NextHop)(nil),                            // 38: gribi_aft.Afts.NextHopGroup.NextHop
-	(*Afts_NextHopGroup_NextHopKey)(nil),                         // 39: gribi_aft.Afts.NextHopGroup.NextHopKey
-	(enums.OpenconfigAftTypesEncapsulationHeaderType)(0),         // 40: gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
-	(*ywrapper.BytesValue)(nil),                                  // 41: ywrapper.BytesValue
-	(*ywrapper.UintValue)(nil),                                   // 42: ywrapper.UintValue
-	(*ywrapper.StringValue)(nil),                                 // 43: ywrapper.StringValue
-	(enums.OpenconfigMplsTypesMplsLabelEnum)(0),                  // 44: gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	(*ywrapper.BoolValue)(nil),                                   // 45: ywrapper.BoolValue
-	(enums.OpenconfigPacketMatchTypesIPPROTOCOL)(0),              // 46: gribi_aft.enums.OpenconfigPacketMatchTypesIPPROTOCOL
+	(*Afts_LabelEntry_DecapMplsLabelStack)(nil),                  // 18: gribi_aft.Afts.LabelEntry.DecapMplsLabelStack
+	(*Afts_LabelEntry_DecapMplsLabelStackKey)(nil),               // 19: gribi_aft.Afts.LabelEntry.DecapMplsLabelStackKey
+	(*Afts_LabelEntry_PoppedMplsLabelStackUnion)(nil),            // 20: gribi_aft.Afts.LabelEntry.PoppedMplsLabelStackUnion
+	(*Afts_NextHop_EncapHeader)(nil),                             // 21: gribi_aft.Afts.NextHop.EncapHeader
+	(*Afts_NextHop_EncapHeaderKey)(nil),                          // 22: gribi_aft.Afts.NextHop.EncapHeaderKey
+	(*Afts_NextHop_Gre)(nil),                                     // 23: gribi_aft.Afts.NextHop.Gre
+	(*Afts_NextHop_InterfaceRef)(nil),                            // 24: gribi_aft.Afts.NextHop.InterfaceRef
+	(*Afts_NextHop_IpInIp)(nil),                                  // 25: gribi_aft.Afts.NextHop.IpInIp
+	(*Afts_NextHop_PushedMplsLabelStackUnion)(nil),               // 26: gribi_aft.Afts.NextHop.PushedMplsLabelStackUnion
+	(*Afts_NextHop_EncapHeader_Gre)(nil),                         // 27: gribi_aft.Afts.NextHop.EncapHeader.Gre
+	(*Afts_NextHop_EncapHeader_Ipv4)(nil),                        // 28: gribi_aft.Afts.NextHop.EncapHeader.Ipv4
+	(*Afts_NextHop_EncapHeader_Ipv6)(nil),                        // 29: gribi_aft.Afts.NextHop.EncapHeader.Ipv6
+	(*Afts_NextHop_EncapHeader_Mpls)(nil),                        // 30: gribi_aft.Afts.NextHop.EncapHeader.Mpls
+	(*Afts_NextHop_EncapHeader_UdpV4)(nil),                       // 31: gribi_aft.Afts.NextHop.EncapHeader.UdpV4
+	(*Afts_NextHop_EncapHeader_UdpV6)(nil),                       // 32: gribi_aft.Afts.NextHop.EncapHeader.UdpV6
+	(*Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStack)(nil),    // 33: gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStack
+	(*Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStackKey)(nil), // 34: gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStackKey
+	(*Afts_NextHop_EncapHeader_Mpls_MplsLabelStackUnion)(nil),    // 35: gribi_aft.Afts.NextHop.EncapHeader.Mpls.MplsLabelStackUnion
+	(*Afts_NextHopGroup_NextHop)(nil),                            // 36: gribi_aft.Afts.NextHopGroup.NextHop
+	(*Afts_NextHopGroup_NextHopKey)(nil),                         // 37: gribi_aft.Afts.NextHopGroup.NextHopKey
+	(enums.OpenconfigAftTypesEncapsulationHeaderType)(0),         // 38: gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
+	(*ywrapper.BytesValue)(nil),                                  // 39: ywrapper.BytesValue
+	(*ywrapper.UintValue)(nil),                                   // 40: ywrapper.UintValue
+	(*ywrapper.StringValue)(nil),                                 // 41: ywrapper.StringValue
+	(enums.OpenconfigMplsTypesMplsLabelEnum)(0),                  // 42: gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	(*ywrapper.BoolValue)(nil),                                   // 43: ywrapper.BoolValue
+	(enums.OpenconfigPacketMatchTypesIPPROTOCOL)(0),              // 44: gribi_aft.enums.OpenconfigPacketMatchTypesIPPROTOCOL
 }
 var file_v1_proto_gribi_aft_gribi_aft_proto_depIdxs = []int32{
 	1,   // 0: gribi_aft.Device.afts:type_name -> gribi_aft.Afts
@@ -2976,117 +2828,109 @@ var file_v1_proto_gribi_aft_gribi_aft_proto_depIdxs = []int32{
 	15,  // 6: gribi_aft.Afts.next_hop:type_name -> gribi_aft.Afts.NextHopKey
 	14,  // 7: gribi_aft.Afts.next_hop_group:type_name -> gribi_aft.Afts.NextHopGroupKey
 	17,  // 8: gribi_aft.Afts.policy_forwarding_entry:type_name -> gribi_aft.Afts.PolicyForwardingEntryKey
-	18,  // 9: gribi_aft.Afts.state_synced:type_name -> gribi_aft.Afts.StateSynced
-	2,   // 10: gribi_aft.Afts.BackupActivationKey.backup_activation:type_name -> gribi_aft.Afts.BackupActivation
-	40,  // 11: gribi_aft.Afts.Ipv4Entry.decapsulate_header:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
-	41,  // 12: gribi_aft.Afts.Ipv4Entry.entry_metadata:type_name -> ywrapper.BytesValue
-	42,  // 13: gribi_aft.Afts.Ipv4Entry.next_hop_group:type_name -> ywrapper.UintValue
-	43,  // 14: gribi_aft.Afts.Ipv4Entry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
-	4,   // 15: gribi_aft.Afts.Ipv4EntryKey.ipv4_entry:type_name -> gribi_aft.Afts.Ipv4Entry
-	40,  // 16: gribi_aft.Afts.Ipv6Entry.decapsulate_header:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
-	41,  // 17: gribi_aft.Afts.Ipv6Entry.entry_metadata:type_name -> ywrapper.BytesValue
-	42,  // 18: gribi_aft.Afts.Ipv6Entry.next_hop_group:type_name -> ywrapper.UintValue
-	43,  // 19: gribi_aft.Afts.Ipv6Entry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
-	6,   // 20: gribi_aft.Afts.Ipv6EntryKey.ipv6_entry:type_name -> gribi_aft.Afts.Ipv6Entry
-	20,  // 21: gribi_aft.Afts.LabelEntry.decap_mpls_label_stack:type_name -> gribi_aft.Afts.LabelEntry.DecapMplsLabelStackKey
-	41,  // 22: gribi_aft.Afts.LabelEntry.entry_metadata:type_name -> ywrapper.BytesValue
-	42,  // 23: gribi_aft.Afts.LabelEntry.next_hop_group:type_name -> ywrapper.UintValue
-	43,  // 24: gribi_aft.Afts.LabelEntry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
-	21,  // 25: gribi_aft.Afts.LabelEntry.popped_mpls_label_stack:type_name -> gribi_aft.Afts.LabelEntry.PoppedMplsLabelStackUnion
-	44,  // 26: gribi_aft.Afts.LabelEntryKey.label_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	8,   // 27: gribi_aft.Afts.LabelEntryKey.label_entry:type_name -> gribi_aft.Afts.LabelEntry
-	41,  // 28: gribi_aft.Afts.MacEntry.entry_metadata:type_name -> ywrapper.BytesValue
-	42,  // 29: gribi_aft.Afts.MacEntry.next_hop_group:type_name -> ywrapper.UintValue
-	43,  // 30: gribi_aft.Afts.MacEntry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
-	10,  // 31: gribi_aft.Afts.MacEntryKey.mac_entry:type_name -> gribi_aft.Afts.MacEntry
-	40,  // 32: gribi_aft.Afts.NextHop.decapsulate_header:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
-	23,  // 33: gribi_aft.Afts.NextHop.encap_header:type_name -> gribi_aft.Afts.NextHop.EncapHeaderKey
-	40,  // 34: gribi_aft.Afts.NextHop.encapsulate_header:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
-	24,  // 35: gribi_aft.Afts.NextHop.gre:type_name -> gribi_aft.Afts.NextHop.Gre
-	25,  // 36: gribi_aft.Afts.NextHop.interface_ref:type_name -> gribi_aft.Afts.NextHop.InterfaceRef
-	43,  // 37: gribi_aft.Afts.NextHop.ip_address:type_name -> ywrapper.StringValue
-	26,  // 38: gribi_aft.Afts.NextHop.ip_in_ip:type_name -> gribi_aft.Afts.NextHop.IpInIp
-	43,  // 39: gribi_aft.Afts.NextHop.mac_address:type_name -> ywrapper.StringValue
-	43,  // 40: gribi_aft.Afts.NextHop.network_instance:type_name -> ywrapper.StringValue
-	45,  // 41: gribi_aft.Afts.NextHop.pop_top_label:type_name -> ywrapper.BoolValue
-	27,  // 42: gribi_aft.Afts.NextHop.pushed_mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.PushedMplsLabelStackUnion
-	43,  // 43: gribi_aft.Afts.NextHop.tunnel_src_ip_address:type_name -> ywrapper.StringValue
-	42,  // 44: gribi_aft.Afts.NextHop.vni_label:type_name -> ywrapper.UintValue
-	45,  // 45: gribi_aft.Afts.NextHopGroup.backup_active:type_name -> ywrapper.BoolValue
-	42,  // 46: gribi_aft.Afts.NextHopGroup.backup_next_hop_group:type_name -> ywrapper.UintValue
-	42,  // 47: gribi_aft.Afts.NextHopGroup.color:type_name -> ywrapper.UintValue
-	39,  // 48: gribi_aft.Afts.NextHopGroup.next_hop:type_name -> gribi_aft.Afts.NextHopGroup.NextHopKey
-	43,  // 49: gribi_aft.Afts.NextHopGroup.next_hop_group_name:type_name -> ywrapper.StringValue
-	13,  // 50: gribi_aft.Afts.NextHopGroupKey.next_hop_group:type_name -> gribi_aft.Afts.NextHopGroup
-	12,  // 51: gribi_aft.Afts.NextHopKey.next_hop:type_name -> gribi_aft.Afts.NextHop
-	41,  // 52: gribi_aft.Afts.PolicyForwardingEntry.entry_metadata:type_name -> ywrapper.BytesValue
-	42,  // 53: gribi_aft.Afts.PolicyForwardingEntry.ip_dscp:type_name -> ywrapper.UintValue
-	43,  // 54: gribi_aft.Afts.PolicyForwardingEntry.ip_prefix:type_name -> ywrapper.StringValue
-	46,  // 55: gribi_aft.Afts.PolicyForwardingEntry.ip_protocol_openconfigpacketmatchtypesipprotocol:type_name -> gribi_aft.enums.OpenconfigPacketMatchTypesIPPROTOCOL
-	42,  // 56: gribi_aft.Afts.PolicyForwardingEntry.l4_dst_port:type_name -> ywrapper.UintValue
-	42,  // 57: gribi_aft.Afts.PolicyForwardingEntry.l4_src_port:type_name -> ywrapper.UintValue
-	43,  // 58: gribi_aft.Afts.PolicyForwardingEntry.mac_address:type_name -> ywrapper.StringValue
-	44,  // 59: gribi_aft.Afts.PolicyForwardingEntry.mpls_label_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	42,  // 60: gribi_aft.Afts.PolicyForwardingEntry.mpls_tc:type_name -> ywrapper.UintValue
-	42,  // 61: gribi_aft.Afts.PolicyForwardingEntry.next_hop_group:type_name -> ywrapper.UintValue
-	43,  // 62: gribi_aft.Afts.PolicyForwardingEntry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
-	16,  // 63: gribi_aft.Afts.PolicyForwardingEntryKey.policy_forwarding_entry:type_name -> gribi_aft.Afts.PolicyForwardingEntry
-	45,  // 64: gribi_aft.Afts.StateSynced.ipv4_unicast:type_name -> ywrapper.BoolValue
-	45,  // 65: gribi_aft.Afts.StateSynced.ipv6_unicast:type_name -> ywrapper.BoolValue
-	44,  // 66: gribi_aft.Afts.LabelEntry.DecapMplsLabelStack.label_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	19,  // 67: gribi_aft.Afts.LabelEntry.DecapMplsLabelStackKey.decap_mpls_label_stack:type_name -> gribi_aft.Afts.LabelEntry.DecapMplsLabelStack
-	44,  // 68: gribi_aft.Afts.LabelEntry.PoppedMplsLabelStackUnion.popped_mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	28,  // 69: gribi_aft.Afts.NextHop.EncapHeader.gre:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Gre
-	29,  // 70: gribi_aft.Afts.NextHop.EncapHeader.ipv4:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Ipv4
-	30,  // 71: gribi_aft.Afts.NextHop.EncapHeader.ipv6:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Ipv6
-	31,  // 72: gribi_aft.Afts.NextHop.EncapHeader.mpls:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls
-	40,  // 73: gribi_aft.Afts.NextHop.EncapHeader.type:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
-	32,  // 74: gribi_aft.Afts.NextHop.EncapHeader.udp_v4:type_name -> gribi_aft.Afts.NextHop.EncapHeader.UdpV4
-	33,  // 75: gribi_aft.Afts.NextHop.EncapHeader.udp_v6:type_name -> gribi_aft.Afts.NextHop.EncapHeader.UdpV6
-	34,  // 76: gribi_aft.Afts.NextHop.EncapHeader.vxlan:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Vxlan
-	22,  // 77: gribi_aft.Afts.NextHop.EncapHeaderKey.encap_header:type_name -> gribi_aft.Afts.NextHop.EncapHeader
-	43,  // 78: gribi_aft.Afts.NextHop.Gre.dst_ip:type_name -> ywrapper.StringValue
-	43,  // 79: gribi_aft.Afts.NextHop.Gre.src_ip:type_name -> ywrapper.StringValue
-	42,  // 80: gribi_aft.Afts.NextHop.Gre.ttl:type_name -> ywrapper.UintValue
-	43,  // 81: gribi_aft.Afts.NextHop.InterfaceRef.interface:type_name -> ywrapper.StringValue
-	42,  // 82: gribi_aft.Afts.NextHop.InterfaceRef.subinterface:type_name -> ywrapper.UintValue
-	43,  // 83: gribi_aft.Afts.NextHop.IpInIp.dst_ip:type_name -> ywrapper.StringValue
-	43,  // 84: gribi_aft.Afts.NextHop.IpInIp.src_ip:type_name -> ywrapper.StringValue
-	44,  // 85: gribi_aft.Afts.NextHop.PushedMplsLabelStackUnion.pushed_mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	43,  // 86: gribi_aft.Afts.NextHop.EncapHeader.Gre.dst_ip:type_name -> ywrapper.StringValue
-	43,  // 87: gribi_aft.Afts.NextHop.EncapHeader.Gre.src_ip:type_name -> ywrapper.StringValue
-	42,  // 88: gribi_aft.Afts.NextHop.EncapHeader.Gre.ttl:type_name -> ywrapper.UintValue
-	43,  // 89: gribi_aft.Afts.NextHop.EncapHeader.Ipv4.dst_ip:type_name -> ywrapper.StringValue
-	43,  // 90: gribi_aft.Afts.NextHop.EncapHeader.Ipv4.src_ip:type_name -> ywrapper.StringValue
-	43,  // 91: gribi_aft.Afts.NextHop.EncapHeader.Ipv6.dst_ip:type_name -> ywrapper.StringValue
-	43,  // 92: gribi_aft.Afts.NextHop.EncapHeader.Ipv6.src_ip:type_name -> ywrapper.StringValue
-	36,  // 93: gribi_aft.Afts.NextHop.EncapHeader.Mpls.encap_mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStackKey
-	37,  // 94: gribi_aft.Afts.NextHop.EncapHeader.Mpls.mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls.MplsLabelStackUnion
-	42,  // 95: gribi_aft.Afts.NextHop.EncapHeader.Mpls.traffic_class:type_name -> ywrapper.UintValue
-	42,  // 96: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dscp:type_name -> ywrapper.UintValue
-	43,  // 97: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dst_ip:type_name -> ywrapper.StringValue
-	42,  // 98: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dst_udp_port:type_name -> ywrapper.UintValue
-	42,  // 99: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.ip_ttl:type_name -> ywrapper.UintValue
-	43,  // 100: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.src_ip:type_name -> ywrapper.StringValue
-	42,  // 101: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.src_udp_port:type_name -> ywrapper.UintValue
-	42,  // 102: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dscp:type_name -> ywrapper.UintValue
-	43,  // 103: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dst_ip:type_name -> ywrapper.StringValue
-	42,  // 104: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dst_udp_port:type_name -> ywrapper.UintValue
-	42,  // 105: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.ip_ttl:type_name -> ywrapper.UintValue
-	43,  // 106: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.src_ip:type_name -> ywrapper.StringValue
-	42,  // 107: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.src_udp_port:type_name -> ywrapper.UintValue
-	43,  // 108: gribi_aft.Afts.NextHop.EncapHeader.Vxlan.tunnel_src_ip_address:type_name -> ywrapper.StringValue
-	42,  // 109: gribi_aft.Afts.NextHop.EncapHeader.Vxlan.vni_label:type_name -> ywrapper.UintValue
-	44,  // 110: gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStack.label_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	35,  // 111: gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStackKey.encap_mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStack
-	44,  // 112: gribi_aft.Afts.NextHop.EncapHeader.Mpls.MplsLabelStackUnion.mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	42,  // 113: gribi_aft.Afts.NextHopGroup.NextHop.weight:type_name -> ywrapper.UintValue
-	38,  // 114: gribi_aft.Afts.NextHopGroup.NextHopKey.next_hop:type_name -> gribi_aft.Afts.NextHopGroup.NextHop
-	115, // [115:115] is the sub-list for method output_type
-	115, // [115:115] is the sub-list for method input_type
-	115, // [115:115] is the sub-list for extension type_name
-	115, // [115:115] is the sub-list for extension extendee
-	0,   // [0:115] is the sub-list for field type_name
+	2,   // 9: gribi_aft.Afts.BackupActivationKey.backup_activation:type_name -> gribi_aft.Afts.BackupActivation
+	38,  // 10: gribi_aft.Afts.Ipv4Entry.decapsulate_header:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
+	39,  // 11: gribi_aft.Afts.Ipv4Entry.entry_metadata:type_name -> ywrapper.BytesValue
+	40,  // 12: gribi_aft.Afts.Ipv4Entry.next_hop_group:type_name -> ywrapper.UintValue
+	41,  // 13: gribi_aft.Afts.Ipv4Entry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
+	4,   // 14: gribi_aft.Afts.Ipv4EntryKey.ipv4_entry:type_name -> gribi_aft.Afts.Ipv4Entry
+	38,  // 15: gribi_aft.Afts.Ipv6Entry.decapsulate_header:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
+	39,  // 16: gribi_aft.Afts.Ipv6Entry.entry_metadata:type_name -> ywrapper.BytesValue
+	40,  // 17: gribi_aft.Afts.Ipv6Entry.next_hop_group:type_name -> ywrapper.UintValue
+	41,  // 18: gribi_aft.Afts.Ipv6Entry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
+	6,   // 19: gribi_aft.Afts.Ipv6EntryKey.ipv6_entry:type_name -> gribi_aft.Afts.Ipv6Entry
+	19,  // 20: gribi_aft.Afts.LabelEntry.decap_mpls_label_stack:type_name -> gribi_aft.Afts.LabelEntry.DecapMplsLabelStackKey
+	39,  // 21: gribi_aft.Afts.LabelEntry.entry_metadata:type_name -> ywrapper.BytesValue
+	40,  // 22: gribi_aft.Afts.LabelEntry.next_hop_group:type_name -> ywrapper.UintValue
+	41,  // 23: gribi_aft.Afts.LabelEntry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
+	20,  // 24: gribi_aft.Afts.LabelEntry.popped_mpls_label_stack:type_name -> gribi_aft.Afts.LabelEntry.PoppedMplsLabelStackUnion
+	42,  // 25: gribi_aft.Afts.LabelEntryKey.label_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	8,   // 26: gribi_aft.Afts.LabelEntryKey.label_entry:type_name -> gribi_aft.Afts.LabelEntry
+	39,  // 27: gribi_aft.Afts.MacEntry.entry_metadata:type_name -> ywrapper.BytesValue
+	40,  // 28: gribi_aft.Afts.MacEntry.next_hop_group:type_name -> ywrapper.UintValue
+	41,  // 29: gribi_aft.Afts.MacEntry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
+	10,  // 30: gribi_aft.Afts.MacEntryKey.mac_entry:type_name -> gribi_aft.Afts.MacEntry
+	38,  // 31: gribi_aft.Afts.NextHop.decapsulate_header:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
+	22,  // 32: gribi_aft.Afts.NextHop.encap_header:type_name -> gribi_aft.Afts.NextHop.EncapHeaderKey
+	38,  // 33: gribi_aft.Afts.NextHop.encapsulate_header:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
+	23,  // 34: gribi_aft.Afts.NextHop.gre:type_name -> gribi_aft.Afts.NextHop.Gre
+	24,  // 35: gribi_aft.Afts.NextHop.interface_ref:type_name -> gribi_aft.Afts.NextHop.InterfaceRef
+	41,  // 36: gribi_aft.Afts.NextHop.ip_address:type_name -> ywrapper.StringValue
+	25,  // 37: gribi_aft.Afts.NextHop.ip_in_ip:type_name -> gribi_aft.Afts.NextHop.IpInIp
+	41,  // 38: gribi_aft.Afts.NextHop.mac_address:type_name -> ywrapper.StringValue
+	41,  // 39: gribi_aft.Afts.NextHop.network_instance:type_name -> ywrapper.StringValue
+	43,  // 40: gribi_aft.Afts.NextHop.pop_top_label:type_name -> ywrapper.BoolValue
+	26,  // 41: gribi_aft.Afts.NextHop.pushed_mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.PushedMplsLabelStackUnion
+	41,  // 42: gribi_aft.Afts.NextHop.tunnel_src_ip_address:type_name -> ywrapper.StringValue
+	40,  // 43: gribi_aft.Afts.NextHop.vni_label:type_name -> ywrapper.UintValue
+	40,  // 44: gribi_aft.Afts.NextHopGroup.backup_next_hop_group:type_name -> ywrapper.UintValue
+	40,  // 45: gribi_aft.Afts.NextHopGroup.color:type_name -> ywrapper.UintValue
+	37,  // 46: gribi_aft.Afts.NextHopGroup.next_hop:type_name -> gribi_aft.Afts.NextHopGroup.NextHopKey
+	13,  // 47: gribi_aft.Afts.NextHopGroupKey.next_hop_group:type_name -> gribi_aft.Afts.NextHopGroup
+	12,  // 48: gribi_aft.Afts.NextHopKey.next_hop:type_name -> gribi_aft.Afts.NextHop
+	39,  // 49: gribi_aft.Afts.PolicyForwardingEntry.entry_metadata:type_name -> ywrapper.BytesValue
+	40,  // 50: gribi_aft.Afts.PolicyForwardingEntry.ip_dscp:type_name -> ywrapper.UintValue
+	41,  // 51: gribi_aft.Afts.PolicyForwardingEntry.ip_prefix:type_name -> ywrapper.StringValue
+	44,  // 52: gribi_aft.Afts.PolicyForwardingEntry.ip_protocol_openconfigpacketmatchtypesipprotocol:type_name -> gribi_aft.enums.OpenconfigPacketMatchTypesIPPROTOCOL
+	40,  // 53: gribi_aft.Afts.PolicyForwardingEntry.l4_dst_port:type_name -> ywrapper.UintValue
+	40,  // 54: gribi_aft.Afts.PolicyForwardingEntry.l4_src_port:type_name -> ywrapper.UintValue
+	41,  // 55: gribi_aft.Afts.PolicyForwardingEntry.mac_address:type_name -> ywrapper.StringValue
+	42,  // 56: gribi_aft.Afts.PolicyForwardingEntry.mpls_label_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	40,  // 57: gribi_aft.Afts.PolicyForwardingEntry.mpls_tc:type_name -> ywrapper.UintValue
+	40,  // 58: gribi_aft.Afts.PolicyForwardingEntry.next_hop_group:type_name -> ywrapper.UintValue
+	41,  // 59: gribi_aft.Afts.PolicyForwardingEntry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
+	16,  // 60: gribi_aft.Afts.PolicyForwardingEntryKey.policy_forwarding_entry:type_name -> gribi_aft.Afts.PolicyForwardingEntry
+	42,  // 61: gribi_aft.Afts.LabelEntry.DecapMplsLabelStack.label_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	18,  // 62: gribi_aft.Afts.LabelEntry.DecapMplsLabelStackKey.decap_mpls_label_stack:type_name -> gribi_aft.Afts.LabelEntry.DecapMplsLabelStack
+	42,  // 63: gribi_aft.Afts.LabelEntry.PoppedMplsLabelStackUnion.popped_mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	27,  // 64: gribi_aft.Afts.NextHop.EncapHeader.gre:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Gre
+	28,  // 65: gribi_aft.Afts.NextHop.EncapHeader.ipv4:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Ipv4
+	29,  // 66: gribi_aft.Afts.NextHop.EncapHeader.ipv6:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Ipv6
+	30,  // 67: gribi_aft.Afts.NextHop.EncapHeader.mpls:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls
+	38,  // 68: gribi_aft.Afts.NextHop.EncapHeader.type:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
+	31,  // 69: gribi_aft.Afts.NextHop.EncapHeader.udp_v4:type_name -> gribi_aft.Afts.NextHop.EncapHeader.UdpV4
+	32,  // 70: gribi_aft.Afts.NextHop.EncapHeader.udp_v6:type_name -> gribi_aft.Afts.NextHop.EncapHeader.UdpV6
+	21,  // 71: gribi_aft.Afts.NextHop.EncapHeaderKey.encap_header:type_name -> gribi_aft.Afts.NextHop.EncapHeader
+	41,  // 72: gribi_aft.Afts.NextHop.Gre.dst_ip:type_name -> ywrapper.StringValue
+	41,  // 73: gribi_aft.Afts.NextHop.Gre.src_ip:type_name -> ywrapper.StringValue
+	40,  // 74: gribi_aft.Afts.NextHop.Gre.ttl:type_name -> ywrapper.UintValue
+	41,  // 75: gribi_aft.Afts.NextHop.InterfaceRef.interface:type_name -> ywrapper.StringValue
+	40,  // 76: gribi_aft.Afts.NextHop.InterfaceRef.subinterface:type_name -> ywrapper.UintValue
+	41,  // 77: gribi_aft.Afts.NextHop.IpInIp.dst_ip:type_name -> ywrapper.StringValue
+	41,  // 78: gribi_aft.Afts.NextHop.IpInIp.src_ip:type_name -> ywrapper.StringValue
+	42,  // 79: gribi_aft.Afts.NextHop.PushedMplsLabelStackUnion.pushed_mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	41,  // 80: gribi_aft.Afts.NextHop.EncapHeader.Gre.dst_ip:type_name -> ywrapper.StringValue
+	41,  // 81: gribi_aft.Afts.NextHop.EncapHeader.Gre.src_ip:type_name -> ywrapper.StringValue
+	40,  // 82: gribi_aft.Afts.NextHop.EncapHeader.Gre.ttl:type_name -> ywrapper.UintValue
+	41,  // 83: gribi_aft.Afts.NextHop.EncapHeader.Ipv4.dst_ip:type_name -> ywrapper.StringValue
+	41,  // 84: gribi_aft.Afts.NextHop.EncapHeader.Ipv4.src_ip:type_name -> ywrapper.StringValue
+	41,  // 85: gribi_aft.Afts.NextHop.EncapHeader.Ipv6.dst_ip:type_name -> ywrapper.StringValue
+	41,  // 86: gribi_aft.Afts.NextHop.EncapHeader.Ipv6.src_ip:type_name -> ywrapper.StringValue
+	34,  // 87: gribi_aft.Afts.NextHop.EncapHeader.Mpls.encap_mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStackKey
+	35,  // 88: gribi_aft.Afts.NextHop.EncapHeader.Mpls.mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls.MplsLabelStackUnion
+	40,  // 89: gribi_aft.Afts.NextHop.EncapHeader.Mpls.traffic_class:type_name -> ywrapper.UintValue
+	40,  // 90: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dscp:type_name -> ywrapper.UintValue
+	41,  // 91: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dst_ip:type_name -> ywrapper.StringValue
+	40,  // 92: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dst_udp_port:type_name -> ywrapper.UintValue
+	40,  // 93: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.ip_ttl:type_name -> ywrapper.UintValue
+	41,  // 94: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.src_ip:type_name -> ywrapper.StringValue
+	40,  // 95: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.src_udp_port:type_name -> ywrapper.UintValue
+	40,  // 96: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dscp:type_name -> ywrapper.UintValue
+	41,  // 97: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dst_ip:type_name -> ywrapper.StringValue
+	40,  // 98: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dst_udp_port:type_name -> ywrapper.UintValue
+	40,  // 99: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.ip_ttl:type_name -> ywrapper.UintValue
+	41,  // 100: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.src_ip:type_name -> ywrapper.StringValue
+	40,  // 101: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.src_udp_port:type_name -> ywrapper.UintValue
+	42,  // 102: gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStack.label_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	33,  // 103: gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStackKey.encap_mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls.EncapMplsLabelStack
+	42,  // 104: gribi_aft.Afts.NextHop.EncapHeader.Mpls.MplsLabelStackUnion.mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	40,  // 105: gribi_aft.Afts.NextHopGroup.NextHop.weight:type_name -> ywrapper.UintValue
+	36,  // 106: gribi_aft.Afts.NextHopGroup.NextHopKey.next_hop:type_name -> gribi_aft.Afts.NextHopGroup.NextHop
+	107, // [107:107] is the sub-list for method output_type
+	107, // [107:107] is the sub-list for method input_type
+	107, // [107:107] is the sub-list for extension type_name
+	107, // [107:107] is the sub-list for extension extendee
+	0,   // [0:107] is the sub-list for field type_name
 }
 
 func init() { file_v1_proto_gribi_aft_gribi_aft_proto_init() }
@@ -3104,11 +2948,11 @@ func file_v1_proto_gribi_aft_gribi_aft_proto_init() {
 		(*Afts_PolicyForwardingEntry_MplsLabelOpenconfigmplstypesmplslabelenum)(nil),
 		(*Afts_PolicyForwardingEntry_MplsLabelUint64)(nil),
 	}
-	file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[19].OneofWrappers = []any{
+	file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[18].OneofWrappers = []any{
 		(*Afts_LabelEntry_DecapMplsLabelStack_LabelOpenconfigmplstypesmplslabelenum)(nil),
 		(*Afts_LabelEntry_DecapMplsLabelStack_LabelUint64)(nil),
 	}
-	file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[35].OneofWrappers = []any{
+	file_v1_proto_gribi_aft_gribi_aft_proto_msgTypes[33].OneofWrappers = []any{
 		(*Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStack_LabelOpenconfigmplstypesmplslabelenum)(nil),
 		(*Afts_NextHop_EncapHeader_Mpls_EncapMplsLabelStack_LabelUint64)(nil),
 	}
@@ -3118,7 +2962,7 @@ func file_v1_proto_gribi_aft_gribi_aft_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc), len(file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   40,
+			NumMessages:   38,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
