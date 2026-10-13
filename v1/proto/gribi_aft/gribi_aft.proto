@@ -21,6 +21,7 @@ message Device {
 }
 
 message Afts {
+
   message BackupActivate {
   }
   message BackupActivateKey {
@@ -57,21 +58,10 @@ message Afts {
     Ipv6Entry ipv6_entry = 2;
   }
   message LabelEntry {
-    message DecapMplsLabelStack {
-      oneof label {
-        gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum label_openconfigmplstypesmplslabelenum = 391158406 [(yext.schemapath) = "/afts/mpls/label-entry/decap-mpls-label-stacks/decap-mpls-label-stack/state/label"];
-        uint64 label_uint64 = 290622354 [(yext.schemapath) = "/afts/mpls/label-entry/decap-mpls-label-stacks/decap-mpls-label-stack/state/label"];
-      }
-    }
-    message DecapMplsLabelStackKey {
-      uint64 id = 1 [(yext.schemapath) = "/afts/mpls/label-entry/decap-mpls-label-stacks/decap-mpls-label-stack/state/id|/afts/mpls/label-entry/decap-mpls-label-stacks/decap-mpls-label-stack/id"];
-      DecapMplsLabelStack decap_mpls_label_stack = 2;
-    }
     message PoppedMplsLabelStackUnion {
       gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum popped_mpls_label_stack_openconfigmplstypesmplslabelenum = 524692292 [(yext.schemapath) = "/afts/mpls/label-entry/state/popped-mpls-label-stack"];
       uint64 popped_mpls_label_stack_uint64 = 510588408 [(yext.schemapath) = "/afts/mpls/label-entry/state/popped-mpls-label-stack"];
     }
-    repeated DecapMplsLabelStackKey decap_mpls_label_stack = 366415920 [(yext.schemapath) = "/afts/mpls/label-entry/decap-mpls-label-stacks/decap-mpls-label-stack"];
     ywrapper.BytesValue entry_metadata = 100486674 [(yext.schemapath) = "/afts/mpls/label-entry/state/entry-metadata"];
     ywrapper.UintValue next_hop_group = 307713279 [(yext.schemapath) = "/afts/mpls/label-entry/state/next-hop-group"];
     ywrapper.StringValue next_hop_group_network_instance = 303628026 [(yext.schemapath) = "/afts/mpls/label-entry/state/next-hop-group-network-instance"];
@@ -109,21 +99,13 @@ message Afts {
         ywrapper.StringValue src_ip = 254664891 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6/state/src-ip"];
       }
       message Mpls {
-        message EncapMplsLabelStack {
-          oneof label {
-            gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum label_openconfigmplstypesmplslabelenum = 352288984 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/encap-mpls-label-stacks/encap-mpls-label-stack/state/label"];
-            uint64 label_uint64 = 14350340 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/encap-mpls-label-stacks/encap-mpls-label-stack/state/label"];
-          }
-        }
-        message EncapMplsLabelStackKey {
-          uint64 id = 1 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/encap-mpls-label-stacks/encap-mpls-label-stack/state/id|/afts/next-hops/next-hop/encap-headers/encap-header/mpls/encap-mpls-label-stacks/encap-mpls-label-stack/id"];
-          EncapMplsLabelStack encap_mpls_label_stack = 2;
+        message EncapMplsLabelStacks {
         }
         message MplsLabelStackUnion {
           gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum mpls_label_stack_openconfigmplstypesmplslabelenum = 212167609 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/mpls-label-stack"];
           uint64 mpls_label_stack_uint64 = 205621201 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/mpls-label-stack"];
         }
-        repeated EncapMplsLabelStackKey encap_mpls_label_stack = 84223922 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/encap-mpls-label-stacks/encap-mpls-label-stack"];
+        EncapMplsLabelStacks encap_mpls_label_stacks = 32964497 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/encap-mpls-label-stacks"];
         repeated MplsLabelStackUnion mpls_label_stack = 310218456 [(yext.leaflistunion) = true,(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/mpls-label-stack"];
         ywrapper.UintValue traffic_class = 380564126 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/traffic-class"];
       }

@@ -16,6 +16,7 @@ module gribi-aft {
   namespace "http://github.com/openconfig/gribi/v1/yang/gribi/aft";
   prefix "gaft";
 
+  import openconfig-extensions { prefix "oc-ext"; }
   import openconfig-aft { prefix "oc-aft"; }
 
   organization
@@ -28,6 +29,15 @@ module gribi-aft {
     "This module defines the gRIBI API. It is used to generate
     the protobuf definition of the schema that is used in the
     protocol.";
+
+  oc-ext:openconfig-version "1.0.0";
+
+  revision "2026-10-13" {
+    description
+      "Add versioning of gribi-aft.yang. Deviate mpls-label-stack and 
+      encap-mpls-label-stack as not supported in this release.";
+    reference "1.0.0";
+  }
 
   uses oc-aft:aft-top;
 
@@ -146,6 +156,20 @@ module gribi-aft {
   deviation "/afts/next-hops/next-hop/encap-headers/encap-header/vxlan" {
     description
       "VXLAN header encapsulation is not accessible over gRIBI.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/mpls/label-entry/decap-mpls-label-stacks" {
+    description
+      "Decapsulation of MPLS label stacks is not supported in this release of
+      gRIBI.  A future release of gRIBI could add support for this leaf.";
+    deviate not-supported;
+  }
+
+  deviation "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/encap-mpls-label-stacks/encap-mpls-label-stack" {
+    description
+      "Encapsulation of MPLS label stacks is not supported in this release of
+      gRIBI.  A future release of gRIBI could add support for this leaf.";
     deviate not-supported;
   }
 
