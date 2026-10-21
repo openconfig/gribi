@@ -921,7 +921,7 @@ type AFTOperation struct {
 	//	*AFTOperation_NextHop
 	//	*AFTOperation_MacEntry
 	//	*AFTOperation_PolicyForwardingEntry
-	//	*AFTOperation_BackupActivate
+	//	*AFTOperation_BackupActivation
 	Entry isAFTOperation_Entry `protobuf_oneof:"entry"`
 	// Election ID of the client.
 	// In SINGLE_PRIMARY redundancy model, used by the server to determine
@@ -1062,10 +1062,10 @@ func (x *AFTOperation) GetPolicyForwardingEntry() *gribi_aft.Afts_PolicyForwardi
 	return nil
 }
 
-func (x *AFTOperation) GetBackupActivate() *gribi_aft.Afts_BackupActivateKey {
+func (x *AFTOperation) GetBackupActivation() *gribi_aft.Afts_BackupActivationKey {
 	if x != nil {
-		if x, ok := x.Entry.(*AFTOperation_BackupActivate); ok {
-			return x.BackupActivate
+		if x, ok := x.Entry.(*AFTOperation_BackupActivation); ok {
+			return x.BackupActivation
 		}
 	}
 	return nil
@@ -1128,10 +1128,10 @@ type AFTOperation_PolicyForwardingEntry struct {
 	PolicyForwardingEntry *gribi_aft.Afts_PolicyForwardingEntryKey `protobuf:"bytes,10,opt,name=policy_forwarding_entry,json=policyForwardingEntry,proto3,oneof"`
 }
 
-type AFTOperation_BackupActivate struct {
+type AFTOperation_BackupActivation struct {
 	// Schema for BackupActivateKey is generated from
 	// /network-instances/network-instance/afts/backup-activate
-	BackupActivate *gribi_aft.Afts_BackupActivateKey `protobuf:"bytes,12,opt,name=backup_activate,json=backupActivate,proto3,oneof"`
+	BackupActivation *gribi_aft.Afts_BackupActivationKey `protobuf:"bytes,12,opt,name=backup_activation,json=backupActivation,proto3,oneof"`
 }
 
 func (*AFTOperation_Ipv4) isAFTOperation_Entry() {}
@@ -1148,7 +1148,7 @@ func (*AFTOperation_MacEntry) isAFTOperation_Entry() {}
 
 func (*AFTOperation_PolicyForwardingEntry) isAFTOperation_Entry() {}
 
-func (*AFTOperation_BackupActivate) isAFTOperation_Entry() {}
+func (*AFTOperation_BackupActivation) isAFTOperation_Entry() {}
 
 // A set of AFT responses.
 type ModifyResponse struct {
@@ -1707,7 +1707,7 @@ type AFTEntry struct {
 	//	*AFTEntry_NextHop
 	//	*AFTEntry_MacEntry
 	//	*AFTEntry_PolicyForwardingEntry
-	//	*AFTEntry_BackupActivate
+	//	*AFTEntry_BackupActivation
 	Entry isAFTEntry_Entry `protobuf_oneof:"entry"`
 	// RIB programming status of the entry.
 	RibStatus AFTEntry_Status `protobuf:"varint,11,opt,name=rib_status,json=ribStatus,proto3,enum=gribi.AFTEntry_Status" json:"rib_status,omitempty"`
@@ -1824,10 +1824,10 @@ func (x *AFTEntry) GetPolicyForwardingEntry() *gribi_aft.Afts_PolicyForwardingEn
 	return nil
 }
 
-func (x *AFTEntry) GetBackupActivate() *gribi_aft.Afts_BackupActivateKey {
+func (x *AFTEntry) GetBackupActivation() *gribi_aft.Afts_BackupActivationKey {
 	if x != nil {
-		if x, ok := x.Entry.(*AFTEntry_BackupActivate); ok {
-			return x.BackupActivate
+		if x, ok := x.Entry.(*AFTEntry_BackupActivation); ok {
+			return x.BackupActivation
 		}
 	}
 	return nil
@@ -1883,8 +1883,8 @@ type AFTEntry_PolicyForwardingEntry struct {
 	PolicyForwardingEntry *gribi_aft.Afts_PolicyForwardingEntryKey `protobuf:"bytes,10,opt,name=policy_forwarding_entry,json=policyForwardingEntry,proto3,oneof"`
 }
 
-type AFTEntry_BackupActivate struct {
-	BackupActivate *gribi_aft.Afts_BackupActivateKey `protobuf:"bytes,13,opt,name=backup_activate,json=backupActivate,proto3,oneof"`
+type AFTEntry_BackupActivation struct {
+	BackupActivation *gribi_aft.Afts_BackupActivationKey `protobuf:"bytes,13,opt,name=backup_activation,json=backupActivation,proto3,oneof"`
 }
 
 func (*AFTEntry_Ipv4) isAFTEntry_Entry() {}
@@ -1901,7 +1901,7 @@ func (*AFTEntry_MacEntry) isAFTEntry_Entry() {}
 
 func (*AFTEntry_PolicyForwardingEntry) isAFTEntry_Entry() {}
 
-func (*AFTEntry_BackupActivate) isAFTEntry_Entry() {}
+func (*AFTEntry_BackupActivation) isAFTEntry_Entry() {}
 
 type GetResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -2227,7 +2227,7 @@ const file_v1_proto_service_gribi_proto_rawDesc = "" +
 	"\toperation\x18\x01 \x03(\v2\x13.gribi.AFTOperationR\toperation\x120\n" +
 	"\x06params\x18\x02 \x01(\v2\x18.gribi.SessionParametersR\x06params\x12/\n" +
 	"\velection_id\x18\x03 \x01(\v2\x0e.gribi.Uint128R\n" +
-	"electionId\"\xfb\x05\n" +
+	"electionId\"\x81\x06\n" +
 	"\fAFTOperation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12)\n" +
 	"\x10network_instance\x18\x02 \x01(\tR\x0fnetworkInstance\x12-\n" +
@@ -2239,8 +2239,8 @@ const file_v1_proto_service_gribi_proto_rawDesc = "" +
 	"\bnext_hop\x18\b \x01(\v2\x1a.gribi_aft.Afts.NextHopKeyH\x00R\anextHop\x12:\n" +
 	"\tmac_entry\x18\t \x01(\v2\x1b.gribi_aft.Afts.MacEntryKeyH\x00R\bmacEntry\x12b\n" +
 	"\x17policy_forwarding_entry\x18\n" +
-	" \x01(\v2(.gribi_aft.Afts.PolicyForwardingEntryKeyH\x00R\x15policyForwardingEntry\x12L\n" +
-	"\x0fbackup_activate\x18\f \x01(\v2!.gribi_aft.Afts.BackupActivateKeyH\x00R\x0ebackupActivate\x12/\n" +
+	" \x01(\v2(.gribi_aft.Afts.PolicyForwardingEntryKeyH\x00R\x15policyForwardingEntry\x12R\n" +
+	"\x11backup_activation\x18\f \x01(\v2#.gribi_aft.Afts.BackupActivationKeyH\x00R\x10backupActivation\x12/\n" +
 	"\velection_id\x18\v \x01(\v2\x0e.gribi.Uint128R\n" +
 	"electionId\":\n" +
 	"\tOperation\x12\v\n" +
@@ -2309,7 +2309,7 @@ const file_v1_proto_service_gribi_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x12 \n" +
 	"\x03all\x18\x02 \x01(\v2\f.gribi.EmptyH\x00R\x03all\x12 \n" +
 	"\x03aft\x18\x03 \x01(\x0e2\x0e.gribi.AFTTypeR\x03aftB\x12\n" +
-	"\x10network_instance\"\xf8\x05\n" +
+	"\x10network_instance\"\xfe\x05\n" +
 	"\bAFTEntry\x12)\n" +
 	"\x10network_instance\x18\x01 \x01(\tR\x0fnetworkInstance\x122\n" +
 	"\x04ipv4\x18\x04 \x01(\v2\x1c.gribi_aft.Afts.Ipv4EntryKeyH\x00R\x04ipv4\x122\n" +
@@ -2319,8 +2319,8 @@ const file_v1_proto_service_gribi_proto_rawDesc = "" +
 	"\bnext_hop\x18\b \x01(\v2\x1a.gribi_aft.Afts.NextHopKeyH\x00R\anextHop\x12:\n" +
 	"\tmac_entry\x18\t \x01(\v2\x1b.gribi_aft.Afts.MacEntryKeyH\x00R\bmacEntry\x12b\n" +
 	"\x17policy_forwarding_entry\x18\n" +
-	" \x01(\v2(.gribi_aft.Afts.PolicyForwardingEntryKeyH\x00R\x15policyForwardingEntry\x12L\n" +
-	"\x0fbackup_activate\x18\r \x01(\v2!.gribi_aft.Afts.BackupActivateKeyH\x00R\x0ebackupActivate\x125\n" +
+	" \x01(\v2(.gribi_aft.Afts.PolicyForwardingEntryKeyH\x00R\x15policyForwardingEntry\x12R\n" +
+	"\x11backup_activation\x18\r \x01(\v2#.gribi_aft.Afts.BackupActivationKeyH\x00R\x10backupActivation\x125\n" +
 	"\n" +
 	"rib_status\x18\v \x01(\x0e2\x16.gribi.AFTEntry.StatusR\tribStatus\x125\n" +
 	"\n" +
@@ -2424,7 +2424,7 @@ var file_v1_proto_service_gribi_proto_goTypes = []any{
 	(*gribi_aft.Afts_NextHopKey)(nil),               // 31: gribi_aft.Afts.NextHopKey
 	(*gribi_aft.Afts_MacEntryKey)(nil),              // 32: gribi_aft.Afts.MacEntryKey
 	(*gribi_aft.Afts_PolicyForwardingEntryKey)(nil), // 33: gribi_aft.Afts.PolicyForwardingEntryKey
-	(*gribi_aft.Afts_BackupActivateKey)(nil),        // 34: gribi_aft.Afts.BackupActivateKey
+	(*gribi_aft.Afts_BackupActivationKey)(nil),      // 34: gribi_aft.Afts.BackupActivationKey
 }
 var file_v1_proto_service_gribi_proto_depIdxs = []int32{
 	12, // 0: gribi.ModifyRequest.operation:type_name -> gribi.AFTOperation
@@ -2438,7 +2438,7 @@ var file_v1_proto_service_gribi_proto_depIdxs = []int32{
 	31, // 8: gribi.AFTOperation.next_hop:type_name -> gribi_aft.Afts.NextHopKey
 	32, // 9: gribi.AFTOperation.mac_entry:type_name -> gribi_aft.Afts.MacEntryKey
 	33, // 10: gribi.AFTOperation.policy_forwarding_entry:type_name -> gribi_aft.Afts.PolicyForwardingEntryKey
-	34, // 11: gribi.AFTOperation.backup_activate:type_name -> gribi_aft.Afts.BackupActivateKey
+	34, // 11: gribi.AFTOperation.backup_activation:type_name -> gribi_aft.Afts.BackupActivationKey
 	18, // 12: gribi.AFTOperation.election_id:type_name -> gribi.Uint128
 	14, // 13: gribi.ModifyResponse.result:type_name -> gribi.AFTResult
 	17, // 14: gribi.ModifyResponse.session_params_result:type_name -> gribi.SessionParametersResult
@@ -2459,7 +2459,7 @@ var file_v1_proto_service_gribi_proto_depIdxs = []int32{
 	31, // 29: gribi.AFTEntry.next_hop:type_name -> gribi_aft.Afts.NextHopKey
 	32, // 30: gribi.AFTEntry.mac_entry:type_name -> gribi_aft.Afts.MacEntryKey
 	33, // 31: gribi.AFTEntry.policy_forwarding_entry:type_name -> gribi_aft.Afts.PolicyForwardingEntryKey
-	34, // 32: gribi.AFTEntry.backup_activate:type_name -> gribi_aft.Afts.BackupActivateKey
+	34, // 32: gribi.AFTEntry.backup_activation:type_name -> gribi_aft.Afts.BackupActivationKey
 	8,  // 33: gribi.AFTEntry.rib_status:type_name -> gribi.AFTEntry.Status
 	8,  // 34: gribi.AFTEntry.fib_status:type_name -> gribi.AFTEntry.Status
 	22, // 35: gribi.GetResponse.entry:type_name -> gribi.AFTEntry
@@ -2494,7 +2494,7 @@ func file_v1_proto_service_gribi_proto_init() {
 		(*AFTOperation_NextHop)(nil),
 		(*AFTOperation_MacEntry)(nil),
 		(*AFTOperation_PolicyForwardingEntry)(nil),
-		(*AFTOperation_BackupActivate)(nil),
+		(*AFTOperation_BackupActivation)(nil),
 	}
 	file_v1_proto_service_gribi_proto_msgTypes[10].OneofWrappers = []any{
 		(*GetRequest_Name)(nil),
@@ -2508,7 +2508,7 @@ func file_v1_proto_service_gribi_proto_init() {
 		(*AFTEntry_NextHop)(nil),
 		(*AFTEntry_MacEntry)(nil),
 		(*AFTEntry_PolicyForwardingEntry)(nil),
-		(*AFTEntry_BackupActivate)(nil),
+		(*AFTEntry_BackupActivation)(nil),
 	}
 	file_v1_proto_service_gribi_proto_msgTypes[13].OneofWrappers = []any{
 		(*FlushRequest_Id)(nil),
