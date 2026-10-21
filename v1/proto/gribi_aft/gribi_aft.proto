@@ -21,16 +21,6 @@ message Device {
 }
 
 message Afts {
-
-  message BackupActivate {
-  }
-  message BackupActivateKey {
- 	uint64 next_hop_group = 1 [(yext.schemapath) = "/afts/backup-activate/backup-activate/state/next-hop-group|/afts/backup-activate/backup-activate/next-hop-group"];
- 	BackupActivate backup_activate = 2;
-  }
-  // Repeated container for backup_activate entries in the AFT
-  repeated BackupActivateKey backup_activate = 268235568 [(yext.schemapath) = "/afts/backup-activate/backup-activate"];
-
   message BackupActivation {
   }
   message BackupActivationKey {
@@ -99,13 +89,10 @@ message Afts {
         ywrapper.StringValue src_ip = 254664891 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/ipv6/state/src-ip"];
       }
       message Mpls {
-        message EncapMplsLabelStacks {
-        }
         message MplsLabelStackUnion {
           gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum mpls_label_stack_openconfigmplstypesmplslabelenum = 212167609 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/mpls-label-stack"];
           uint64 mpls_label_stack_uint64 = 205621201 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/mpls-label-stack"];
         }
-        EncapMplsLabelStacks encap_mpls_label_stacks = 32964497 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/encap-mpls-label-stacks"];
         repeated MplsLabelStackUnion mpls_label_stack = 310218456 [(yext.leaflistunion) = true,(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/mpls-label-stack"];
         ywrapper.UintValue traffic_class = 380564126 [(yext.schemapath) = "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/state/traffic-class"];
       }

@@ -166,7 +166,7 @@ module gribi-aft {
     deviate not-supported;
   }
 
-  deviation "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/encap-mpls-label-stacks/encap-mpls-label-stack" {
+  deviation "/afts/next-hops/next-hop/encap-headers/encap-header/mpls/encap-mpls-label-stacks" {
     description
       "Encapsulation of MPLS label stacks is not supported in this release of
       gRIBI.  A future release of gRIBI could add support for this leaf.";
