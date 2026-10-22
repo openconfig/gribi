@@ -215,7 +215,8 @@ message AFTOperation {
     // policy-forwarding-entry
     gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
     // Schema for backup_activation is generated from
-    // /network-instances/network-instance/afts/backup-activations/backup-activation
+    // /network-instances/network-instance/afts/backup-activations/
+    // backup-activation
     gribi_aft.Afts.BackupActivationKey backup_activation = 12;
   }
 
