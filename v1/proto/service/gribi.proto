@@ -192,30 +192,30 @@ message AFTOperation {
     // Each openconfig.AFT.* message is a protobuf transformed
     // message corresponding to the OpenConfig AFT for that
     // schema.
-    // Schema for IPv4UnicastEntry is generated from
+    // Schema for ipv4 is generated from
     // /network-instances/network-instance/afts/ipv4-unicast/ipv4-entry
     gribi_aft.Afts.Ipv4EntryKey ipv4 = 4;
-    // Schema for IPv6UnicastEntry is generated from
+    // Schema for ipv6 is generated from
     // /network-instances/network-instance/afts/ipv6-unicast/ipv6-entry
     gribi_aft.Afts.Ipv6EntryKey ipv6 = 5;
-    // Schema for MPLSLabelEntry is generated from
+    // Schema for mpls is generated from
     // /network-instances/network-instance/afts/mpls/label-entry
     gribi_aft.Afts.LabelEntryKey mpls = 6;
-    // Schema for NextHopGroup is generated from
+    // Schema for next_hop_group is generated from
     // /network-instances/network-instance/afts/next-hop-groups/next-hop-group
     gribi_aft.Afts.NextHopGroupKey next_hop_group = 7;
-    // Schema for NextHop is generated from
+    // Schema for next_hop is generated from
     // /network-instances/network-instance/afts/next-hops/next-hop.
     gribi_aft.Afts.NextHopKey next_hop = 8;
-    // Schema for MacEntry is generated from
+    // Schema for mac_entry is generated from
     // /network-instances/network-instance/afts/ethernet/mac-entry
     gribi_aft.Afts.MacEntryKey mac_entry = 9;
-    // Schema for PolicyForwardingGroup is generated from
+    // Schema for policy_forwarding_entry is generated from
     // /network-instances/network-instance/afts/policy-forwarding/
     // policy-forwarding-entry
     gribi_aft.Afts.PolicyForwardingEntryKey policy_forwarding_entry = 10;
-    // Schema for BackupActivateKey is generated from
-    // /network-instances/network-instance/afts/backup-activations
+    // Schema for backup_activation is generated from
+    // /network-instances/network-instance/afts/backup-activations/backup-activation
     gribi_aft.Afts.BackupActivationKey backup_activation = 12;
   }
 

@@ -35,7 +35,7 @@ module gribi-aft {
   revision "2026-10-13" {
     description
       "Add versioning of gribi-aft.yang. Deviate mpls-label-stack and 
-      encap-mpls-label-stack as not supported in this release.";
+      encap-mpls-label-stack as they are not supported in this release.";
     reference "1.0.0";
   }
 
