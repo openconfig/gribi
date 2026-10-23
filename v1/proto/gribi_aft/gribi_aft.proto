@@ -21,6 +21,12 @@ message Device {
 }
 
 message Afts {
+  message BackupActivation {
+  }
+  message BackupActivationKey {
+    uint64 next_hop_group = 1 [(yext.schemapath) = "/afts/backup-activations/backup-activation/state/next-hop-group|/afts/backup-activations/backup-activation/next-hop-group"];
+    BackupActivation backup_activation = 2;
+  }
   message Ipv4Entry {
     gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType decapsulate_header = 383809427 [(yext.schemapath) = "/afts/ipv4-unicast/ipv4-entry/state/decapsulate-header"];
     ywrapper.BytesValue entry_metadata = 290934374 [(yext.schemapath) = "/afts/ipv4-unicast/ipv4-entry/state/entry-metadata"];
@@ -192,6 +198,7 @@ message Afts {
     uint64 index = 1 [(yext.schemapath) = "/afts/policy-forwarding/policy-forwarding-entry/state/index|/afts/policy-forwarding/policy-forwarding-entry/index"];
     PolicyForwardingEntry policy_forwarding_entry = 2;
   }
+  repeated BackupActivationKey backup_activation = 177885967 [(yext.schemapath) = "/afts/backup-activations/backup-activation"];
   repeated Ipv4EntryKey ipv4_entry = 410397655 [(yext.schemapath) = "/afts/ipv4-unicast/ipv4-entry"];
   repeated Ipv6EntryKey ipv6_entry = 403891971 [(yext.schemapath) = "/afts/ipv6-unicast/ipv6-entry"];
   repeated LabelEntryKey label_entry = 153428187 [(yext.schemapath) = "/afts/mpls/label-entry"];
