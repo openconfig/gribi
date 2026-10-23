@@ -3,7 +3,7 @@ module github.com/openconfig/gribi
 go 1.26.0
 
 require (
-	github.com/openconfig/ygot v0.35.0
+	github.com/openconfig/ygot v0.36.0
 	google.golang.org/grpc v1.84.0
 	google.golang.org/protobuf v1.36.12
 )
