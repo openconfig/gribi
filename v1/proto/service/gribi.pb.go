@@ -1086,51 +1086,52 @@ type AFTOperation_Ipv4 struct {
 	// Each openconfig.AFT.* message is a protobuf transformed
 	// message corresponding to the OpenConfig AFT for that
 	// schema.
-	// Schema for IPv4UnicastEntry is generated from
+	// Schema for ipv4 is generated from
 	// /network-instances/network-instance/afts/ipv4-unicast/ipv4-entry
 	Ipv4 *gribi_aft.Afts_Ipv4EntryKey `protobuf:"bytes,4,opt,name=ipv4,proto3,oneof"`
 }
 
 type AFTOperation_Ipv6 struct {
-	// Schema for IPv6UnicastEntry is generated from
+	// Schema for ipv6 is generated from
 	// /network-instances/network-instance/afts/ipv6-unicast/ipv6-entry
 	Ipv6 *gribi_aft.Afts_Ipv6EntryKey `protobuf:"bytes,5,opt,name=ipv6,proto3,oneof"`
 }
 
 type AFTOperation_Mpls struct {
-	// Schema for MPLSLabelEntry is generated from
+	// Schema for mpls is generated from
 	// /network-instances/network-instance/afts/mpls/label-entry
 	Mpls *gribi_aft.Afts_LabelEntryKey `protobuf:"bytes,6,opt,name=mpls,proto3,oneof"`
 }
 
 type AFTOperation_NextHopGroup struct {
-	// Schema for NextHopGroup is generated from
+	// Schema for next_hop_group is generated from
 	// /network-instances/network-instance/afts/next-hop-groups/next-hop-group
 	NextHopGroup *gribi_aft.Afts_NextHopGroupKey `protobuf:"bytes,7,opt,name=next_hop_group,json=nextHopGroup,proto3,oneof"`
 }
 
 type AFTOperation_NextHop struct {
-	// Schema for NextHop is generated from
+	// Schema for next_hop is generated from
 	// /network-instances/network-instance/afts/next-hops/next-hop.
 	NextHop *gribi_aft.Afts_NextHopKey `protobuf:"bytes,8,opt,name=next_hop,json=nextHop,proto3,oneof"`
 }
 
 type AFTOperation_MacEntry struct {
-	// Schema for MacEntry is generated from
+	// Schema for mac_entry is generated from
 	// /network-instances/network-instance/afts/ethernet/mac-entry
 	MacEntry *gribi_aft.Afts_MacEntryKey `protobuf:"bytes,9,opt,name=mac_entry,json=macEntry,proto3,oneof"`
 }
 
 type AFTOperation_PolicyForwardingEntry struct {
-	// Schema for PolicyForwardingGroup is generated from
+	// Schema for policy_forwarding_entry is generated from
 	// /network-instances/network-instance/afts/policy-forwarding/
 	// policy-forwarding-entry
 	PolicyForwardingEntry *gribi_aft.Afts_PolicyForwardingEntryKey `protobuf:"bytes,10,opt,name=policy_forwarding_entry,json=policyForwardingEntry,proto3,oneof"`
 }
 
 type AFTOperation_BackupActivation struct {
-	// Schema for BackupActivateKey is generated from
-	// /network-instances/network-instance/afts/backup-activate
+	// Schema for backup_activation is generated from
+	// /network-instances/network-instance/afts/backup-activations/
+	// backup-activation
 	BackupActivation *gribi_aft.Afts_BackupActivationKey `protobuf:"bytes,12,opt,name=backup_activation,json=backupActivation,proto3,oneof"`
 }
 

@@ -786,6 +786,7 @@ type Afts_NextHop struct {
 	IpInIp               *Afts_NextHop_IpInIp                            `protobuf:"bytes,157296597,opt,name=ip_in_ip,json=ipInIp,proto3" json:"ip_in_ip,omitempty"`
 	MacAddress           *ywrapper.StringValue                           `protobuf:"bytes,404609192,opt,name=mac_address,json=macAddress,proto3" json:"mac_address,omitempty"`
 	NetworkInstance      *ywrapper.StringValue                           `protobuf:"bytes,232391308,opt,name=network_instance,json=networkInstance,proto3" json:"network_instance,omitempty"`
+	PolicyTag            *ywrapper.StringValue                           `protobuf:"bytes,406422915,opt,name=policy_tag,json=policyTag,proto3" json:"policy_tag,omitempty"`
 	PopTopLabel          *ywrapper.BoolValue                             `protobuf:"bytes,382175404,opt,name=pop_top_label,json=popTopLabel,proto3" json:"pop_top_label,omitempty"`
 	PushedMplsLabelStack []*Afts_NextHop_PushedMplsLabelStackUnion       `protobuf:"bytes,489592660,rep,name=pushed_mpls_label_stack,json=pushedMplsLabelStack,proto3" json:"pushed_mpls_label_stack,omitempty"`
 	TunnelSrcIpAddress   *ywrapper.StringValue                           `protobuf:"bytes,174262178,opt,name=tunnel_src_ip_address,json=tunnelSrcIpAddress,proto3" json:"tunnel_src_ip_address,omitempty"`
@@ -883,6 +884,13 @@ func (x *Afts_NextHop) GetMacAddress() *ywrapper.StringValue {
 func (x *Afts_NextHop) GetNetworkInstance() *ywrapper.StringValue {
 	if x != nil {
 		return x.NetworkInstance
+	}
+	return nil
+}
+
+func (x *Afts_NextHop) GetPolicyTag() *ywrapper.StringValue {
+	if x != nil {
+		return x.PolicyTag
 	}
 	return nil
 }
@@ -2283,7 +2291,7 @@ const file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc = "" +
 	"\n" +
 	"\"v1/proto/gribi_aft/gribi_aft.proto\x12\tgribi_aft\x1a8github.com/openconfig/ygot/proto/ywrapper/ywrapper.proto\x1a0github.com/openconfig/ygot/proto/yext/yext.proto\x1a$v1/proto/gribi_aft/enums/enums.proto\":\n" +
 	"\x06Device\x120\n" +
-	"\x04afts\x18\xb4\x96\x94\x11 \x01(\v2\x0f.gribi_aft.AftsB\b\x82A\x05/aftsR\x04afts\"\xdav\n" +
+	"\x04afts\x18\xb4\x96\x94\x11 \x01(\v2\x0f.gribi_aft.AftsB\b\x82A\x05/aftsR\x04afts\"\xc2w\n" +
 	"\x04Afts\x12\x82\x01\n" +
 	"\x11backup_activation\x18\x8f\xa6\xe9T \x03(\v2#.gribi_aft.Afts.BackupActivationKeyB-\x82A*/afts/backup-activations/backup-activationR\x10backupActivation\x12a\n" +
 	"\n" +
@@ -2340,7 +2348,7 @@ const file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc = "" +
 	"\vMacEntryKey\x12s\n" +
 	"\vmac_address\x18\x01 \x01(\tBR\x82AO/afts/ethernet/mac-entry/state/mac-address|/afts/ethernet/mac-entry/mac-addressR\n" +
 	"macAddress\x125\n" +
-	"\tmac_entry\x18\x02 \x01(\v2\x18.gribi_aft.Afts.MacEntryR\bmacEntry\x1a\xfc7\n" +
+	"\tmac_entry\x18\x02 \x01(\v2\x18.gribi_aft.Afts.MacEntryR\bmacEntry\x1a\xe48\n" +
 	"\aNextHop\x12\xa2\x01\n" +
 	"\x12decapsulate_header\x18\xa9\xf4\x862 \x01(\x0e2:.gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderTypeB4\x82A1/afts/next-hops/next-hop/state/decapsulate-headerR\x11decapsulateHeader\x12\x84\x01\n" +
 	"\fencap_header\x18\xd2\xe6\xf8; \x03(\v2&.gribi_aft.Afts.NextHop.EncapHeaderKeyB6\x82A3/afts/next-hops/next-hop/encap-headers/encap-headerR\vencapHeader\x12\xa2\x01\n" +
@@ -2352,7 +2360,9 @@ const file_v1_proto_gribi_aft_gribi_aft_proto_rawDesc = "" +
 	"\bip_in_ip\x18\xd5πK \x01(\v2\x1e.gribi_aft.Afts.NextHop.IpInIpB$\x82A!/afts/next-hops/next-hop/ip-in-ipR\x06ipInIp\x12i\n" +
 	"\vmac_address\x18\xa8\xb1\xf7\xc0\x01 \x01(\v2\x15.ywrapper.StringValueB-\x82A*/afts/next-hops/next-hop/state/mac-addressR\n" +
 	"macAddress\x12w\n" +
-	"\x10network_instance\x18\x8c\x85\xe8n \x01(\v2\x15.ywrapper.StringValueB2\x82A//afts/next-hops/next-hop/state/network-instanceR\x0fnetworkInstance\x12l\n" +
+	"\x10network_instance\x18\x8c\x85\xe8n \x01(\v2\x15.ywrapper.StringValueB2\x82A//afts/next-hops/next-hop/state/network-instanceR\x0fnetworkInstance\x12f\n" +
+	"\n" +
+	"policy_tag\x18\x83\x8b\xe6\xc1\x01 \x01(\v2\x15.ywrapper.StringValueB,\x82A)/afts/next-hops/next-hop/state/policy-tagR\tpolicyTag\x12l\n" +
 	"\rpop_top_label\x18\xac\x91\x9e\xb6\x01 \x01(\v2\x13.ywrapper.BoolValueB/\x82A,/afts/next-hops/next-hop/state/pop-top-labelR\vpopTopLabel\x12\xaa\x01\n" +
 	"\x17pushed_mpls_label_stack\x18Ԯ\xba\xe9\x01 \x03(\v21.gribi_aft.Afts.NextHop.PushedMplsLabelStackUnionB<\x82A6/afts/next-hops/next-hop/state/pushed-mpls-label-stack\xe0I\x01R\x14pushedMplsLabelStack\x12\x84\x01\n" +
 	"\x15tunnel_src_ip_address\x18\xa2\x8f\x8cS \x01(\v2\x15.ywrapper.StringValueB7\x82A4/afts/next-hops/next-hop/state/tunnel-src-ip-addressR\x12tunnelSrcIpAddress\x12`\n" +
@@ -2550,73 +2560,74 @@ var file_v1_proto_gribi_aft_gribi_aft_proto_depIdxs = []int32{
 	23,  // 36: gribi_aft.Afts.NextHop.ip_in_ip:type_name -> gribi_aft.Afts.NextHop.IpInIp
 	37,  // 37: gribi_aft.Afts.NextHop.mac_address:type_name -> ywrapper.StringValue
 	37,  // 38: gribi_aft.Afts.NextHop.network_instance:type_name -> ywrapper.StringValue
-	39,  // 39: gribi_aft.Afts.NextHop.pop_top_label:type_name -> ywrapper.BoolValue
-	24,  // 40: gribi_aft.Afts.NextHop.pushed_mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.PushedMplsLabelStackUnion
-	37,  // 41: gribi_aft.Afts.NextHop.tunnel_src_ip_address:type_name -> ywrapper.StringValue
-	36,  // 42: gribi_aft.Afts.NextHop.vni_label:type_name -> ywrapper.UintValue
-	36,  // 43: gribi_aft.Afts.NextHopGroup.backup_next_hop_group:type_name -> ywrapper.UintValue
-	36,  // 44: gribi_aft.Afts.NextHopGroup.color:type_name -> ywrapper.UintValue
-	33,  // 45: gribi_aft.Afts.NextHopGroup.next_hop:type_name -> gribi_aft.Afts.NextHopGroup.NextHopKey
-	13,  // 46: gribi_aft.Afts.NextHopGroupKey.next_hop_group:type_name -> gribi_aft.Afts.NextHopGroup
-	12,  // 47: gribi_aft.Afts.NextHopKey.next_hop:type_name -> gribi_aft.Afts.NextHop
-	35,  // 48: gribi_aft.Afts.PolicyForwardingEntry.entry_metadata:type_name -> ywrapper.BytesValue
-	36,  // 49: gribi_aft.Afts.PolicyForwardingEntry.ip_dscp:type_name -> ywrapper.UintValue
-	37,  // 50: gribi_aft.Afts.PolicyForwardingEntry.ip_prefix:type_name -> ywrapper.StringValue
-	40,  // 51: gribi_aft.Afts.PolicyForwardingEntry.ip_protocol_openconfigpacketmatchtypesipprotocol:type_name -> gribi_aft.enums.OpenconfigPacketMatchTypesIPPROTOCOL
-	36,  // 52: gribi_aft.Afts.PolicyForwardingEntry.l4_dst_port:type_name -> ywrapper.UintValue
-	36,  // 53: gribi_aft.Afts.PolicyForwardingEntry.l4_src_port:type_name -> ywrapper.UintValue
-	37,  // 54: gribi_aft.Afts.PolicyForwardingEntry.mac_address:type_name -> ywrapper.StringValue
-	38,  // 55: gribi_aft.Afts.PolicyForwardingEntry.mpls_label_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	36,  // 56: gribi_aft.Afts.PolicyForwardingEntry.mpls_tc:type_name -> ywrapper.UintValue
-	36,  // 57: gribi_aft.Afts.PolicyForwardingEntry.next_hop_group:type_name -> ywrapper.UintValue
-	37,  // 58: gribi_aft.Afts.PolicyForwardingEntry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
-	16,  // 59: gribi_aft.Afts.PolicyForwardingEntryKey.policy_forwarding_entry:type_name -> gribi_aft.Afts.PolicyForwardingEntry
-	38,  // 60: gribi_aft.Afts.LabelEntry.PoppedMplsLabelStackUnion.popped_mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	25,  // 61: gribi_aft.Afts.NextHop.EncapHeader.gre:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Gre
-	26,  // 62: gribi_aft.Afts.NextHop.EncapHeader.ipv4:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Ipv4
-	27,  // 63: gribi_aft.Afts.NextHop.EncapHeader.ipv6:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Ipv6
-	28,  // 64: gribi_aft.Afts.NextHop.EncapHeader.mpls:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls
-	34,  // 65: gribi_aft.Afts.NextHop.EncapHeader.type:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
-	29,  // 66: gribi_aft.Afts.NextHop.EncapHeader.udp_v4:type_name -> gribi_aft.Afts.NextHop.EncapHeader.UdpV4
-	30,  // 67: gribi_aft.Afts.NextHop.EncapHeader.udp_v6:type_name -> gribi_aft.Afts.NextHop.EncapHeader.UdpV6
-	19,  // 68: gribi_aft.Afts.NextHop.EncapHeaderKey.encap_header:type_name -> gribi_aft.Afts.NextHop.EncapHeader
-	37,  // 69: gribi_aft.Afts.NextHop.Gre.dst_ip:type_name -> ywrapper.StringValue
-	37,  // 70: gribi_aft.Afts.NextHop.Gre.src_ip:type_name -> ywrapper.StringValue
-	36,  // 71: gribi_aft.Afts.NextHop.Gre.ttl:type_name -> ywrapper.UintValue
-	37,  // 72: gribi_aft.Afts.NextHop.InterfaceRef.interface:type_name -> ywrapper.StringValue
-	36,  // 73: gribi_aft.Afts.NextHop.InterfaceRef.subinterface:type_name -> ywrapper.UintValue
-	37,  // 74: gribi_aft.Afts.NextHop.IpInIp.dst_ip:type_name -> ywrapper.StringValue
-	37,  // 75: gribi_aft.Afts.NextHop.IpInIp.src_ip:type_name -> ywrapper.StringValue
-	38,  // 76: gribi_aft.Afts.NextHop.PushedMplsLabelStackUnion.pushed_mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	37,  // 77: gribi_aft.Afts.NextHop.EncapHeader.Gre.dst_ip:type_name -> ywrapper.StringValue
-	37,  // 78: gribi_aft.Afts.NextHop.EncapHeader.Gre.src_ip:type_name -> ywrapper.StringValue
-	36,  // 79: gribi_aft.Afts.NextHop.EncapHeader.Gre.ttl:type_name -> ywrapper.UintValue
-	37,  // 80: gribi_aft.Afts.NextHop.EncapHeader.Ipv4.dst_ip:type_name -> ywrapper.StringValue
-	37,  // 81: gribi_aft.Afts.NextHop.EncapHeader.Ipv4.src_ip:type_name -> ywrapper.StringValue
-	37,  // 82: gribi_aft.Afts.NextHop.EncapHeader.Ipv6.dst_ip:type_name -> ywrapper.StringValue
-	37,  // 83: gribi_aft.Afts.NextHop.EncapHeader.Ipv6.src_ip:type_name -> ywrapper.StringValue
-	31,  // 84: gribi_aft.Afts.NextHop.EncapHeader.Mpls.mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls.MplsLabelStackUnion
-	36,  // 85: gribi_aft.Afts.NextHop.EncapHeader.Mpls.traffic_class:type_name -> ywrapper.UintValue
-	36,  // 86: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dscp:type_name -> ywrapper.UintValue
-	37,  // 87: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dst_ip:type_name -> ywrapper.StringValue
-	36,  // 88: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dst_udp_port:type_name -> ywrapper.UintValue
-	36,  // 89: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.ip_ttl:type_name -> ywrapper.UintValue
-	37,  // 90: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.src_ip:type_name -> ywrapper.StringValue
-	36,  // 91: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.src_udp_port:type_name -> ywrapper.UintValue
-	36,  // 92: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dscp:type_name -> ywrapper.UintValue
-	37,  // 93: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dst_ip:type_name -> ywrapper.StringValue
-	36,  // 94: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dst_udp_port:type_name -> ywrapper.UintValue
-	36,  // 95: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.ip_ttl:type_name -> ywrapper.UintValue
-	37,  // 96: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.src_ip:type_name -> ywrapper.StringValue
-	36,  // 97: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.src_udp_port:type_name -> ywrapper.UintValue
-	38,  // 98: gribi_aft.Afts.NextHop.EncapHeader.Mpls.MplsLabelStackUnion.mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
-	36,  // 99: gribi_aft.Afts.NextHopGroup.NextHop.weight:type_name -> ywrapper.UintValue
-	32,  // 100: gribi_aft.Afts.NextHopGroup.NextHopKey.next_hop:type_name -> gribi_aft.Afts.NextHopGroup.NextHop
-	101, // [101:101] is the sub-list for method output_type
-	101, // [101:101] is the sub-list for method input_type
-	101, // [101:101] is the sub-list for extension type_name
-	101, // [101:101] is the sub-list for extension extendee
-	0,   // [0:101] is the sub-list for field type_name
+	37,  // 39: gribi_aft.Afts.NextHop.policy_tag:type_name -> ywrapper.StringValue
+	39,  // 40: gribi_aft.Afts.NextHop.pop_top_label:type_name -> ywrapper.BoolValue
+	24,  // 41: gribi_aft.Afts.NextHop.pushed_mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.PushedMplsLabelStackUnion
+	37,  // 42: gribi_aft.Afts.NextHop.tunnel_src_ip_address:type_name -> ywrapper.StringValue
+	36,  // 43: gribi_aft.Afts.NextHop.vni_label:type_name -> ywrapper.UintValue
+	36,  // 44: gribi_aft.Afts.NextHopGroup.backup_next_hop_group:type_name -> ywrapper.UintValue
+	36,  // 45: gribi_aft.Afts.NextHopGroup.color:type_name -> ywrapper.UintValue
+	33,  // 46: gribi_aft.Afts.NextHopGroup.next_hop:type_name -> gribi_aft.Afts.NextHopGroup.NextHopKey
+	13,  // 47: gribi_aft.Afts.NextHopGroupKey.next_hop_group:type_name -> gribi_aft.Afts.NextHopGroup
+	12,  // 48: gribi_aft.Afts.NextHopKey.next_hop:type_name -> gribi_aft.Afts.NextHop
+	35,  // 49: gribi_aft.Afts.PolicyForwardingEntry.entry_metadata:type_name -> ywrapper.BytesValue
+	36,  // 50: gribi_aft.Afts.PolicyForwardingEntry.ip_dscp:type_name -> ywrapper.UintValue
+	37,  // 51: gribi_aft.Afts.PolicyForwardingEntry.ip_prefix:type_name -> ywrapper.StringValue
+	40,  // 52: gribi_aft.Afts.PolicyForwardingEntry.ip_protocol_openconfigpacketmatchtypesipprotocol:type_name -> gribi_aft.enums.OpenconfigPacketMatchTypesIPPROTOCOL
+	36,  // 53: gribi_aft.Afts.PolicyForwardingEntry.l4_dst_port:type_name -> ywrapper.UintValue
+	36,  // 54: gribi_aft.Afts.PolicyForwardingEntry.l4_src_port:type_name -> ywrapper.UintValue
+	37,  // 55: gribi_aft.Afts.PolicyForwardingEntry.mac_address:type_name -> ywrapper.StringValue
+	38,  // 56: gribi_aft.Afts.PolicyForwardingEntry.mpls_label_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	36,  // 57: gribi_aft.Afts.PolicyForwardingEntry.mpls_tc:type_name -> ywrapper.UintValue
+	36,  // 58: gribi_aft.Afts.PolicyForwardingEntry.next_hop_group:type_name -> ywrapper.UintValue
+	37,  // 59: gribi_aft.Afts.PolicyForwardingEntry.next_hop_group_network_instance:type_name -> ywrapper.StringValue
+	16,  // 60: gribi_aft.Afts.PolicyForwardingEntryKey.policy_forwarding_entry:type_name -> gribi_aft.Afts.PolicyForwardingEntry
+	38,  // 61: gribi_aft.Afts.LabelEntry.PoppedMplsLabelStackUnion.popped_mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	25,  // 62: gribi_aft.Afts.NextHop.EncapHeader.gre:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Gre
+	26,  // 63: gribi_aft.Afts.NextHop.EncapHeader.ipv4:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Ipv4
+	27,  // 64: gribi_aft.Afts.NextHop.EncapHeader.ipv6:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Ipv6
+	28,  // 65: gribi_aft.Afts.NextHop.EncapHeader.mpls:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls
+	34,  // 66: gribi_aft.Afts.NextHop.EncapHeader.type:type_name -> gribi_aft.enums.OpenconfigAftTypesEncapsulationHeaderType
+	29,  // 67: gribi_aft.Afts.NextHop.EncapHeader.udp_v4:type_name -> gribi_aft.Afts.NextHop.EncapHeader.UdpV4
+	30,  // 68: gribi_aft.Afts.NextHop.EncapHeader.udp_v6:type_name -> gribi_aft.Afts.NextHop.EncapHeader.UdpV6
+	19,  // 69: gribi_aft.Afts.NextHop.EncapHeaderKey.encap_header:type_name -> gribi_aft.Afts.NextHop.EncapHeader
+	37,  // 70: gribi_aft.Afts.NextHop.Gre.dst_ip:type_name -> ywrapper.StringValue
+	37,  // 71: gribi_aft.Afts.NextHop.Gre.src_ip:type_name -> ywrapper.StringValue
+	36,  // 72: gribi_aft.Afts.NextHop.Gre.ttl:type_name -> ywrapper.UintValue
+	37,  // 73: gribi_aft.Afts.NextHop.InterfaceRef.interface:type_name -> ywrapper.StringValue
+	36,  // 74: gribi_aft.Afts.NextHop.InterfaceRef.subinterface:type_name -> ywrapper.UintValue
+	37,  // 75: gribi_aft.Afts.NextHop.IpInIp.dst_ip:type_name -> ywrapper.StringValue
+	37,  // 76: gribi_aft.Afts.NextHop.IpInIp.src_ip:type_name -> ywrapper.StringValue
+	38,  // 77: gribi_aft.Afts.NextHop.PushedMplsLabelStackUnion.pushed_mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	37,  // 78: gribi_aft.Afts.NextHop.EncapHeader.Gre.dst_ip:type_name -> ywrapper.StringValue
+	37,  // 79: gribi_aft.Afts.NextHop.EncapHeader.Gre.src_ip:type_name -> ywrapper.StringValue
+	36,  // 80: gribi_aft.Afts.NextHop.EncapHeader.Gre.ttl:type_name -> ywrapper.UintValue
+	37,  // 81: gribi_aft.Afts.NextHop.EncapHeader.Ipv4.dst_ip:type_name -> ywrapper.StringValue
+	37,  // 82: gribi_aft.Afts.NextHop.EncapHeader.Ipv4.src_ip:type_name -> ywrapper.StringValue
+	37,  // 83: gribi_aft.Afts.NextHop.EncapHeader.Ipv6.dst_ip:type_name -> ywrapper.StringValue
+	37,  // 84: gribi_aft.Afts.NextHop.EncapHeader.Ipv6.src_ip:type_name -> ywrapper.StringValue
+	31,  // 85: gribi_aft.Afts.NextHop.EncapHeader.Mpls.mpls_label_stack:type_name -> gribi_aft.Afts.NextHop.EncapHeader.Mpls.MplsLabelStackUnion
+	36,  // 86: gribi_aft.Afts.NextHop.EncapHeader.Mpls.traffic_class:type_name -> ywrapper.UintValue
+	36,  // 87: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dscp:type_name -> ywrapper.UintValue
+	37,  // 88: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dst_ip:type_name -> ywrapper.StringValue
+	36,  // 89: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.dst_udp_port:type_name -> ywrapper.UintValue
+	36,  // 90: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.ip_ttl:type_name -> ywrapper.UintValue
+	37,  // 91: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.src_ip:type_name -> ywrapper.StringValue
+	36,  // 92: gribi_aft.Afts.NextHop.EncapHeader.UdpV4.src_udp_port:type_name -> ywrapper.UintValue
+	36,  // 93: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dscp:type_name -> ywrapper.UintValue
+	37,  // 94: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dst_ip:type_name -> ywrapper.StringValue
+	36,  // 95: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.dst_udp_port:type_name -> ywrapper.UintValue
+	36,  // 96: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.ip_ttl:type_name -> ywrapper.UintValue
+	37,  // 97: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.src_ip:type_name -> ywrapper.StringValue
+	36,  // 98: gribi_aft.Afts.NextHop.EncapHeader.UdpV6.src_udp_port:type_name -> ywrapper.UintValue
+	38,  // 99: gribi_aft.Afts.NextHop.EncapHeader.Mpls.MplsLabelStackUnion.mpls_label_stack_openconfigmplstypesmplslabelenum:type_name -> gribi_aft.enums.OpenconfigMplsTypesMplsLabelEnum
+	36,  // 100: gribi_aft.Afts.NextHopGroup.NextHop.weight:type_name -> ywrapper.UintValue
+	32,  // 101: gribi_aft.Afts.NextHopGroup.NextHopKey.next_hop:type_name -> gribi_aft.Afts.NextHopGroup.NextHop
+	102, // [102:102] is the sub-list for method output_type
+	102, // [102:102] is the sub-list for method input_type
+	102, // [102:102] is the sub-list for extension type_name
+	102, // [102:102] is the sub-list for extension extendee
+	0,   // [0:102] is the sub-list for field type_name
 }
 
 func init() { file_v1_proto_gribi_aft_gribi_aft_proto_init() }
