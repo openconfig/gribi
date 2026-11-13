@@ -23,7 +23,26 @@ submodule openconfig-aft-common {
     "Submodule containing definitions of groupings that are re-used
     across multiple contexts within the AFT model.";
 
-  oc-ext:openconfig-version "3.5.0";
+  oc-ext:openconfig-version "3.8.0";
+
+  revision "2026-10-30" {
+    description
+      "Add policy-tag leaf to AFT next-hop state.";
+    reference "3.8.0";
+  }
+
+  revision "2026-10-22" {
+    description
+      "Add DSCP leaf to GRE encapsulation config.";
+    reference "3.7.0";
+  }
+
+  revision "2026-10-04" {
+    description
+      "Add in-profile-dscp and out-profile-dscp to GRE and UDP
+      encapsulation headers.";
+    reference "3.6.0";
+  }
 
   revision "2026-09-01" {
     description
@@ -642,6 +661,16 @@ submodule openconfig-aft-common {
          specified network-instance.";
     }
 
+    leaf policy-tag {
+      type string;
+      description
+        "A tag applied to the next-hop. A policy-forwarding rule can match this
+        tag. As a result, the policy-forwarding action will be applied to all
+        next-hops with this tag. This allows the next-hops which the policy
+        applies to change dynamically with next-hop programming while the
+        policy-forwarding rule configuration may remain static.";
+    }
+
     uses aft-common-install-protocol;
   }
 
@@ -738,6 +767,36 @@ submodule openconfig-aft-common {
         "If specified, this TTL value is used on the GRE header during
         encapsulation. If unspecified, the TTL value of the inner packet is
         copied to the GRE header TTL value during encapsulation.";
+    }
+
+    leaf dscp {
+      type oc-inet:dscp;
+      description
+        "DSCP value to use for the outer IP header of the GRE-encapsulated
+         packet.";
+    }
+
+    leaf in-profile-dscp {
+      type oc-inet:dscp;
+      description
+        "DSCP value to use in the outer IP header of the GRE-encapsulated
+        packet when the packet is in-profile.  A packet is in-profile
+        unless it is out-of-profile (see out-profile-dscp); for example,
+        packets that conform to a policer (i.e., are subject to its
+        conform-action) are in-profile.  When this leaf is not set, the
+        value of the dscp leaf is used for in-profile packets.";
+    }
+
+    leaf out-profile-dscp {
+      type oc-inet:dscp;
+      description
+        "DSCP value to use in the outer IP header of the GRE-encapsulated
+        packet when the packet is out-of-profile.  A packet is
+        out-of-profile when a policer has determined it to be exceeding or
+        violating (i.e., subject to its exceed-action or violate-action)
+        and it has not been dropped, or when the system has otherwise
+        classified it as out-of-profile.  When this leaf is not set, the
+        value of the dscp leaf is used for out-of-profile packets.";
     }
   }
 
@@ -851,6 +910,29 @@ submodule openconfig-aft-common {
       description
         "DSCP value to use for the UDP header of the encapsulated
          packet.";
+    }
+
+    leaf in-profile-dscp {
+      type oc-inet:dscp;
+      description
+        "DSCP value to use in the outer IP header of the UDP-encapsulated
+         packet when the packet is in-profile.  A packet is in-profile
+         unless it is out-of-profile (see out-profile-dscp); for example,
+         packets that conform to a policer (i.e., are subject to its
+         conform-action) are in-profile.  When this leaf is not set, the
+         value of the dscp leaf is used for in-profile packets.";
+    }
+
+    leaf out-profile-dscp {
+      type oc-inet:dscp;
+      description
+        "DSCP value to use in the outer IP header of the UDP-encapsulated
+         packet when the packet is out-of-profile.  A packet is
+         out-of-profile when a policer has determined it to be exceeding or
+         violating (i.e., subject to its exceed-action or violate-action)
+         and it has not been dropped, or when the system has otherwise
+         classified it as out-of-profile.  When this leaf is not set, the
+         value of the dscp leaf is used for out-of-profile packets.";
     }
 
     leaf src-udp-port {
