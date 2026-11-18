@@ -204,10 +204,10 @@ const (
 	// all linecards that host a particular VRF etc). This notification may
 	// not always be sent for a particular operation since:
 	//
-	//	a) the entry may be duplicate for another gRIBI client.
-	//	b) the entry may not be the preferred system route (e.g., there
-	//	   may be a higher-preference RIB client that has a matching
-	//	   entry, and hence the FIB is unchanged).
+	//  a) the entry may be duplicate for another gRIBI client.
+	//  b) the entry may not be the preferred system route (e.g., there
+	//     may be a higher-preference RIB client that has a matching
+	//     entry, and hence the FIB is unchanged).
 	//
 	// In cases where the FIB was meant to be programmed, but an error
 	// code was received from the underlying hardware abstraction layer
@@ -754,12 +754,12 @@ type ModifyRequest struct {
 	// A group of requests to add/modify/remove a single AFT entry.
 	//
 	// A gRIBI server :
-	//   - Should process AFTOperations per the received order.
-	//   - Should not close the RPC session due to errors encountered in an
-	//     AFTOperation. Invalid AFTOperations should be responded to with
-	//     failures within the stream.
-	//   - May finish pending AFTOperations if existing RPC session is
-	//     dropped/closed/cancelled.
+	//  * Should process AFTOperations per the received order.
+	//  * Should not close the RPC session due to errors encountered in an
+	//    AFTOperation. Invalid AFTOperations should be responded to with
+	//    failures within the stream.
+	//  * May finish pending AFTOperations if existing RPC session is
+	//    dropped/closed/cancelled.
 	Operation []*AFTOperation `protobuf:"bytes,1,rep,name=operation,proto3" json:"operation,omitempty"`
 	// Meta information that the external entity sends to the network
 	// element. If a non default set of parameters is required, then
@@ -787,10 +787,9 @@ type ModifyRequest struct {
 	// the session and sets the RPC error code based on status.proto
 	// (http://tinyurl.com/grpc-status-proto)
 	// status.code is set to
-	//   - UNIMPLEMENTED when it encounters an unsupported `persistence`
-	//     or `ack_type` or `redundancy`
-	//   - FAILED_PRECONDITION for the other cases
-	//
+	//  - UNIMPLEMENTED when it encounters an unsupported `persistence`
+	//    or `ack_type` or `redundancy`
+	//  - FAILED_PRECONDITION for the other cases
 	// status.details is filled with the ModifyRPCErrorDetails message with
 	// an appropriate `reason`.
 	//
@@ -822,10 +821,10 @@ type ModifyRequest struct {
 	// without an external election having taken place.
 	//
 	// Upon discovering a failover, the server:
-	//   - SHOULD stop processing pending AFTOperations that were sent by
-	//     the previous primary.
-	//   - MUST not send responses for AFTOperations of the previous primary
-	//     to the acquiring-primary.
+	//  * SHOULD stop processing pending AFTOperations that were sent by
+	//    the previous primary.
+	//  * MUST not send responses for AFTOperations of the previous primary
+	//    to the acquiring-primary.
 	//
 	// Only AFT operations from the primary client are acted upon by
 	// the network element. AFT operations from non-primary clients
@@ -927,13 +926,12 @@ type AFTOperation struct {
 	// In SINGLE_PRIMARY redundancy model, used by the server to determine
 	// whether to process the AFTOperation.
 	// The server processes the AFTOperation if
-	//  1. the election_id in the AFTOperation is equal to the election_id last
-	//     advertised in a ModifyRequest by the client
-	//     AND
-	//  2. the election_id in the AFTOperation is the highest election_id
-	//     amongst all the election IDs that the server knows about, ie.
-	//     the client is the primary client
-	//
+	// 1. the election_id in the AFTOperation is equal to the election_id last
+	//    advertised in a ModifyRequest by the client
+	//    AND
+	// 2. the election_id in the AFTOperation is the highest election_id
+	//    amongst all the election IDs that the server knows about, ie.
+	//    the client is the primary client
 	// If the election_id in the AFTOperation does not meet these criteria
 	// the server discards the AFTOperation and returns FAILED in AFTResult
 	ElectionId    *Uint128 `protobuf:"bytes,11,opt,name=election_id,json=electionId,proto3" json:"election_id,omitempty"`
