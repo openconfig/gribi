@@ -14,13 +14,13 @@ jobs:
 
     steps:
       - name: Install protobuf
-        uses: arduino/setup-protoc@v1
+        uses: arduino/setup-protoc@v3.0.0
         with:
           version: '3.x'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with:
           go-version: '1.x'
         id: go
@@ -39,7 +39,7 @@ jobs:
           go install github.com/openconfig/ygot/proto_generator@latest
 
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: go/src/github.com/openconfig/gribi
 
